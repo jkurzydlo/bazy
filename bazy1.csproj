@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="img\bg.jpg" />
+    <None Remove="img\doctor.png" />
+    <None Remove="img\health%402x.png" />
+    <None Remove="img\health.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="img\bg.jpg" />
+    <Resource Include="img\doctor.png" />
+    <Resource Include="img\health.png" />
+    <Resource Include="img\health@2x.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BootstrapIcons.AspNetCore" Version="1.11.0" />
+  </ItemGroup>
+
+</Project>
