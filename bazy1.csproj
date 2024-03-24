@@ -36,4 +36,11 @@
     <PackageReference Include="MySql.EntityFrameworkCore" Version="8.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModels\Doctor\Pages\" />
+    <Folder Include="ViewModels\Receptionist\Pages\" />
+    <Folder Include="Views\Doctor\Pages\" />
+    <Folder Include="Views\Receptionist\Pages\" />
+  </ItemGroup>
+
 </Project>

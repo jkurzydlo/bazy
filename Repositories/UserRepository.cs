@@ -23,7 +23,8 @@ namespace bazy1.Repositories
 				using (var command = new MySqlCommand()) {
 					connection.Open();
 					command.Connection = connection;
-					command.CommandText = "select * from User where login=@login and password=@password";
+					//Dodane binary żeby zwracał uwagę na wielkość znaków
+					command.CommandText = "select * from User where @login = binary login and @password= binary password";
 					command.Parameters.Add("@login",MySqlDbType.VarChar).Value = credential.UserName;
 					command.Parameters.Add("@password", MySqlDbType.VarChar).Value = credential.Password;
 					valid = command.ExecuteScalar() == null ? false : true;

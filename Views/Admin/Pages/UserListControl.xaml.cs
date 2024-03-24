@@ -13,12 +13,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace bazy1.Views {
+namespace bazy1.Views.Admin.Pages {
 	/// <summary>
-	/// Logika interakcji dla klasy UserAddControl.xaml
+	/// Logika interakcji dla klasy UserListControl.xaml
 	/// </summary>
-	public partial class UserAddControl : UserControl {
-		public UserAddControl() {
+	public partial class UserListControl : UserControl {
+		public UserListControl() {
 			InitializeComponent();
 		}
 	}

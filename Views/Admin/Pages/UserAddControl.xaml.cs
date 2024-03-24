@@ -10,18 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace bazy1.Views
-{
-    /// <summary>
-    /// Logika interakcji dla klasy MainView.xaml
-    /// </summary>
-    public partial class MainView : Window
-    {
-        public MainView()
-        {
-            InitializeComponent();
-        }
-    }
+namespace bazy1.Views.Admin.Pages {
+	/// <summary>
+	/// Logika interakcji dla klasy UserAddControl.xaml
+	/// </summary>
+	public partial class UserAddControl : UserControl {
+		public UserAddControl() {
+			InitializeComponent();
+		}
+	}
 }

@@ -12,13 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace bazy1.Views {
-	/// <summary>
-	/// Logika interakcji dla klasy AdminView.xaml
-	/// </summary>
-	public partial class AdminView : Window {
-		public AdminView() {
-			InitializeComponent();
-		}
-	}
+namespace bazy1.Views.Doctor
+{
+    /// <summary>
+    /// Logika interakcji dla klasy MainView.xaml
+    /// </summary>
+    public partial class DoctorView : Window
+    {
+        public DoctorView()
+        {
+            InitializeComponent();
+        }
+    }
 }

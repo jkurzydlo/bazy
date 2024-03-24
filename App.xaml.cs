@@ -1,5 +1,7 @@
 ﻿using bazy1.ViewModels;
 using bazy1.Views;
+using bazy1.Views.Admin;
+using bazy1.Views.Doctor;
 using System.Configuration;
 using System.Data;
 using System.Windows;
@@ -27,7 +29,7 @@ namespace bazy1
 			{
 				if (((UserEventArgs)e).UserType.Equals("lekarz"))
 				{
-					var mainView = new MainView();
+					var mainView = new DoctorView();
 					loginView.Close();
 					mainView.Show();
 				}else if (((UserEventArgs)e).UserType.Equals("admin")){

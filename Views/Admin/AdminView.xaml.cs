@@ -10,15 +10,14 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace bazy1.Views {
+namespace bazy1.Views.Admin {
 	/// <summary>
-	/// Logika interakcji dla klasy UserListControl.xaml
+	/// Logika interakcji dla klasy AdminView.xaml
 	/// </summary>
-	public partial class UserListControl : UserControl {
-		public UserListControl() {
+	public partial class AdminView : Window {
+		public AdminView() {
 			InitializeComponent();
 		}
 	}
