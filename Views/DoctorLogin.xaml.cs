@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace bazy1.Views
 {
-	public partial class DoctorLogin : UserControl
+	public partial class DoctorLogin
 	{
 		public DoctorLogin()
 		{
@@ -32,6 +32,6 @@ namespace bazy1.Views
 			Application.Current.Shutdown();
 		}
 
-	}
+    }
 
 }

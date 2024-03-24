@@ -6,7 +6,7 @@
         mc:Ignorable="d"
         Title="App" Height="600" Width="800" WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen" MouseDown="Window_MouseDown">
     <Grid>
-        <views:startPage/>
+        <views:StartPage/>
     </Grid>
-    
+
 </Window>

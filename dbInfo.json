@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "BazaPrzychodnia": "Server=localhost;Database=m4;Uid=root;Pwd=12345;"
+  }
+}

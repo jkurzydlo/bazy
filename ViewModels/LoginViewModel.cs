@@ -1,0 +1,87 @@
+﻿using bazy1.Models.Repositories;
+using bazy1.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Principal;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using System.Windows.Markup;
+
+namespace bazy1.ViewModels {
+    class LoginViewModel : ViewModelBase {
+
+
+        private string _username;
+        private string _password;
+        private string _errorMessage;
+
+        public ICommand LoginCommand { get; }
+        private IUserRepository userRepository;
+        public event EventHandler LoginCompleted;
+
+        //Jeśli nie udało się zalogować - okno cały czas widoczne
+        private bool isVisible = true;
+
+        public LoginViewModel() {
+            userRepository = new UserRepository();
+
+            //ustawiamy komendę dla viewmodelu
+            LoginCommand = new ViewModelCommand(ExecuteLoginCommand, CanExecuteLoginCommand);
+        }
+
+        private void ExecuteRecoverPassCommand(string username, string password) {
+            throw new NotImplementedException();
+        }
+
+        private bool CanExecuteLoginCommand(object obj) {
+            return !(string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password));
+        }
+
+        private void ExecuteLoginCommand(object obj) {
+            var isValid = userRepository.authenticate(new System.Net.NetworkCredential(Username, Password));
+            if(isValid)
+            {
+                Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(Username),null);
+                isVisible = false; // Użytkownik zalogowany, ukryj okno
+                LoginCompleted(this, new EventArgs());
+            }
+            else
+            {
+                ErrorMessage = "Niepoprawne dane logowania";
+            }
+        }
+
+        //Przy zmianie którejś ze składowych wywołać OnPropertyChanged
+        public string Username {
+            get => _username;
+            set {
+                _username = value;
+                OnPropertyChanged(nameof(Username));
+            }
+        }
+
+        public string Password {
+            get => _password;
+            set {
+                _password = value;
+                OnPropertyChanged(nameof(Password));
+            }
+        }
+        public string ErrorMessage {
+            get => _errorMessage;
+            set {
+                _errorMessage = value;
+                OnPropertyChanged(nameof(ErrorMessage));
+            }
+        }
+        public bool IsVisible {
+            get => isVisible;
+            set {
+                isVisible = value;
+            }
+        }
+    }
+
+}

@@ -18,9 +18,9 @@ namespace bazy1.Views
     /// <summary>
     /// Logika interakcji dla klasy UserControl1.xaml
     /// </summary>
-    public partial class startPage : UserControl
+    public partial class StartPage : UserControl
     {
-        public startPage()
+        public StartPage()
         {
 			InitializeComponent();
         }
@@ -29,25 +29,10 @@ namespace bazy1.Views
 			Application.Current.MainWindow.WindowState = WindowState.Minimized;
 		}
 
-		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-		{
-			//if (e.LeftButton.Equals(MouseButtonState.Pressed))
-		}
-
-		private void BtnLoginClick(object sender, RoutedEventArgs e)
-		{
-
-		}
-
-
 		private void BtnCloseClick(object sender, RoutedEventArgs e)
 		{
 			Application.Current.Shutdown();
 		}
 
-		private void BtnDoctorClick(object sender, RoutedEventArgs e)
-		{
-			//redite
-		}
 	}
 }

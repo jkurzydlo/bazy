@@ -18,6 +18,7 @@ namespace bazy1
 	{
 		public MainWindow()
 		{
+			InitializeComponent();
 		}
 
 		private void Window_MouseDown(object sender, MouseButtonEventArgs e)
