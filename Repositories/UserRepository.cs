@@ -1,8 +1,10 @@
 ﻿using bazy1.Models;
 using bazy1.Models.Repositories;
+using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -40,7 +42,35 @@ namespace bazy1.Repositories
 		}
 
 		public User findByUsername(string username) {
-			throw new NotImplementedException();
+					User? user = null;
+
+			using (var connection = GetConnection())
+			{
+				using (var command = new MySqlCommand())
+				{
+					connection.Open();
+					command.Connection = connection;
+					command.CommandText = "select * from User where login=@login";
+					command.Parameters.Add("@login", MySqlDbType.VarChar).Value = username;
+
+					using (var reader = command.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							user = new User()
+							{
+								Id = reader.GetInt32(0),
+								Type = reader.GetString(1),
+								Name = reader.GetString(4),
+								Surname = reader.GetString(5)
+							};
+						}
+					}
+				}
+			}
+			Console.WriteLine("dasda");
+			Console.WriteLine(user.Name);
+			return user;
 		}
 
 		public void remove(User user) {

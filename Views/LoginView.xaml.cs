@@ -4,9 +4,9 @@ using System.Windows.Input;
 
 namespace bazy1.Views
 {
-	public partial class DoctorLogin
+	public partial class LoginView
 	{
-		public DoctorLogin()
+		public LoginView()
 		{
 			InitializeComponent();
 		}

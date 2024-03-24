@@ -16,16 +16,25 @@ namespace bazy1
 		}
 
 		protected void ApplicationStartup(object sender, StartupEventArgs e) {
-			var mainView = new MainView();
+			
+
 			var vm = new LoginViewModel();
-			var loginView = new DoctorLogin
+			var loginView = new LoginView
 			{
 				DataContext = vm
 			};
 			vm.LoginCompleted += (s, e) =>
 			{
-				loginView.Close();
-				mainView.Show();
+				if (((UserEventArgs)e).UserType.Equals("lekarz"))
+				{
+					var mainView = new MainView();
+					loginView.Close();
+					mainView.Show();
+				}else if (((UserEventArgs)e).UserType.Equals("admin")){
+					var mainView = new AdminView();
+					loginView.Close();
+					mainView.Show();
+				}
 			};
 			loginView.Show();
 			

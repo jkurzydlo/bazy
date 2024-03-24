@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace bazy1.ViewModels
 {
-	class ViewModelCommand : ICommand //klasa bazowa, wszystkie komendy będą z niej dziedziczyć
+	class BasicCommand : ICommand //klasa bazowa, wszystkie komendy będą z niej dziedziczyć
 	{
 		public event EventHandler? CanExecuteChanged
 		{
@@ -24,13 +24,13 @@ namespace bazy1.ViewModels
 		private readonly Action<object> _executeAction;
 		private readonly Predicate<object> _canExecutePredicate;
 
-		public ViewModelCommand(Action<object> executeAction, Predicate<object> canExecutePredicate)
+		public BasicCommand(Action<object> executeAction, Predicate<object> canExecutePredicate)
 		{
 			_executeAction = executeAction;
 			_canExecutePredicate = canExecutePredicate;
 		}
 
-		public ViewModelCommand(Action<object> executeAction)
+		public BasicCommand(Action<object> executeAction)
 		{
 			_executeAction = executeAction;
 		}

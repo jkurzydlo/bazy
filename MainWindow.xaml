@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:views="clr-namespace:bazy1.Views"
         mc:Ignorable="d"
-        Title="App" Height="600" Width="800" WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen" MouseDown="Window_MouseDown">
+        Title="App" Height="200" Width="200" WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen" MouseDown="Window_MouseDown">
     <Grid>
         <views:StartPage/>
     </Grid>

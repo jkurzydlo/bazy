@@ -19,6 +19,7 @@ namespace bazy1.ViewModels {
 
         public ICommand LoginCommand { get; }
         private IUserRepository userRepository;
+
         public event EventHandler LoginCompleted;
 
         //Jeśli nie udało się zalogować - okno cały czas widoczne
@@ -28,12 +29,10 @@ namespace bazy1.ViewModels {
             userRepository = new UserRepository();
 
             //ustawiamy komendę dla viewmodelu
-            LoginCommand = new ViewModelCommand(ExecuteLoginCommand, CanExecuteLoginCommand);
+            LoginCommand = new BasicCommand(ExecuteLoginCommand, CanExecuteLoginCommand);
         }
 
-        private void ExecuteRecoverPassCommand(string username, string password) {
-            throw new NotImplementedException();
-        }
+        private void ExecuteRecoverPassCommand(string username, string password) { }
 
         private bool CanExecuteLoginCommand(object obj) {
             return !(string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password));
@@ -44,8 +43,7 @@ namespace bazy1.ViewModels {
             if(isValid)
             {
                 Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(Username),null);
-                isVisible = false; // Użytkownik zalogowany, ukryj okno
-                LoginCompleted(this, new EventArgs());
+                LoginCompleted(this, new UserEventArgs(userRepository.findByUsername(Username).Type));// Użytkownik zalogowany, wywołaj komendę z LoginCompleted -> ukryj okno
             }
             else
             {
