@@ -19,7 +19,7 @@ namespace bazy1.ViewModels.Admin
         private void ExecuteShowAddUserViewCommand(object obj)
         {
             //Ustawiamy viewmodel dla widoku dodawania użytkownika
-            _currentViewModel = new AddUserViewModel();
+            CurrentViewModel = new AddUserViewModel();
             Caption2 = "Dodaj użytkownika";
         }
 
@@ -28,7 +28,7 @@ namespace bazy1.ViewModels.Admin
         private void ExecuteShowUserListViewCommand(object obj)
         {
             //Ustawiamy viewmodel dla widoku listy użytkowników
-            _currentViewModel = new ListUserViewModel();
+            CurrentViewModel = new ListUserViewModel();
             Caption2 = "Lista użytkowników";
             Console.WriteLine("dasdas");
         }

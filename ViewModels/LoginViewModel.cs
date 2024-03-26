@@ -43,7 +43,7 @@ namespace bazy1.ViewModels {
             if(isValid)
             {
                 Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(Username),null);
-                LoginCompleted(this, new UserEventArgs(userRepository.findByUsername(Username).Type));// Użytkownik zalogowany, wywołaj komendę z LoginCompleted -> ukryj okno
+                LoginCompleted(this, new UserEventArgs(userRepository.findByUsername(Username).Type,userRepository.findByUsername(Username).FirstLogin));// Użytkownik zalogowany, wywołaj komendę z LoginCompleted -> ukryj okno
             }
             else
             {

@@ -9,10 +9,12 @@ namespace bazy1 {
 	public class UserEventArgs : EventArgs {
 
 		private readonly string _userType;
+		private readonly bool _firstLogin;
 		public string UserType { get { return _userType; } }
 
-		public UserEventArgs(string? userType) {
+		public UserEventArgs(string? userType, bool? firstLogin) {
 			_userType = userType;
+			_firstLogin = firstLogin.GetValueOrDefault();
 		}
 	}
 }

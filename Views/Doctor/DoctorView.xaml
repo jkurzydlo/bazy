@@ -3,19 +3,52 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:bazy1.Views.Doctor"
         xmlns:viewModels="clr-namespace:bazy1.ViewModels.Doctor"
+        xmlns:pagesViewModels="clr-namespace:bazy1.ViewModels.Doctor.Pages"
+        xmlns:pagesViews="clr-namespace:bazy1.Views.Doctor.Pages"
         mc:Ignorable="d"
         Title="MainView" Height="450" Width="800"
         WindowStartupLocation="CenterScreen"
         >
-<Window.DataContext> <!-- Ustawia MainViewModel jako viewmodel dla tego widoku-->
+    <Window.DataContext>
+        <!-- Ustawia MainViewModel jako viewmodel dla tego widoku-->
         <viewModels:DoctorViewModel/>
     </Window.DataContext>
 
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type pagesViewModels:DashboardViewModel}">
+            <pagesViews:DoctorDashboard/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type pagesViewModels:PatientListViewModel}">
+            <pagesViews:PatientListControl/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type pagesViewModels:ScheduleViewModel}">
+            <pagesViews:ScheduleControl/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type pagesViewModels:FirstLoginViewModel}">
+            <pagesViews:FirstLoginControl/>
+        </DataTemplate>
+
+
+    </Window.Resources>
+
+
+
     <Grid>
-        <TextBlock Text="{Binding CurrentUser.Name}" FontSize="30" HorizontalAlignment="Center" VerticalAlignment="Center">
-            
-        </TextBlock>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Vertical">
+            <Button x:Name="listPatientButton" Width="100" Height="20" Content="Lista pacjentów" Command="{Binding ShowPatientListViewCommand}"/>
+            <Button x:Name="scheduleButton" Width="100" Height="20" Content="Terminarz" Command="{Binding ShowScheduleViewCommand}"/>
+            <TextBlock x:Name="userRemove" Text="Zmień dane użytkownika"></TextBlock>
+
+        </StackPanel>
+
+        <ContentControl Content="{Binding CurrentViewModel}" Grid.Column="2"/>
     </Grid>
 </Window>

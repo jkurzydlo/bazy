@@ -17,6 +17,8 @@ public partial class User
 
     public string? Surname { get; set; }
 
+    public bool? FirstLogin { get; set; }
+
     public virtual ICollection<Administrator> Administrators { get; set; } = new List<Administrator>();
 
     public virtual ICollection<Doctor> Doctors { get; set; } = new List<Doctor>();

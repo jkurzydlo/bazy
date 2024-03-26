@@ -486,6 +486,9 @@ public partial class M4Context : DbContext
             entity.ToTable("user");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.FirstLogin)
+                .HasDefaultValueSql("'1'")
+                .HasColumnName("firstLogin");
             entity.Property(e => e.Login)
                 .HasMaxLength(45)
                 .HasColumnName("login");
