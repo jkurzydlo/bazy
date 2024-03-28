@@ -22,6 +22,7 @@ namespace bazy1.Views.Doctor
         public DoctorView()
         {
             InitializeComponent();
+            Console.WriteLine(DataContext.ToString());
         }
     }
 }

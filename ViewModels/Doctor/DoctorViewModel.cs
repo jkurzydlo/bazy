@@ -6,30 +6,38 @@ using bazy1.ViewModels.Doctor.Pages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace bazy1.ViewModels.Doctor {
 
-	class DoctorViewModel : ViewModelBase {
+	public class DoctorViewModel : ViewModelBase {
 
 		private ViewModelBase _currentViewModel;
 		private string _caption;
+		private bool _firstLogin = true;
+		private string errorMessage;
+		private FirstLoginViewModel _firstLoginViewModel;
+		private string _tag;
+		public ICommand ShowDashboardLoggedInCommand { get; }
 
 		//komendy dla wszystkich widoków w oknie
 		public ICommand ShowDashboardViewCommand { get; }
 
 		private void ExecuteShowDashboardViewCommand(object obj) {
-			//Jeżeli użytkownik loguje się po raz pierwszy wyświetl widok zminy hasła, jeśli nie - ekran główny
-			Console.WriteLine(_currentUser.Surname);
-			if (!_currentUser.FirstLogin.GetValueOrDefault())
+			//Jeżeli użytkownik loguje się po raz pierwszy wyświetl widok zmiany hasła, jeśli nie - ekran główny
+						//_currentUser.Surname = "dsds";
+
+						Console.WriteLine("executeshowdashobard ");
+			if (_currentUser.FirstLogin.GetValueOrDefault())
 			{
-			CurrentViewModel = new FirstLoginViewModel();			
+			CurrentViewModel = new FirstLoginViewModel(_currentUser);	
 			}
 			else
 			{
-				CurrentViewModel = new DashboardViewModel();
+			CurrentViewModel = new DashboardViewModel(_currentUser);
 			}	
 			Caption2 = "Ekran główny";
 		}
@@ -37,10 +45,11 @@ namespace bazy1.ViewModels.Doctor {
 		public ICommand ShowPatientListViewCommand { get; }
 
 		private void ExecuteShowPatientListViewCommand(object obj) {
-			if (_currentUser.FirstLogin.GetValueOrDefault())
+
+			if (!_currentUser.FirstLogin.GetValueOrDefault() || !_firstLogin) //Jeśli użytkownik nie loguje się pierwszy raz -> zmienił hasło -> daj dostęp do przycisków
 			{
 				//Ustawiamy viewmodel dla widoku listy użytkowników
-				CurrentViewModel = new PatientListViewModel();
+				CurrentViewModel = new PatientListViewModel(_currentUser);
 				Caption2 = "Lista pacjentów";
 				Console.WriteLine("dasdas");
 			}
@@ -49,14 +58,13 @@ namespace bazy1.ViewModels.Doctor {
 		public ICommand ShowScheduleViewCommand { get; }
 
 		private void ExecuteShowScheduleViewCommand(object obj) {
-			if (_currentUser.FirstLogin.GetValueOrDefault())
+			if (!_currentUser.FirstLogin.GetValueOrDefault() || !_firstLogin)
 			{
 				//Ustawiamy viewmodel dla widoku listy użytkowników
 				CurrentViewModel = new ScheduleViewModel();
 				Caption2 = "Terminarz";
 			}
 		}
-
 
 
 		private User _currentUser;
@@ -73,7 +81,7 @@ namespace bazy1.ViewModels.Doctor {
 		}
 
 		public DoctorViewModel() {
-
+			Console.WriteLine("nowy model");
 			
 			_userRepository = new UserRepository();
 			CurrentUser = new User();
@@ -82,6 +90,16 @@ namespace bazy1.ViewModels.Doctor {
 			ShowDashboardViewCommand = new BasicCommand(ExecuteShowDashboardViewCommand);
 			ShowPatientListViewCommand = new BasicCommand(ExecuteShowPatientListViewCommand);
 			ShowScheduleViewCommand = new BasicCommand(ExecuteShowScheduleViewCommand);
+			ShowDashboardLoggedInCommand = new BasicCommand((object obj) => {
+
+				
+				FirstLoginViewModel = (FirstLoginViewModel)CurrentViewModel;
+				if (FirstLoginViewModel.Password.Equals(FirstLoginViewModel.PasswordRepeat))
+				{
+					CurrentViewModel = new DashboardViewModel(_currentUser);
+					_firstLogin = false;
+				}
+			} );
 		}
 
 		//Znajdź w bazie użytkownika o danych podanych w polu logowania i ustaw jako właściwość CurrentUser
@@ -89,11 +107,13 @@ namespace bazy1.ViewModels.Doctor {
 			User? user = _userRepository.findByUsername(Thread.CurrentPrincipal.Identity.Name);
 			if (user != null)
 			{
+				CurrentUser.Id = user.Id;
 				CurrentUser.Name = user.Name;
 				CurrentUser.Surname = user.Surname;
 				CurrentUser.Login = user.Login;
 				CurrentUser.Type = user.Type;
 				CurrentUser.Password = user.Password;
+				CurrentUser.FirstLogin = user.FirstLogin;
 			}
 		}
 
@@ -102,6 +122,7 @@ namespace bazy1.ViewModels.Doctor {
 			set {
 				_currentViewModel = value;
 				OnPropertyChanged(nameof(CurrentViewModel));
+				Console.WriteLine("model: "+CurrentViewModel.ToString());
 			}
 		}
 
@@ -114,5 +135,22 @@ namespace bazy1.ViewModels.Doctor {
 			}
 		}
 
+		public string Tag { get => _tag; set {
+				_tag = value;
+				OnPropertyChanged(nameof(Tag));
+			}
+		}
+
+		public string ErrorMessage { get => errorMessage; set {
+				errorMessage = value;
+
+			}
+		}
+
+		public FirstLoginViewModel FirstLoginViewModel { get => _firstLoginViewModel; set {
+				_firstLoginViewModel = value;
+				OnPropertyChanged(nameof(FirstLoginViewModel));
+			}
+		}
 	}
 }

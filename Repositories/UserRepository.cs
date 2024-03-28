@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
@@ -39,7 +40,34 @@ namespace bazy1.Repositories
 		}
 
 		public User findById(int id) {
-			throw new NotImplementedException();
+			User? user = null;
+
+			using (var connection = GetConnection())
+			{
+				using (var command = new MySqlCommand())
+				{
+					connection.Open();
+					command.Connection = connection;
+					command.CommandText = "select * from User where id=@id";
+					command.Parameters.Add("@id", MySqlDbType.Int32).Value = id;
+
+					using (var reader = command.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							user = new User()
+							{
+								Id = reader.GetInt32(0),
+								Type = reader.GetString(1),
+								Name = reader.GetString(4),
+								Surname = reader.GetString(5)
+							};
+						}
+					}
+				}
+			}
+			return user;
+
 		}
 
 		public User findByUsername(string username) {
@@ -62,15 +90,18 @@ namespace bazy1.Repositories
 							{
 								Id = reader.GetInt32(0),
 								Type = reader.GetString(1),
+								Login = reader.GetString(2),
+								Password = reader.GetString(3),
 								Name = reader.GetString(4),
-								Surname = reader.GetString(5)
+								Surname = reader.GetString(5),
+								FirstLogin = reader.GetBoolean(6)
 							};
 						}
 					}
 				}
 			}
 			Console.WriteLine("dasda");
-			Console.WriteLine(user.Name);
+			Console.WriteLine($"user.Id {user.FirstLogin}");
 			return user;
 		}
 

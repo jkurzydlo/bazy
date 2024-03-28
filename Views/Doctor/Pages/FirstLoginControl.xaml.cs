@@ -1,4 +1,5 @@
-﻿using System;
+﻿using bazy1.CustomControls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,8 +19,14 @@ namespace bazy1.Views.Doctor.Pages {
 	/// Logika interakcji dla klasy FirstLoginControl.xaml
 	/// </summary>
 	public partial class FirstLoginControl : UserControl {
+
 		public FirstLoginControl() {
+			Console.WriteLine("utworzono");
 			InitializeComponent();
 		}
 	}
+
+
 }
+
+

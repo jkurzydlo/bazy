@@ -31,9 +31,6 @@ namespace bazy1.ViewModels {
             //ustawiamy komendę dla viewmodelu
             LoginCommand = new BasicCommand(ExecuteLoginCommand, CanExecuteLoginCommand);
         }
-
-        private void ExecuteRecoverPassCommand(string username, string password) { }
-
         private bool CanExecuteLoginCommand(object obj) {
             return !(string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password));
         }

@@ -8,6 +8,7 @@ namespace bazy1.Views
 	{
 		public LoginView()
 		{
+
 			InitializeComponent();
 		}
 

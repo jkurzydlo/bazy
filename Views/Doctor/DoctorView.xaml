@@ -11,7 +11,7 @@
         WindowStartupLocation="CenterScreen"
         >
     <Window.DataContext>
-        <!-- Ustawia MainViewModel jako viewmodel dla tego widoku-->
+        <!-- Ustawia DoctorViewModel jako kontekst danych dla tego widoku-->
         <viewModels:DoctorViewModel/>
     </Window.DataContext>
 
