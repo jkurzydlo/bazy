@@ -7,17 +7,19 @@ public partial class User
 {
     public int Id { get; set; }
 
-    public string? Type { get; set; }
+    public string Type { get; set; } = null!;
 
-    public string? Login { get; set; }
+    public string Login { get; set; } = null!;
 
-    public string? Password { get; set; }
+    public string Password { get; set; } = null!;
 
-    public string? Name { get; set; }
+    public string Name { get; set; } = null!;
 
-    public string? Surname { get; set; }
+    public string Surname { get; set; } = null!;
 
-    public bool? FirstLogin { get; set; }
+    public string Hash { get; set; } = null!;
+
+    public bool FirstLogin { get; set; }
 
     public virtual ICollection<Administrator> Administrators { get; set; } = new List<Administrator>();
 

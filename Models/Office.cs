@@ -7,11 +7,7 @@ public partial class Office
 {
     public int Id { get; set; }
 
-    public int DoctorUserIdUser { get; set; }
+    public int Number { get; set; }
 
-    public int DoctorId { get; set; }
-
-    public int DoctorUserId { get; set; }
-
-    public virtual Doctor Doctor { get; set; } = null!;
+    public virtual ICollection<Doctor> Doctors { get; set; } = new List<Doctor>();
 }

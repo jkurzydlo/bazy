@@ -94,7 +94,8 @@ namespace bazy1.Repositories
 								Password = reader.GetString(3),
 								Name = reader.GetString(4),
 								Surname = reader.GetString(5),
-								FirstLogin = reader.GetBoolean(6)
+								Hash = reader.GetString(6),
+								FirstLogin = reader.GetBoolean(7)
 							};
 						}
 					}

@@ -10,9 +10,11 @@
         <TextBlock Text="Ekran główny" FontSize="50"></TextBlock>
         <TextBlock>
             <Run Text="Witaj, "/>
-            <Run Text="{Binding CurrentUser.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            <Run Text="{Binding DataContext.CurrentUser.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
             <Run Text=" "/>
-            <Run Text="{Binding CurrentUser.Surname, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+            <Run Text="{Binding DataContext.CurrentUser.Surname, RelativeSource={RelativeSource AncestorType=local:DoctorView}, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
         </TextBlock>
-            </Grid>
+        <Button Content="klik" Width="50" Height="100" Command="{Binding DataContext.klik, RelativeSource={RelativeSource AncestorType=local:DoctorView}, Mode=TwoWay}"/>
+
+    </Grid>
 </UserControl>
