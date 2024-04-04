@@ -17,7 +17,7 @@ public partial class User
 
     public string Surname { get; set; } = null!;
 
-    public string Hash { get; set; } = null!;
+    public string? Hash { get; set; }
 
     public bool FirstLogin { get; set; }
 

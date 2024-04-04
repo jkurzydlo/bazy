@@ -4,23 +4,28 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using bazy1.Models;
 using bazy1.Models.Part;
 using bazy1.ViewModels.Admin.Pages;
 using bazy1.Views.Admin.Pages;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
+using MvvmDialogs;
 
 namespace bazy1.ViewModels.Admin
 {
     public class AdminViewModel : ViewModelBase
     {
+
 		private ViewModelBase _currentViewModel;
         private string _caption;
         private DatabaseService _databaseService;
         private User _currentUser;
         private List<UserPart> _users;
+        public ICommand RefreshCommand{ get; set; }
 
         public List<UserPart> Users {
             get => _users;
@@ -46,14 +51,15 @@ namespace bazy1.ViewModels.Admin
         private void ExecuteShowUserListViewCommand(object obj)
         {
             //Ustawiamy viewmodel dla widoku listy użytkowników
-            CurrentViewModel = new ListUserViewModel();
+            CurrentViewModel = new ListUserViewModel(this);
             Caption2 = "Lista użytkowników";
             Console.WriteLine("dasdas");
         }
-
+        
 
         public AdminViewModel()
         {
+            //RefreshCommand = new BasicCommand((object obj) => CurrentViewModel);
 
 			_databaseService = new DatabaseService(new Przychodnia9Context());
             Users = 
@@ -66,6 +72,7 @@ namespace bazy1.ViewModels.Admin
             ShowAddUserViewCommand = new BasicCommand(ExecuteShowAddUserViewCommand);
             ShowUserListViewCommand = new BasicCommand(ExecuteShowUserListViewCommand);
             ExecuteShowUserListViewCommand(null);
+
         }
 
         public ViewModelBase CurrentViewModel
@@ -88,6 +95,8 @@ namespace bazy1.ViewModels.Admin
                 OnPropertyChanged(nameof(CurrentViewModel));
             }
         }
+
+
 
 
 

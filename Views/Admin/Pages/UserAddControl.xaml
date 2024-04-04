@@ -16,8 +16,8 @@
         <TextBlock Text="Specjalizacja" Margin="10,115,-10,-115" Visibility="{Binding DoctorOptionsVisible, UpdateSourceTrigger=PropertyChanged}"/>
 
 
-        <TextBox x:Name="Imię" HorizontalAlignment="Left" Height="23" Margin="140,10,0,0" TextWrapping="Wrap" Text="{Binding Login,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="Nazwisko" HorizontalAlignment="Left" Height="23" Margin="140,45,0,0" TextWrapping="Wrap" Text="{Binding Login,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120" TextChanged="Logins_TextChanged"/>
+        <TextBox x:Name="Imię" HorizontalAlignment="Left" Height="23" Margin="140,10,0,0" TextWrapping="Wrap" Text="{Binding UserName,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="Nazwisko" HorizontalAlignment="Left" Height="23" Margin="140,45,0,0" TextWrapping="Wrap" Text="{Binding UserSurname,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120" TextChanged="Logins_TextChanged"/>
         
         <ComboBox ItemsSource="{Binding UserTypes}" SelectedItem="{Binding ChosenUserType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="140,80,0,0" VerticalAlignment="Top" Width="120"/>
         <ComboBox ItemsSource="{Binding Specializations}" SelectedItem="{Binding ChosenSpecialization }" Visibility="{Binding DoctorOptionsVisible}" HorizontalAlignment="Left" Margin="140,115,0,0" VerticalAlignment="Top" Width="120" DisplayMemberPath="Name"/>

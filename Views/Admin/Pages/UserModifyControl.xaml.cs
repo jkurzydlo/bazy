@@ -1,5 +1,4 @@
-﻿using bazy1.CustomControls;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,20 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace bazy1.Views.Doctor.Pages {
-	/// <summary>
-	/// Logika interakcji dla klasy FirstLoginControl.xaml
-	/// </summary>
-	public partial class FirstLoginControl : UserControl {
-
-		public FirstLoginControl() {
-			InitializeComponent();
-
-			Console.WriteLine("utworzono");
-		}
-	}
-
-
+namespace bazy1.Views.Admin.Pages
+{
+    /// <summary>
+    /// Logika interakcji dla klasy UserModifyControl.xaml
+    /// </summary>
+    public partial class UserModifyControl : UserControl
+    {
+        public UserModifyControl()
+        {
+            InitializeComponent();
+        }
+    }
 }
-
-

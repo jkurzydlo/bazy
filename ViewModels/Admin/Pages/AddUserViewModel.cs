@@ -1,6 +1,7 @@
 ﻿using bazy1.Models;
 using Google.Protobuf.Compiler;
 using Microsoft.AspNetCore.CookiePolicy;
+using Org.BouncyCastle.Crypto.Generators;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,6 +17,7 @@ namespace bazy1.ViewModels.Admin.Pages {
 
 
     public class AddUserViewModel : ViewModelBase {
+        private User _user;
         private List<string> userTypes = new()
         {
             "Lekarz",
@@ -23,11 +25,11 @@ namespace bazy1.ViewModels.Admin.Pages {
             "Administrator"
         };
         private AdminViewModel parentModel;
-        private ObservableCollection<Specialization> _specializations;
+        private ObservableCollection<Specialization> _specializations; //ObservableCollection aktualizuje widok przy każdej zmianie kolekcji (usunięciu elementu, dodaniu itd.)
         private Enum _userTypes;
         private Visibility _doctorOptionsVisible = Visibility.Hidden;
 
-        public ICommand AddUserCommand;
+        public ICommand AddUserCommand { get; set; }
 
         public AddUserViewModel() {
 		}
@@ -68,20 +70,21 @@ namespace bazy1.ViewModels.Admin.Pages {
             }
 		}
 
-		private string _login;
-        private User user;
-        private string _username;
+        private string _userSurname;
+        private string _userName;
         public string UserName {
-            get => _username; set {
-                _username = value;
+            get => _userName;
+            set {
+                _userName = value;
                 OnPropertyChanged(UserName);
             }
         }
 
-		public string Login { get => _login; set{
-                _login = value;
-                OnPropertyChanged(nameof(Login));
-                Console.WriteLine(_login);
+		public string UserSurname {
+            get => _userSurname; 
+            set{
+                _userSurname = value;
+                OnPropertyChanged(nameof(UserSurname));
             } 
         }
 
@@ -96,14 +99,58 @@ namespace bazy1.ViewModels.Admin.Pages {
 
 		public AddUserViewModel(User user, AdminViewModel parentModel) {
             
-            this.user = user;
+            _user = user;
 			ParentModel = parentModel;
+            var tempUser = new User();
+            var tempDoctor = new Models.Doctor();
             AddUserCommand = new BasicCommand((object obj) =>
             {
-               // DbContext.Users.Add(new User
-               // {
-               //     Type = 
-               // });
+
+                Console.WriteLine("ds");
+                tempUser.Name = UserName;
+                tempUser.Surname = UserSurname;
+                tempUser.Type = ChosenUserType;
+                tempUser.FirstLogin = true;
+                tempUser.Login = tempUser.Name.First().ToString().ToLower() + tempUser.Surname.First().ToString().ToLower() + tempUser.Id +
+                new Random().Next(0, 9) + new Random().Next(0, 9) + new Random().Next(0, 9) + new Random().Next(0, 9);
+                tempUser.Hash = "0";
+
+                string tempPass = "";
+                var randomGenerator = new Random();
+
+				//Pierwsze hasło w formacie [0-9][0-9][0-9][0-9][Znak ASCII od !-~][Znak ASCII od !-~][Znak ASCII od !-~]
+				for (int i = 0; i < 7; i++)
+                {
+                    if (i < 4) tempPass += randomGenerator.Next(0, 9);
+                    else tempPass += Convert.ToChar(randomGenerator.Next(33, 126));
+                }
+                Console.WriteLine(tempPass);
+                tempUser.Password = tempPass;
+
+                //string passHash = BCrypt.Net.BCrypt.HashPassword(tempPass);
+               // tempUser.Hash = passHash;
+                 
+                switch (tempUser.Type)
+                {
+                    case "Lekarz":
+                        {
+                            tempDoctor.User = tempUser;
+                            tempDoctor.Name = UserName;
+                            tempDoctor.Surname = UserSurname;
+                            tempDoctor.Specializations.Add(ChosenSpecialization);
+                            DbContext.Doctors.Add(tempDoctor);
+                        }break;
+                    case "Recepcjonista":
+                        {
+                            
+                        }break;
+                }
+
+                DbContext.SaveChanges();
+
+
+
+
             });
 
             Console.WriteLine(DbContext.Specializations.Count()); 

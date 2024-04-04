@@ -41,19 +41,22 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			Console.WriteLine("hasło: "+Password + PasswordRepeat);
 			Console.WriteLine($"Rozmiar: {db.Users.Where(e => e.Id == _currentUser.Id).Count()}");
 			Console.WriteLine(db.Users.Count());
-			if (Password.Equals(PasswordRepeat))
+			if (!string.IsNullOrEmpty(Password) && !string.IsNullOrEmpty(PasswordRepeat))
 			{
-				watch.Start();
-				Console.WriteLine("ok");
-				db.Users.Where(e => e.Id == _currentUser.Id).First().Password = _password;
-				db.Users.Where(e => e.Id == _currentUser.Id).First().FirstLogin = false;
-				watch.Stop();
-				Console.WriteLine("czas oper: " + watch.ElapsedMilliseconds);
-				db.SaveChanges();
-			}
-			else
-			{
-				ErrorMessage = "Hasłooo";
+				if (Password.Equals(PasswordRepeat))
+				{
+					watch.Start();
+					Console.WriteLine("ok");
+					db.Users.Where(e => e.Id == _currentUser.Id).First().Password = _password;
+					db.Users.Where(e => e.Id == _currentUser.Id).First().FirstLogin = false;
+					watch.Stop();
+					Console.WriteLine("czas oper: " + watch.ElapsedMilliseconds);
+					db.SaveChanges();
+				}
+				else
+				{
+					ErrorMessage = "Hasła nie są zgodne";
+				}
 			}
 			Console.WriteLine(ErrorMessage);
 			

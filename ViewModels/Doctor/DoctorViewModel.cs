@@ -10,6 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using FirstLoginViewModel = bazy1.ViewModels.Doctor.Pages.FirstLoginViewModel;
 
 namespace bazy1.ViewModels.Doctor {
 
@@ -101,10 +102,13 @@ namespace bazy1.ViewModels.Doctor {
 
 				
 				FirstLoginViewModel = (FirstLoginViewModel)CurrentViewModel;
-				if (FirstLoginViewModel.Password.Equals(FirstLoginViewModel.PasswordRepeat))
+				if (!string.IsNullOrEmpty(FirstLoginViewModel.Password) && !string.IsNullOrEmpty(FirstLoginViewModel.PasswordRepeat))
 				{
-					CurrentViewModel = new Pages.DashboardViewModel(_currentUser);
-					_firstLogin = false;
+					if (FirstLoginViewModel.Password.Equals(FirstLoginViewModel.PasswordRepeat))
+					{
+						CurrentViewModel = new Pages.DashboardViewModel(_currentUser);
+						_firstLogin = false;
+					}
 				}
 			} );
 		}
@@ -121,6 +125,7 @@ namespace bazy1.ViewModels.Doctor {
 				CurrentUser.Type = user.Type;
 				CurrentUser.Password = user.Password;
 				CurrentUser.FirstLogin = user.FirstLogin;
+				Console.Write("da: "+CurrentUser.Name + CurrentUser.Surname);
 			}
 		}
 
