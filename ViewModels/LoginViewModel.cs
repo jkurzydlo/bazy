@@ -16,6 +16,8 @@ namespace bazy1.ViewModels {
         private string _username;
         private string _password;
         private string _errorMessage;
+        private string _loginMessage;
+        private string _passwordMessage;
 
         public ICommand LoginCommand { get; }
         private IUserRepository userRepository;
@@ -77,6 +79,21 @@ namespace bazy1.ViewModels {
                 isVisible = value;
             }
         }
-    }
+
+		public string LoginMessage {
+            get => _loginMessage;
+            set {
+                _loginMessage = value;
+                OnPropertyChanged(nameof(LoginMessage));
+            }
+        }
+		public string PasswordMessage {
+            get => _passwordMessage;
+            set {
+                _passwordMessage = value;
+                OnPropertyChanged(nameof(PasswordMessage));
+            }
+        }
+	}
 
 }

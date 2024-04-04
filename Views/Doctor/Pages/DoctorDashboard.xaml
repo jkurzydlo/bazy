@@ -14,7 +14,8 @@
             <Run Text=" "/>
             <Run Text="{Binding DataContext.CurrentUser.Surname, RelativeSource={RelativeSource AncestorType=local:DoctorView}, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
         </TextBlock>
-        <Button Content="klik" Width="50" Height="100" Command="{Binding DataContext.klik, RelativeSource={RelativeSource AncestorType=local:DoctorView}, Mode=TwoWay}"/>
+        <TextBlock Text="{Binding T1}" Margin="315,30,-315,-30"></TextBlock>
+        <Button Content="klik" Width="50" Height="100" Command="{Binding Test}"/>
 
     </Grid>
 </UserControl>

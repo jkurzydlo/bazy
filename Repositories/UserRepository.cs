@@ -24,13 +24,19 @@ namespace bazy1.Repositories
 				using (var command = new MySqlCommand()) {
 					connection.Open();
 					command.Connection = connection;
-					if (credential.Password == "admin" && credential.UserName == "admin") { valid = true; return valid; }
+					if (credential.Password == "admin" && credential.UserName == "admin") { return true; }
 					//Dodane binary żeby zwracał uwagę na wielkość znaków
-					command.CommandText = "select * from User where @login = binary login and @password= binary password";
+					command.CommandText = "select hash from User where @login = binary login";
 					command.Parameters.Add("@login",MySqlDbType.VarChar).Value = credential.UserName;
-					command.Parameters.Add("@password", MySqlDbType.VarChar).Value = credential.Password;
+					//command.Parameters.Add("@password", MySqlDbType.VarChar).Value = credential.Password;
+
+					var hash = (string)command.ExecuteScalar();
+					Console.WriteLine("hash: "+hash);
+					if (hash != null){
+						if (BCrypt.Net.BCrypt.Verify(credential.Password, hash)) valid = true;
+					}
 					Console.WriteLine(credential.UserName + credential.Password);
-					valid = command.ExecuteScalar() == null ? false : true;
+					//valid = command.ExecuteScalar() == null ? false : true;
 
 				}
 			}

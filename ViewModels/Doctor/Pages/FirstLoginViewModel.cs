@@ -19,11 +19,6 @@ namespace bazy1.ViewModels.Doctor.Pages {
 
 		public ICommand PasswordChangeCommand{ get; }
 
-
-		public void changeVM(ViewModelBase vm) {
-			vm = new DashboardViewModel(_currentUser);
-		}
-
 		public FirstLoginViewModel() {
 			PasswordChangeCommand = new BasicCommand(ExecutePasswordChangeCommand);
 		}
@@ -45,9 +40,12 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			{
 				if (Password.Equals(PasswordRepeat))
 				{
+					var hash = BCrypt.Net.BCrypt.HashPassword(Password);
+
 					watch.Start();
 					Console.WriteLine("ok");
-					db.Users.Where(e => e.Id == _currentUser.Id).First().Password = _password;
+					db.Users.Where(e => e.Id == _currentUser.Id).First().Hash = hash;
+					db.Users.Where(e => e.Id == _currentUser.Id).First().Password = Password;
 					db.Users.Where(e => e.Id == _currentUser.Id).First().FirstLogin = false;
 					watch.Stop();
 					Console.WriteLine("czas oper: " + watch.ElapsedMilliseconds);
@@ -70,7 +68,6 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			get => _password;
 			set {
 				_password = value;
-				ErrorMessage = "das";
 				OnPropertyChanged(nameof(Password));
 			}
 		}
@@ -78,7 +75,6 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			get => _passwordRepeat;
 			set {
 				_passwordRepeat = value;
-				ErrorMessage = "das";
 				OnPropertyChanged(nameof(PasswordRepeat));
 			}
 		}

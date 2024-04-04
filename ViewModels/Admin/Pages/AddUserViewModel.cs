@@ -127,8 +127,8 @@ namespace bazy1.ViewModels.Admin.Pages {
                 Console.WriteLine(tempPass);
                 tempUser.Password = tempPass;
 
-                //string passHash = BCrypt.Net.BCrypt.HashPassword(tempPass);
-               // tempUser.Hash = passHash;
+                string passHash = BCrypt.Net.BCrypt.HashPassword(tempPass);
+                tempUser.Hash = passHash;
                  
                 switch (tempUser.Type)
                 {

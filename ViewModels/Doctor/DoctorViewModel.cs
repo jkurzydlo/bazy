@@ -23,7 +23,8 @@ namespace bazy1.ViewModels.Doctor {
 		private FirstLoginViewModel _firstLoginViewModel;
 		private string _tag;
 		public ICommand ShowDashboardLoggedInCommand { get; }
-		public ICommand klik { get; set; }
+		public ICommand Klik { get; set; }
+
 
 
 		//komendy dla wszystkich widoków w oknie
@@ -88,7 +89,7 @@ namespace bazy1.ViewModels.Doctor {
 		}
 
 		public DoctorViewModel() {
-			klik = new BasicCommand((object obj) => CurrentUser.Surname = "lmao");
+			Klik = new BasicCommand((object obj) => CurrentUser.Surname = "lmao");
 			Console.WriteLine("nowy model");
 			
 			_userRepository = new UserRepository();
@@ -155,7 +156,7 @@ namespace bazy1.ViewModels.Doctor {
 
 		public string ErrorMessage { get => errorMessage; set {
 				errorMessage = value;
-
+				OnPropertyChanged(nameof(ErrorMessage));
 			}
 		}
 

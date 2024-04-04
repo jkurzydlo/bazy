@@ -18,8 +18,6 @@ namespace bazy1.ViewModels.Admin.Pages {
 		private Visibility _editFormVisible = Visibility.Hidden;
 		public ICommand ShowModifyPanel { get; set; }
 
-		//Do obsługi msgboxów
-
 		public ICommand ModifyUserCommand { get; set; }
 		public ObservableCollection<User> Users {
 			get => _users;
