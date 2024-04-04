@@ -38,9 +38,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ViewModels\Receptionist\" />
     <Folder Include="ViewModels\Receptionist\Pages\" />
-    <Folder Include="Views\Receptionist\" />
+    <Folder Include="ViewModels\Receptionist\Pages\" />
+    <Folder Include="Views\Receptionist\Pages\" />
     <Folder Include="Views\Receptionist\Pages\" />
   </ItemGroup>
 
