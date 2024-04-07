@@ -12,12 +12,25 @@
 		<viewModels:ReceptionistViewModel/>
 	</Window.DataContext>
 
-	<!-- Tutaj można dodać zawartość interfejsu użytkownika dla recepcjonisty -->
-	<!-- Na przykład przyciski, kontrolki itp. -->
-
 	<Grid>
-		<!-- Przykładowa zawartość -->
-		<TextBlock Text="{Binding Caption}" Margin="10"/>
-		<ContentControl Content="{Binding CurrentViewModel}" Margin="10"/>
+		<!-- Panel górny -->
+		<Grid HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10">
+			<Button Content="Wyloguj" Command="{Binding LogoutCommand}" />
+		</Grid>
+
+		<!-- Menu boczne -->
+		<Grid Width="100" HorizontalAlignment="Left" VerticalAlignment="Stretch" Background="LightGray">
+			<StackPanel VerticalAlignment="Center" Margin="10">
+				<Button Content="Pacjenci" Command="{Binding ShowPatientsCommand}" Margin="0 0 0 10" HorizontalAlignment="Center"/>
+				<Button Content="Wizyty" Command="{Binding ShowAppointmentsCommand}" Margin="0 0 0 10" HorizontalAlignment="Center"/>
+			</StackPanel>
+		</Grid>
+
+		<!-- Zawartość główna -->
+		<Grid Margin="220 10 10 10">
+			<!-- Tutaj można dodać zawartość głównego interfejsu użytkownika dla recepcjonisty -->
+			<TextBlock Text="{Binding Caption}" Margin="10"/>
+			<ContentControl Content="{Binding CurrentViewModel}" Margin="10"/>
+		</Grid>
 	</Grid>
 </Window>
