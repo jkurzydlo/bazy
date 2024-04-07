@@ -11,7 +11,7 @@ namespace bazy1.Repositories
     {
         private readonly string _connectionStrings;
         public RepositoryBase() {
-            _connectionStrings = "Server=localhost;Database=przychodnia9;Uid=root;Pwd=12345;";
+            _connectionStrings = "Server=localhost;Database=m4;Uid=root;Pwd=12345;";
 
 		}
         protected MySqlConnection GetConnection() {

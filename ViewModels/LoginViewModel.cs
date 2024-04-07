@@ -1,5 +1,4 @@
-﻿using bazy1.Models.Repositories;
-using bazy1.Repositories;
+﻿using bazy1.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +8,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Windows.Markup;
 
-namespace bazy1.ViewModels {
+namespace bazy1.ViewModels
+{
     class LoginViewModel : ViewModelBase {
 
 

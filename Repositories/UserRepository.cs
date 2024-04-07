@@ -1,5 +1,4 @@
 ﻿using bazy1.Models;
-using bazy1.Models.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using System;
@@ -13,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace bazy1.Repositories
 {
-	public class UserRepository : RepositoryBase, IUserRepository {
+    public class UserRepository : RepositoryBase, IUserRepository {
 		public void add(User user) {
 			throw new NotImplementedException();
 		}
@@ -94,8 +93,7 @@ namespace bazy1.Repositories
 								Password = reader.GetString(3),
 								Name = reader.GetString(4),
 								Surname = reader.GetString(5),
-								Hash = reader.GetString(6),
-								FirstLogin = reader.GetBoolean(7)
+								FirstLogin = reader.GetBoolean(6)
 							};
 						}
 					}

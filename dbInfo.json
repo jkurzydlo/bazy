@@ -1,5 +1,5 @@
 {
   "ConnectionStrings": {
-    "BazaPrzychodnia": "Server=localhost;Database=mq;Uid=root;Pwd=12345;"
+    "BazaPrzychodnia": "Server=localhost;Database=m4;Uid=root;Pwd=12345;"
   }
 }

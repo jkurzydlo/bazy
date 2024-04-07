@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace bazy1.Models;
 
-public partial class Przychodnia9Context : DbContext
+public partial class M4Context : DbContext
 {
-    public Przychodnia9Context()
+    public M4Context()
     {
     }
 
-    public Przychodnia9Context(DbContextOptions<Przychodnia9Context> options)
+    public M4Context(DbContextOptions<M4Context> options)
         : base(options)
     {
     }
@@ -47,7 +47,7 @@ public partial class Przychodnia9Context : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySQL("Server=localhost;Database=przychodnia9;Uid=root;Pwd=12345;");
+        => optionsBuilder.UseMySQL("Server=localhost;Database=m4;Uid=root;Pwd=12345;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -179,7 +179,7 @@ public partial class Przychodnia9Context : DbContext
 
             entity.HasMany(d => d.Patients).WithMany(p => p.Diseases)
                 .UsingEntity<Dictionary<string, object>>(
-                    "PatientDiesease",
+                    "DiseaseHasPatient",
                     r => r.HasOne<Patient>().WithMany()
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
@@ -191,7 +191,7 @@ public partial class Przychodnia9Context : DbContext
                     j =>
                     {
                         j.HasKey("DiseaseId", "PatientId").HasName("PRIMARY");
-                        j.ToTable("patient_diesease");
+                        j.ToTable("disease_has_patient");
                         j.HasIndex(new[] { "DiseaseId" }, "fk_Disease_has_Patient_Disease1_idx");
                         j.HasIndex(new[] { "PatientId" }, "fk_Disease_has_Patient_Patient1_idx");
                         j.IndexerProperty<int>("DiseaseId").HasColumnName("Disease_id");
@@ -226,31 +226,9 @@ public partial class Przychodnia9Context : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_Doctor_User1");
 
-            entity.HasMany(d => d.Offices).WithMany(p => p.Doctors)
-                .UsingEntity<Dictionary<string, object>>(
-                    "DoctorHasOffice",
-                    r => r.HasOne<Office>().WithMany()
-                        .HasForeignKey("OfficeId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("fk_Doctor_has_Office_Office1"),
-                    l => l.HasOne<Doctor>().WithMany()
-                        .HasForeignKey("DoctorId", "DoctorUserId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("fk_Doctor_has_Office_Doctor1"),
-                    j =>
-                    {
-                        j.HasKey("DoctorId", "DoctorUserId", "OfficeId").HasName("PRIMARY");
-                        j.ToTable("doctor_has_office");
-                        j.HasIndex(new[] { "DoctorId", "DoctorUserId" }, "fk_Doctor_has_Office_Doctor1_idx");
-                        j.HasIndex(new[] { "OfficeId" }, "fk_Doctor_has_Office_Office1_idx");
-                        j.IndexerProperty<int>("DoctorId").HasColumnName("Doctor_id");
-                        j.IndexerProperty<int>("DoctorUserId").HasColumnName("Doctor_User_id");
-                        j.IndexerProperty<int>("OfficeId").HasColumnName("Office_id");
-                    });
-
             entity.HasMany(d => d.Patients).WithMany(p => p.Doctors)
                 .UsingEntity<Dictionary<string, object>>(
-                    "DoctorHasPatient",
+                    "DoctorPatient",
                     r => r.HasOne<Patient>().WithMany()
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
@@ -262,7 +240,7 @@ public partial class Przychodnia9Context : DbContext
                     j =>
                     {
                         j.HasKey("DoctorId", "DoctorUserId", "PatientId").HasName("PRIMARY");
-                        j.ToTable("doctor_has_patient");
+                        j.ToTable("doctor_patient");
                         j.HasIndex(new[] { "DoctorId", "DoctorUserId" }, "fk_Doctor_has_Patient_Doctor1_idx");
                         j.HasIndex(new[] { "PatientId" }, "fk_Doctor_has_Patient_Patient1_idx");
                         j.IndexerProperty<int>("DoctorId").HasColumnName("Doctor_id");
@@ -272,7 +250,7 @@ public partial class Przychodnia9Context : DbContext
 
             entity.HasMany(d => d.Specializations).WithMany(p => p.Doctors)
                 .UsingEntity<Dictionary<string, object>>(
-                    "DoctorSpecialization",
+                    "DoctorHasSpecialization",
                     r => r.HasOne<Specialization>().WithMany()
                         .HasForeignKey("SpecializationId")
                         .OnDelete(DeleteBehavior.ClientSetNull)
@@ -284,7 +262,7 @@ public partial class Przychodnia9Context : DbContext
                     j =>
                     {
                         j.HasKey("DoctorId", "DoctorUserId", "SpecializationId").HasName("PRIMARY");
-                        j.ToTable("doctor_specialization");
+                        j.ToTable("doctor_has_specialization");
                         j.HasIndex(new[] { "DoctorId", "DoctorUserId" }, "fk_Doctor_has_Specialization_Doctor1_idx");
                         j.HasIndex(new[] { "SpecializationId" }, "fk_Doctor_has_Specialization_Specialization1_idx");
                         j.IndexerProperty<int>("DoctorId").HasColumnName("Doctor_id");
@@ -357,11 +335,23 @@ public partial class Przychodnia9Context : DbContext
 
         modelBuilder.Entity<Office>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PRIMARY");
+            entity.HasKey(e => new { e.Id, e.DoctorUserIdUser, e.DoctorId, e.DoctorUserId }).HasName("PRIMARY");
 
             entity.ToTable("office");
 
-            entity.Property(e => e.Id).HasColumnName("id");
+            entity.HasIndex(e => new { e.DoctorId, e.DoctorUserId }, "fk_Office_Doctor1_idx");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("id");
+            entity.Property(e => e.DoctorUserIdUser).HasColumnName("Doctor_User_idUser");
+            entity.Property(e => e.DoctorId).HasColumnName("Doctor_id");
+            entity.Property(e => e.DoctorUserId).HasColumnName("Doctor_User_id");
+
+            entity.HasOne(d => d.Doctor).WithMany(p => p.Offices)
+                .HasForeignKey(d => new { d.DoctorId, d.DoctorUserId })
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_Office_Doctor1");
         });
 
         modelBuilder.Entity<Patient>(entity =>
@@ -496,10 +486,9 @@ public partial class Przychodnia9Context : DbContext
             entity.ToTable("user");
 
             entity.Property(e => e.Id).HasColumnName("id");
-            entity.Property(e => e.FirstLogin).HasColumnName("firstLogin");
-            entity.Property(e => e.Hash)
-                .HasMaxLength(45)
-                .HasColumnName("hash");
+            entity.Property(e => e.FirstLogin)
+                .HasDefaultValueSql("'1'")
+                .HasColumnName("firstLogin");
             entity.Property(e => e.Login)
                 .HasMaxLength(45)
                 .HasColumnName("login");
@@ -519,7 +508,7 @@ public partial class Przychodnia9Context : DbContext
 
         modelBuilder.Entity<Workhour>(entity =>
         {
-            entity.HasKey(e => new { e.Id, e.ReceptionistId, e.ReceptionistUserId, e.DoctorId, e.DoctorUserId }).HasName("PRIMARY");
+            entity.HasKey(e => new { e.Id, e.DoctorId, e.DoctorUserId, e.ReceptionistId, e.ReceptionistUserId }).HasName("PRIMARY");
 
             entity.ToTable("workhours");
 
@@ -530,10 +519,10 @@ public partial class Przychodnia9Context : DbContext
             entity.Property(e => e.Id)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("id");
-            entity.Property(e => e.ReceptionistId).HasColumnName("Receptionist_id");
-            entity.Property(e => e.ReceptionistUserId).HasColumnName("Receptionist_User_id");
             entity.Property(e => e.DoctorId).HasColumnName("Doctor_id");
             entity.Property(e => e.DoctorUserId).HasColumnName("Doctor_User_id");
+            entity.Property(e => e.ReceptionistId).HasColumnName("Receptionist_id");
+            entity.Property(e => e.ReceptionistUserId).HasColumnName("Receptionist_User_id");
             entity.Property(e => e.End)
                 .HasColumnType("datetime(5)")
                 .HasColumnName("end");

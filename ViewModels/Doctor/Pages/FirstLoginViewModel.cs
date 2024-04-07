@@ -33,10 +33,10 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			
 			var watch = new Stopwatch();
 			watch.Start();
-			var db = new Przychodnia9Context();
+			var db = new M4Context();
 			watch.Stop();
 			Console.WriteLine("czas"+ watch.ElapsedMilliseconds);
-			_currentUser.Surname = "sds";
+			//_currentUser.Surname = "sds";
 			Console.WriteLine($"id2: {_currentUser.Name}");
 			Console.WriteLine("hasło: "+Password + PasswordRepeat);
 			Console.WriteLine($"Rozmiar: {db.Users.Where(e => e.Id == _currentUser.Id).Count()}");

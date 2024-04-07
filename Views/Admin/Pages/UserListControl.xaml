@@ -8,14 +8,8 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
 
-    <UserControl.Resources>
-        
-    </UserControl.Resources>
-    
-
     <Grid>
         <TextBlock Text="Lista użytkowników" FontSize="50"/>
-        <DataGrid IsReadOnly="True" ItemsSource="{Binding DataContext.Users,RelativeSource={RelativeSource AncestorType=local:AdminView}, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Margin="0,125,460,125"/>
 
     </Grid>
 </UserControl>
