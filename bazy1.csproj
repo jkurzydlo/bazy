@@ -47,10 +47,4 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ViewModels\Receptionist\Pages\" />
-    <Folder Include="Views\Receptionist\Pages\" />
-    <Folder Include="Views\Receptionist\Pages\" />
-  </ItemGroup>
-
 </Project>
