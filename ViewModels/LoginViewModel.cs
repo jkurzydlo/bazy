@@ -30,6 +30,8 @@ namespace bazy1.ViewModels {
         public LoginViewModel() {
             userRepository = new UserRepository();
 
+            //Wygeneruj pierwsze konto admina
+            ((UserRepository)userRepository).adminGenerate();
             //ustawiamy komendę dla viewmodelu
             LoginCommand = new BasicCommand(ExecuteLoginCommand, CanExecuteLoginCommand);
         }

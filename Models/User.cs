@@ -21,6 +21,8 @@ public partial class User
 
     public bool FirstLogin { get; set; }
 
+    public DateTime? LastLogin { get; set; }
+
     public virtual ICollection<Administrator> Administrators { get; set; } = new List<Administrator>();
 
     public virtual ICollection<Doctor> Doctors { get; set; } = new List<Doctor>();

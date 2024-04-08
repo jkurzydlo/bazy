@@ -39,7 +39,7 @@ namespace bazy1.ViewModels.Doctor {
 			Console.WriteLine(_currentUser.FirstLogin + CurrentUser.Login);
 			if (_currentUser.FirstLogin)
 			{
-			CurrentViewModel = new FirstLoginViewModel(_currentUser);	
+		CurrentViewModel = new FirstLoginViewModel(_currentUser);	
 			}
 			else
 			{

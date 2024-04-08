@@ -36,11 +36,13 @@
                 <DataGridTextColumn Header="Imię" Binding="{Binding Name}" />
                 <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}"  />
                 <DataGridTextColumn Header="Login" Binding="{Binding Login}"  />
+                <DataGridTextColumn Header="Ostatnie logowanie" Binding="{Binding LastLogin}"/>
             </DataGrid.Columns>
             <DataGrid.ContextMenu>
 
                 <ContextMenu>
                     <MenuItem Header="Zmodyfikuj" Command="{Binding ShowModifyPanel}" />
+                    <MenuItem Header="Usuń" Command="{Binding Source={x:Reference deleteBox}, Path=Show}" CommandParameter="Usunąć?"/>
                 </ContextMenu>
                 
             </DataGrid.ContextMenu>
@@ -48,19 +50,23 @@
 
         <UniformGrid x:Name="modifyPanel" Visibility="{Binding EditFormVisible}" Columns="2" Rows="3" Grid.Column="1" Grid.Row="1" Width="260" Margin="70,0,70,290">
             <TextBlock Text="Imię" FontFamily="Roboto" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
-            <TextBox Text="{Binding Name}" FontFamily="Roboto" Width="120" Height="23" VerticalAlignment="Center" HorizontalAlignment="Left"
-                         Foreground="White"
+            <TextBox Text="{Binding Name}" FontFamily="Roboto" Width="120" Height="20" VerticalAlignment="Center" HorizontalAlignment="Left"
+                         Foreground="Black"
                          CaretBrush="White"
                          Background="Transparent"
-                         BorderThickness="0,0,0,1"/>
+                         BorderThickness="1,1,1,1"/>
             <TextBlock Text="Nazwisko " FontFamily="Roboto" VerticalAlignment="Center" HorizontalAlignment="Left" />
             <TextBox Text="{Binding Surname}" FontFamily="Roboto"  Width="120" Height="23" VerticalAlignment="Center" HorizontalAlignment="Left" 
-                         Foreground="White"
+                         Foreground="Black"
                          CaretBrush="White"
                          Background="Transparent"
-                         BorderThickness="0,0,0,1" />
+                         BorderThickness="1,1,1,1" />
             <TextBlock Text="Login " FontFamily="Roboto" VerticalAlignment="Center" HorizontalAlignment="Left" />
-            <TextBox Text="{Binding Login}" FontFamily="Roboto" Width="120" Height="23" VerticalAlignment="Center"  HorizontalAlignment="Left"/>
+            <TextBox Text="{Binding Login}" FontFamily="Roboto" Width="120" Height="23" VerticalAlignment="Center"  HorizontalAlignment="Left"
+                         Foreground="Black"
+                         CaretBrush="White"
+                         Background="Transparent"
+                         BorderThickness="1,1,1,1" />
 
         </UniformGrid>
         <Button x:Name="btnLogin" Visibility="{Binding EditFormVisible}" BorderThickness="0" Content="Potwierdź" Cursor="Hand" Grid.Column="1" Foreground="White"
@@ -88,6 +94,7 @@
 
         </Button>
         <jm:MessageDialogBox x:Name="dialogBox" Caption="Zapisać? " Icon="Question" Buttons="YesNo" CommandYes="{Binding ModifyUserCommand}" />
+        <jm:MessageDialogBox x:Name="deleteBox" Caption="Usunąć użytkownika?" Icon="Question" Buttons="YesNo" CommandYes="{Binding DeleteUserCommand}" />
 
 
 

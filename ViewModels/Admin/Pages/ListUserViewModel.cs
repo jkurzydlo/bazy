@@ -7,6 +7,7 @@ using System.Windows.Navigation;
 using MvvmDialogs;
 using System.Windows;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.EntityFrameworkCore;
 
 namespace bazy1.ViewModels.Admin.Pages {
 	public class ListUserViewModel : ViewModelBase {
@@ -14,11 +15,12 @@ namespace bazy1.ViewModels.Admin.Pages {
 		private AdminViewModel _adminViewModel;
 		private ObservableCollection<User> _users = new(DbContext.Users);
 		private User _selectedUser;
-		private string _name, _surname, _login;
+		private string _name, _surname, _login, _lastLogin;
 		private Visibility _editFormVisible = Visibility.Hidden;
 		public ICommand ShowModifyPanel { get; set; }
 
 		public ICommand ModifyUserCommand { get; set; }
+		public ICommand DeleteUserCommand { get; }
 		public ObservableCollection<User> Users {
 			get => _users;
 			set {
@@ -65,8 +67,16 @@ namespace bazy1.ViewModels.Admin.Pages {
 			}
 		}
 
+		public string LastLogin { get => _lastLogin;
+			set {
+				_lastLogin = value;
+				OnPropertyChanged(nameof(LastLogin));
+			}
+		}
+
 		public ListUserViewModel(AdminViewModel adminViewModel) {
-			this._adminViewModel = adminViewModel;
+
+			_adminViewModel = adminViewModel;
 			ShowModifyPanel = new BasicCommand((object obj) => EditFormVisible = Visibility.Visible);
 			ModifyUserCommand = new BasicCommand((object obj) =>
 			{
@@ -79,6 +89,24 @@ namespace bazy1.ViewModels.Admin.Pages {
 				DbContext.SaveChanges();
 				_adminViewModel.CurrentViewModel = new ListUserViewModel(adminViewModel);
 
+
+			});
+			DeleteUserCommand = new BasicCommand((object obj) =>
+			{
+				var selected = DbContext.Users.Where(user => SelectedUser.Id == user.Id).First();
+                var doctors = DbContext.Doctors.Where(doctor => doctor.UserId == selected.Id).First();
+
+				//doctors.User = null;
+				//DbContext.Doctors.Remove(doctors);
+				doctors.Specializations.Clear();
+				doctors.Offices.Clear();
+				doctors.Workhours.Clear();
+				doctors.Patients.Clear();
+
+                DbContext.Users.Remove(selected);
+
+				DbContext.SaveChanges();
+				_adminViewModel.CurrentViewModel = new ListUserViewModel(adminViewModel);
 
 			});
 

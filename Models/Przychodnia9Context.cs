@@ -223,7 +223,6 @@ public partial class Przychodnia9Context : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Doctors)
                 .HasForeignKey(d => d.UserId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_Doctor_User1");
 
             entity.HasMany(d => d.Offices).WithMany(p => p.Doctors)
@@ -495,11 +494,16 @@ public partial class Przychodnia9Context : DbContext
 
             entity.ToTable("user");
 
+            entity.HasIndex(e => e.Login, "login").IsUnique();
+
             entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.FirstLogin).HasColumnName("firstLogin");
             entity.Property(e => e.Hash)
-                .HasMaxLength(45)
+                .HasMaxLength(512)
                 .HasColumnName("hash");
+            entity.Property(e => e.LastLogin)
+                .HasColumnType("datetime")
+                .HasColumnName("lastLogin");
             entity.Property(e => e.Login)
                 .HasMaxLength(45)
                 .HasColumnName("login");

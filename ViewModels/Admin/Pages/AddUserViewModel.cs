@@ -1,4 +1,5 @@
 ﻿using bazy1.Models;
+using bazy1.Utils;
 using Google.Protobuf.Compiler;
 using Microsoft.AspNetCore.CookiePolicy;
 using Org.BouncyCastle.Crypto.Generators;
@@ -105,29 +106,18 @@ namespace bazy1.ViewModels.Admin.Pages {
             var tempDoctor = new Models.Doctor();
             AddUserCommand = new BasicCommand((object obj) =>
             {
+            UserCredentialsGenerator generator = new();
+
 
                 Console.WriteLine("ds");
                 tempUser.Name = UserName;
                 tempUser.Surname = UserSurname;
                 tempUser.Type = ChosenUserType;
                 tempUser.FirstLogin = true;
-                tempUser.Login = tempUser.Name.First().ToString().ToLower() + tempUser.Surname.First().ToString().ToLower() + tempUser.Id +
-                new Random().Next(0, 9) + new Random().Next(0, 9) + new Random().Next(0, 9) + new Random().Next(0, 9);
+                tempUser.Login = generator.generateLogin(new User() {Name = UserName,Surname = UserSurname});
                 tempUser.Hash = "0";
-
-                string tempPass = "";
-                var randomGenerator = new Random();
-
-				//Pierwsze hasło w formacie [0-9][0-9][0-9][0-9][Znak ASCII od !-~][Znak ASCII od !-~][Znak ASCII od !-~]
-				for (int i = 0; i < 7; i++)
-                {
-                    if (i < 4) tempPass += randomGenerator.Next(0, 9);
-                    else tempPass += Convert.ToChar(randomGenerator.Next(33, 126));
-                }
-                Console.WriteLine(tempPass);
-                tempUser.Password = tempPass;
-
-                string passHash = BCrypt.Net.BCrypt.HashPassword(tempPass);
+                tempUser.Password = generator.generatePassword();
+                string passHash = BCrypt.Net.BCrypt.HashPassword(tempUser.Password);
                 tempUser.Hash = passHash;
                  
                 switch (tempUser.Type)

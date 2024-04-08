@@ -43,11 +43,9 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical">
-            <Button x:Name="addUserButton" Width="100" Height="20" Content="Dodaj użytkownika" Command="{Binding ShowAddUserViewCommand}"/>
-            <Button x:Name="listUserButton" Width="100" Height="20" Content="Lista użytkowników" Command="{Binding ShowUserListViewCommand}"/>
-
-
-            <TextBlock x:Name="userRemove" Text="Zmień dane użytkownika"></TextBlock>
+            <Button x:Name="addUserButton" Width="150" Height="20" Content="Dodaj użytkownika" Command="{Binding ShowAddUserViewCommand}"/>
+            <Button x:Name="listUserButton" Width="150" Height="20" Content="Lista użytkowników" Command="{Binding ShowUserListViewCommand}">
+            </Button>
 
         </StackPanel>
 

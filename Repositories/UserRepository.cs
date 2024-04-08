@@ -1,5 +1,6 @@
 ﻿using bazy1.Models;
 using bazy1.Models.Repositories;
+using bazy1.Utils;
 using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using System;
@@ -10,30 +11,66 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace bazy1.Repositories
 {
 	public class UserRepository : RepositoryBase, IUserRepository {
+
 		public void add(User user) {
 			throw new NotImplementedException();
 		}
 
+		public void adminGenerate() {
+			using (var connection = GetConnection())
+			{
+				using (var command = new MySqlCommand())
+				{
+					connection.Open();
+					command.Connection = connection;
+
+					string login = "admin", password = "admin"; //Pierwsze dane generowane i dostarczane przy dostarczaniu programu klientowi
+					
+					//Dodane Ignore, żeby dodało konkretnego admina tylko raz 
+					command.CommandText = "insert ignore into user(type,login,name,surname,hash,firstLogin,password) values(@type,@login,@name,@surname, @hash, @firstLogin, @password)";
+					command.Parameters.Add(new MySqlParameter("@type", MySqlDbType.Enum) { Value = login});
+					command.Parameters.Add(new MySqlParameter("@login", MySqlDbType.VarChar) { Value = password });
+					command.Parameters.Add(new MySqlParameter("@name", MySqlDbType.VarChar) { Value = "admin"});
+					command.Parameters.Add(new MySqlParameter("@surname", MySqlDbType.VarChar) { Value = "admin" });
+					command.Parameters.Add(new MySqlParameter("@firstLogin", MySqlDbType.Byte) { Value = 1 });
+					command.Parameters.Add(new MySqlParameter("@hash", MySqlDbType.VarChar) { Value = BCrypt.Net.BCrypt.HashPassword(password) }) ;
+					command.Parameters.Add(new MySqlParameter("@password", MySqlDbType.VarChar) { Value = "admin" });
+					command.ExecuteScalar();
+				}
+			}
+		}
+
 		public bool authenticate(NetworkCredential credential) {
+
 			bool valid = false;
 			using (var connection = GetConnection()) {
 				using (var command = new MySqlCommand()) {
 					connection.Open();
 					command.Connection = connection;
-					if (credential.Password == "admin" && credential.UserName == "admin") { return true; }
+
+
+					
 					//Dodane binary żeby zwracał uwagę na wielkość znaków
 					command.CommandText = "select hash from User where @login = binary login";
 					command.Parameters.Add("@login",MySqlDbType.VarChar).Value = credential.UserName;
-					//command.Parameters.Add("@password", MySqlDbType.VarChar).Value = credential.Password;
-
 					var hash = (string)command.ExecuteScalar();
+
 					Console.WriteLine("hash: "+hash);
 					if (hash != null){
-						if (BCrypt.Net.BCrypt.Verify(credential.Password, hash)) valid = true;
+						if (BCrypt.Net.BCrypt.Verify(credential.Password, hash))
+						{
+							//Jeśli dane ok - ustaw datę ostatniego logowania
+							command.CommandText = "update user set lastLogin=@date where login=@login";
+							command.Parameters.Add("@date", MySqlDbType.DateTime).Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+							command.ExecuteScalar();
+							valid = true;
+
+						}
 					}
 					Console.WriteLine(credential.UserName + credential.Password);
 					//valid = command.ExecuteScalar() == null ? false : true;
