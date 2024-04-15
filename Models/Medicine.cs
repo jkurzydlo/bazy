@@ -5,7 +5,7 @@ namespace bazy1.Models;
 
 public partial class Medicine
 {
-    public int? Name { get; set; }
+    public string? Name { get; set; }
 
     public string? Dose { get; set; }
 

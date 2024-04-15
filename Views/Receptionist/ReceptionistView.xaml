@@ -9,10 +9,6 @@
         xmlns:pagesViews="clr-namespace:bazy1.Views.Admin.Pages"
         Title="ReceptionistView" Height="450" Width="800"
         WindowStartupLocation="CenterScreen">
-	<Window.DataContext>
-		<!-- Ustawia ReceptionistViewModel jako kontekst danych dla tego widoku -->
-		<viewModels:ReceptionistViewModel/>
-	</Window.DataContext>
 
     <Window.Resources>
         <DataTemplate DataType="{x:Type pagesViewModels:AddUserViewModel}">

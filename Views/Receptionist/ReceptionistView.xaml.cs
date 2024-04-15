@@ -1,4 +1,5 @@
-﻿using System;
+﻿using bazy1.ViewModels.Receptionist;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace bazy1.Views.Receptionist
         public ReceptionistView()
         {
             InitializeComponent();
-            Console.WriteLine(DataContext.ToString());
+            DataContext = new ReceptionistViewModel();
         }
     }
 }

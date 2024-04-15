@@ -13,6 +13,14 @@ public partial class Patient
 
     public int Id { get; set; }
 
+    public string? Name { get; set; }
+
+    public string? Surname { get; set; }
+
+    public DateTime? NextVisit { get; set; }
+
+    public DateTime? LastVisit { get; set; }
+
     public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
     public virtual ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
