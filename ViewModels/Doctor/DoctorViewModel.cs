@@ -36,10 +36,10 @@ namespace bazy1.ViewModels.Doctor {
 
 						Console.WriteLine("executeshowdashobard ");
 
-			Console.WriteLine(_currentUser.FirstLogin + CurrentUser.Login);
+			//Console.WriteLine(_currentUser.FirstLogin + CurrentUser.Login);
 			if (_currentUser.FirstLogin)
 			{
-		CurrentViewModel = new FirstLoginViewModel(_currentUser);	
+	CurrentViewModel = new FirstLoginViewModel(_currentUser);	
 			}
 			else
 			{
@@ -53,9 +53,11 @@ namespace bazy1.ViewModels.Doctor {
 		private void ExecuteShowPatientListViewCommand(object obj) {
 			
 			if (!_currentUser.FirstLogin || !_firstLogin) //Jeśli użytkownik nie loguje się pierwszy raz -> zmienił hasło -> daj dostęp do przycisków
-			{
+			{			
+				Console.WriteLine("nazwisko:"+CurrentUser.Surname);
+
 				//Ustawiamy viewmodel dla widoku listy użytkowników
-				CurrentViewModel = new PatientListViewModel(_currentUser);
+				CurrentViewModel = new PatientListViewModel(_currentUser,this);
 				Caption2 = "Lista pacjentów";
 				Console.WriteLine("dasdas");
 			}

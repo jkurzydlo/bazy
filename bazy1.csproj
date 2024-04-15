@@ -9,6 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Fonts\Dosis-ExtraLight.ttf" />
+    <None Remove="Fonts\Dosis-Light.ttf" />
+    <None Remove="Fonts\Dosis-Regular.ttf" />
     <None Remove="img\bg.jpg" />
     <None Remove="img\doctor.png" />
     <None Remove="img\health%402x.png" />
@@ -16,6 +19,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Fonts\Dosis-ExtraLight.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\Dosis-Light.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\Dosis-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="img\bg.jpg" />
     <Resource Include="img\doctor.png" />
     <Resource Include="img\health.png" />
@@ -47,6 +59,15 @@
     <Folder Include="ViewModels\Receptionist\Pages\" />
     <Folder Include="Views\Receptionist\" />
     <Folder Include="Views\Receptionist\Pages\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Fonts\Dosis-Bold.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Fonts\Dosis-ExtraBold.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

@@ -59,13 +59,13 @@ namespace bazy1.ViewModels.Admin
 
         public AdminViewModel()
         {
-            //RefreshCommand = new BasicCommand((object obj) => CurrentViewModel);
+           // RefreshCommand = new BasicCommand((object obj) => CurrentViewModel);
 
 			_databaseService = new DatabaseService(new Przychodnia9Context());
             Users = 
                 DatabaseService.getDbContext().Users.Select(u => new UserPart(){
                 Name = u.Name,
-                Surname = u.Surname,
+               Surname = u.Surname,
                 Type = u.Type
             }).ToList();
 

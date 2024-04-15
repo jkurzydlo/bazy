@@ -7,15 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock Text="Ekran główny" FontSize="50"></TextBlock>
-        <TextBlock>
-            <Run Text="Witaj, "/>
-            <Run Text="{Binding DataContext.CurrentUser.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-            <Run Text=" "/>
-            <Run Text="{Binding DataContext.CurrentUser.Surname, RelativeSource={RelativeSource AncestorType=local:DoctorView}, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-        </TextBlock>
-        <TextBlock Text="{Binding T1}" Margin="315,30,-315,-30"></TextBlock>
-        <Button Content="klik" Width="50" Height="100" Command="{Binding Test}"/>
+
 
     </Grid>
 </UserControl>

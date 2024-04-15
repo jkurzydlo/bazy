@@ -7,9 +7,9 @@ public partial class Disease
 {
     public string Name { get; set; } = null!;
 
-    public string? DateFrom { get; set; }
+    public DateTime? DateFrom { get; set; }
 
-    public string? DateTo { get; set; }
+    public DateTime? DateTo { get; set; }
 
     public sbyte? IsEnded { get; set; }
 

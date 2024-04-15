@@ -167,10 +167,10 @@ public partial class Przychodnia9Context : DbContext
                 .HasMaxLength(45)
                 .HasColumnName("comments");
             entity.Property(e => e.DateFrom)
-                .HasMaxLength(45)
+                .HasColumnType("date")
                 .HasColumnName("dateFrom");
             entity.Property(e => e.DateTo)
-                .HasMaxLength(45)
+                .HasColumnType("date")
                 .HasColumnName("dateTo");
             entity.Property(e => e.IsEnded).HasColumnName("isEnded");
             entity.Property(e => e.Name)
@@ -223,6 +223,7 @@ public partial class Przychodnia9Context : DbContext
 
             entity.HasOne(d => d.User).WithMany(p => p.Doctors)
                 .HasForeignKey(d => d.UserId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_Doctor_User1");
 
             entity.HasMany(d => d.Offices).WithMany(p => p.Doctors)
@@ -302,7 +303,9 @@ public partial class Przychodnia9Context : DbContext
             entity.Property(e => e.Dose)
                 .HasMaxLength(45)
                 .HasColumnName("dose");
-            entity.Property(e => e.Name).HasColumnName("name");
+            entity.Property(e => e.Name)
+                .HasMaxLength(45)
+                .HasColumnName("name");
 
             entity.HasMany(d => d.Patients).WithMany(p => p.Medicines)
                 .UsingEntity<Dictionary<string, object>>(
@@ -373,9 +376,21 @@ public partial class Przychodnia9Context : DbContext
             entity.Property(e => e.Email)
                 .HasMaxLength(45)
                 .HasColumnName("email");
+            entity.Property(e => e.LastVisit)
+                .HasColumnType("date")
+                .HasColumnName("lastVisit");
+            entity.Property(e => e.Name)
+                .HasMaxLength(45)
+                .HasColumnName("name");
+            entity.Property(e => e.NextVisit)
+                .HasColumnType("date")
+                .HasColumnName("nextVisit");
             entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(45)
                 .HasColumnName("phoneNumber");
+            entity.Property(e => e.Surname)
+                .HasMaxLength(45)
+                .HasColumnName("surname");
 
             entity.HasMany(d => d.Addresses).WithMany(p => p.Patients)
                 .UsingEntity<Dictionary<string, object>>(

@@ -34,8 +34,8 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			_currentUser.Surname = "sds";
 			Console.WriteLine($"id2: {_currentUser.Name}");
 			Console.WriteLine("hasło: "+Password + PasswordRepeat);
-			Console.WriteLine($"Rozmiar: {db.Users.Where(e => e.Id == _currentUser.Id).Count()}");
-			Console.WriteLine(db.Users.Count());
+			//Console.WriteLine($"Rozmiar: {db.Users.Where(e => e.Id == _currentUser.Id).Count()}");
+			//Console.WriteLine(db.Users.Count());
 			if (!string.IsNullOrEmpty(Password) && !string.IsNullOrEmpty(PasswordRepeat))
 			{
 				if (Password.Equals(PasswordRepeat))

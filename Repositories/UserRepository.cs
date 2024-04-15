@@ -147,7 +147,7 @@ namespace bazy1.Repositories
 				}
 			}
 			Console.WriteLine("dasda");
-			Console.WriteLine($"user.Id {user.FirstLogin}");
+			//Console.WriteLine($"user.Id {user.FirstLogin}");
 			return user;
 		}
 

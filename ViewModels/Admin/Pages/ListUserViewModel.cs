@@ -81,8 +81,10 @@ namespace bazy1.ViewModels.Admin.Pages {
 			ModifyUserCommand = new BasicCommand((object obj) =>
 			{
 				var selected = DbContext.Users.Where(user => SelectedUser.Id == user.Id).First();
+				var doctors = DbContext.Doctors.Where(doctor => doctor.UserId == selected.Id).First();
+				doctors.Offices.Add(new Office { Number = 12 });
 
-				if(!string.IsNullOrEmpty(Name)) selected.Name = Name;
+				if (!string.IsNullOrEmpty(Name)) selected.Name = Name;
 				if (!string.IsNullOrEmpty(Surname)) selected.Surname = Surname;
 				if (!string.IsNullOrEmpty(Login)) selected.Login = Login;
 
@@ -95,9 +97,8 @@ namespace bazy1.ViewModels.Admin.Pages {
 			{
 				var selected = DbContext.Users.Where(user => SelectedUser.Id == user.Id).First();
                 var doctors = DbContext.Doctors.Where(doctor => doctor.UserId == selected.Id).First();
-
-				//doctors.User = null;
-				//DbContext.Doctors.Remove(doctors);
+				doctors.User = null;
+				DbContext.Doctors.Remove(doctors);
 				doctors.Specializations.Clear();
 				doctors.Offices.Clear();
 				doctors.Workhours.Clear();
