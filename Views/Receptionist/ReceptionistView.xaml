@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:bazy1.ViewModels.Receptionist"
         mc:Ignorable="d"
+        xmlns:pagesViewModels="clr-namespace:bazy1.ViewModels.Admin.Pages"
+        xmlns:pagesViews="clr-namespace:bazy1.Views.Admin.Pages"
         Title="ReceptionistView" Height="450" Width="800"
         WindowStartupLocation="CenterScreen">
 	<Window.DataContext>
@@ -12,7 +14,18 @@
 		<viewModels:ReceptionistViewModel/>
 	</Window.DataContext>
 
-	<Grid>
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type pagesViewModels:AddUserViewModel}">
+            <pagesViews:UserAddControl/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type pagesViewModels:ListUserViewModel}">
+            <pagesViews:UserListControl/>
+        </DataTemplate>
+
+    </Window.Resources>
+
+    <Grid>
 		<!-- Panel górny -->
 		<Grid HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10">
 			<Button Content="Wyloguj" Command="{Binding LogoutCommand}" />

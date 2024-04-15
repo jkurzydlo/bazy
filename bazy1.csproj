@@ -20,6 +20,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Remove="Views\Receptionist\Pages\PatientsView.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="img\bg.jpg" />
     <Resource Include="img\doctor.png" />
     <Resource Include="img\health.png" />

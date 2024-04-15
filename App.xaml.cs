@@ -2,6 +2,7 @@
 using bazy1.Views;
 using bazy1.Views.Admin;
 using bazy1.Views.Doctor;
+using bazy1.Views.Receptionist;
 using System.Configuration;
 using System.Data;
 using System.Windows;
@@ -37,7 +38,13 @@ namespace bazy1
 					loginView.Close();
 					mainView.Show();
 				}
-			};
+                else if (((UserEventArgs)e).UserType.Equals("recepcjonista"))
+                {
+                    var mainView = new ReceptionistView();
+                    loginView.Close();
+                    mainView.Show();
+                }
+            };
 			loginView.Show();
 			
 		}

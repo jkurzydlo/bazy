@@ -53,7 +53,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			}
 			else
 			{
-				ErrorMessage = "Hasłooo";
+				ErrorMessage = "Hasłoo";
 			}
 			Console.WriteLine(ErrorMessage);
 			
