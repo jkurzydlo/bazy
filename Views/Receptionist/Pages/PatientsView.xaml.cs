@@ -1,12 +1,7 @@
-﻿using bazy1.ViewModels.Receptionist;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using bazy1.ViewModels.Receptionist;
 
 namespace bazy1.Views.Receptionist.Pages
 {
@@ -15,7 +10,21 @@ namespace bazy1.Views.Receptionist.Pages
         public PatientsView()
         {
             InitializeComponent();
+            // Ustawienie kontekstu danych na nową instancję ReceptionistViewModel
             DataContext = new ReceptionistViewModel();
+            // Zaktualizowanie danych pacjentów w widoku po utworzeniu
+            UpdatePatients();
+        }
+
+        // Metoda do aktualizacji danych pacjentów
+        private void UpdatePatients()
+        {
+            // Sprawdzenie czy DataContext jest typu ReceptionistViewModel
+            if (DataContext is ReceptionistViewModel viewModel)
+            {
+                // Pobieranie pacjentów za pomocą metody UpdatePatients z ReceptionistViewModel
+                viewModel.UpdatePatients();
+            }
         }
 
         private void ContextMenuButton_Click(object sender, RoutedEventArgs e)
@@ -58,5 +67,7 @@ namespace bazy1.Views.Receptionist.Pages
         }
     }
 }
+
+
 
 

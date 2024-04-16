@@ -1,33 +1,50 @@
-﻿using bazy1.ViewModels.Doctor;
-using System;
-using System.Threading;
-using System.Windows.Input;
-using bazy1.ViewModels;
-using bazy1.Views;
+﻿using bazy1.Models;
+using bazy1.Repositories;
+using bazy1.ViewModels.Doctor;
 using bazy1.Views.Receptionist.Pages;
+using System.Collections.Generic;
+using System.Windows.Input;
 
 namespace bazy1.ViewModels.Receptionist
 {
     public class ReceptionistViewModel : DoctorViewModel
     {
+        private readonly PatientRepository _patientRepository;
+
         public ICommand ShowPatientsCommand { get; }
+
+        private List<Patient> _patients;
+        public List<Patient> Patients
+        {
+            get { return _patients; }
+            set
+            {
+                _patients = value;
+                OnPropertyChanged(nameof(Patients));
+            }
+        }
 
         public ReceptionistViewModel()
         {
-            Console.WriteLine("New ReceptionistViewModel instance created.");
-            // Tutaj możesz dodać logikę specyficzną dla recepcjonisty
+            _patientRepository = new PatientRepository();
+            Patients = _patientRepository.GetPatients();
 
-            // Inicjalizacja polecenia ShowPatientsCommand
             ShowPatientsCommand = new RelayCommand(ExecuteShowPatientsCommand);
         }
 
         private void ExecuteShowPatientsCommand(object obj)
         {
-            // Otwieranie widoku pacjentów (PatientsView.xaml)
             PatientsView patientsView = new PatientsView();
+            patientsView.DataContext = this; // Przekazujemy bieżący widok modelu do PatientsView
             patientsView.Show();
         }
-
-        // Możesz również nadpisać lub rozszerzyć metody istniejące w DoctorViewModel
+        public void UpdatePatients()
+        {
+            Patients = _patientRepository.GetPatients();
+        }
     }
 }
+
+
+
+
