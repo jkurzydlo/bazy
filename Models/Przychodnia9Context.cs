@@ -64,6 +64,9 @@ public partial class Przychodnia9Context : DbContext
             entity.Property(e => e.City)
                 .HasMaxLength(45)
                 .HasColumnName("city");
+            entity.Property(e => e.PostalCode)
+                .HasMaxLength(45)
+                .HasColumnName("postalCode");
             entity.Property(e => e.Street)
                 .HasMaxLength(45)
                 .HasColumnName("street");
@@ -373,6 +376,9 @@ public partial class Przychodnia9Context : DbContext
             entity.ToTable("patient");
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.BirthDate)
+                .HasColumnType("date")
+                .HasColumnName("birthDate");
             entity.Property(e => e.Email)
                 .HasMaxLength(45)
                 .HasColumnName("email");
@@ -388,6 +394,12 @@ public partial class Przychodnia9Context : DbContext
             entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(45)
                 .HasColumnName("phoneNumber");
+            entity.Property(e => e.SecondName)
+                .HasMaxLength(45)
+                .HasColumnName("secondName");
+            entity.Property(e => e.Sex)
+                .HasColumnType("enum('K','M')")
+                .HasColumnName("sex");
             entity.Property(e => e.Surname)
                 .HasMaxLength(45)
                 .HasColumnName("surname");

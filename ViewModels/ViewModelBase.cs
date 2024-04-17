@@ -1,4 +1,5 @@
 using bazy1.Models;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.ComponentModel;
 

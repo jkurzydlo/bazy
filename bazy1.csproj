@@ -39,6 +39,8 @@
     <PackageReference Include="BootstrapIcons.AspNetCore" Version="1.11.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="JacekMatulewski.WpfUtils" Version="1.0.3" />
+    <PackageReference Include="MaterialDesignColors" Version="3.0.0" />
+    <PackageReference Include="MaterialDesignThemes" Version="5.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3">
       <PrivateAssets>all</PrivateAssets>
@@ -55,6 +57,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Validation\" />
     <Folder Include="ViewModels\Receptionist\" />
     <Folder Include="ViewModels\Receptionist\Pages\" />
     <Folder Include="Views\Receptionist\" />

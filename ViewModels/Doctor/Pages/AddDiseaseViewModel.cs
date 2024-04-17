@@ -46,9 +46,11 @@ namespace bazy1.ViewModels.Doctor.Pages
                 disease.DateFrom = Date.ToDateTime(new TimeOnly(0, 0, 0));
                 if (!string.IsNullOrEmpty(Name) && !string.IsNullOrWhiteSpace(Name))
                 {
+                    Patient tempPatient;  
                     disease.Name = Name;
-					patient.Diseases.Add(disease);
-					DbContext.SaveChanges();
+                    DbContext.Patients.Where(pat => pat.Id == patient.Id).First().Diseases.Add(disease);
+                    Console.WriteLine("imie: " + DbContext.Patients.Where(pat => pat.Id == patient.Id).First());
+                    DbContext.SaveChanges();
                     Console.WriteLine("choroby:" + patient.Diseases.Count());
 				}
 

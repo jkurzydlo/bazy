@@ -20,9 +20,14 @@ namespace bazy1.ViewModels.Doctor.Pages {
 		private ObservableCollection<Patient> _patientsList;
 		public ICommand ShowMedicalHistoryCommand { get; }
 		public ICommand ShowAddDiseaseCommand { get; }
+		public ICommand AddPatientCommand { get; set; }
 
 
 		public PatientListViewModel(User user, DoctorViewModel viewModel) {
+
+			AddPatientCommand = new BasicCommand(obj => viewModel.CurrentViewModel = new AddPatientViewModel(doctor,viewModel));
+
+
 			Console.WriteLine(user.Name + user.Surname+user.Id);
 			this.user = user;
 			doctor = DbContext.Doctors.Where(doctor => doctor.UserId == user.Id).First();
@@ -35,11 +40,12 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			//DbContext.SaveChanges();
 			ShowMedicalHistoryCommand = new BasicCommand((object obj) => {
 				Console.WriteLine(SelectedPatient.Name + SelectedPatient.Surname);
-				if (SelectedPatient != null) viewModel.CurrentViewModel = new MedicalHistoryViewModel(SelectedPatient);
+				Console.WriteLine("sel: " + DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First().Diseases.Count);
+				if (SelectedPatient != null) viewModel.CurrentViewModel = new MedicalHistoryViewModel(DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First());
 				});
 			ShowAddDiseaseCommand = new BasicCommand((object obj) =>
 			{
-				if (SelectedPatient != null) viewModel.CurrentViewModel = new AddDiseaseViewModel(SelectedPatient); 
+				if (SelectedPatient != null) viewModel.CurrentViewModel = new AddDiseaseViewModel(DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First()); 
 			});
 
 			Console.WriteLine(doctor.Name);

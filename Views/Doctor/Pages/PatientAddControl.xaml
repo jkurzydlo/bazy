@@ -1,0 +1,90 @@
+﻿<UserControl x:Class="bazy1.Views.Doctor.Pages.PatientAddControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:bazy1.Views.Doctor.Pages"
+             xmlns:vm="clr-namespace:bazy1.ViewModels.Doctor.Pages"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+
+
+    <Grid Background="AliceBlue">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="13*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center">
+            <Button Content="Lista pacjentów" FontSize="10" Height="25" Width="150" HorizontalAlignment="Center"/>
+            <Button Content="Nowy" FontSize="10" Height="25" Width="150" HorizontalAlignment="Center" Command="{Binding AddPatientCommand}" IsEnabled="False"/>
+        </StackPanel>
+
+
+        <TabControl Margin="10" BorderBrush="Gainsboro" Background="AliceBlue" Grid.Row="1">
+            <TabControl.Resources>
+                <Style TargetType="TabItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="TabItem">
+                                <Border Name="Border" BorderThickness="1,1,1,0" BorderBrush="Gainsboro" CornerRadius="4,4,0,0" Margin="2,0">
+                                    <ContentPresenter x:Name="ContentSite"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"
+                                        ContentSource="Header"
+                                        Margin="10,2"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter TargetName="Border" Property="Background" Value="SlateBlue" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected" Value="False">
+                                        <Setter TargetName="Border" Property="Background" Value="GhostWhite" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
+            <TabItem Header="Dane osobowe">
+                <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,10">
+                        <TextBlock Text="Imię*" Margin="0,0,10,0"></TextBlock>
+                        <TextBox Text="{Binding Name}" BorderBrush="{Binding NameTextBoxColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="80" FontSize="10" Height="15" VerticalAlignment="Center"  Margin="0,0,10,0"></TextBox>
+                        <TextBlock Text="Nazwisko*" Margin="0,0,10,0"></TextBlock>
+                        <TextBox Text="{Binding Surname}" BorderBrush="{Binding SurnameTextBoxColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="10" Width="120" Height="15" VerticalAlignment="Center" Margin="0,0,10,0"></TextBox>
+                        <TextBlock Text="Drugie Imię" Margin="0,0,10,0"></TextBlock>
+                        <TextBox Text="{Binding SecondName}" Width="80" FontSize="10" Height="15" VerticalAlignment="Center"></TextBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <TextBlock Text="PESEL*" Margin="0,0,2,0"></TextBlock>
+                        <TextBox Text="{Binding Pesel}" BorderBrush="{Binding PeselTextBoxColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="10" Width="50" Height="15" VerticalAlignment="Center"  Margin="0,0,10,0"></TextBox>
+                        <TextBlock Text="Data urodzenia *" Margin="0,0,6,0"></TextBlock>
+                        <DatePicker Text="{Binding BirthDate}" BorderBrush="{Binding BirthDateTextBoxColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="10" Width="120" Height="25" VerticalAlignment="Center" Margin="0,0,50,0"></DatePicker>
+                        <TextBlock Text="Płeć*" Margin="0,0,10,0"></TextBlock>
+                        <ComboBox ItemsSource="{Binding Sexes}" Background="{Binding SexTextBoxColor, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding Sex}" Width="40" Height="20"></ComboBox>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,10,0,0">
+                        <TextBlock  Text="E-mail" Margin="0,0,4,0"></TextBlock>
+                        <TextBox Text="{Binding Email}" Width="80" FontSize="10" Height="15" VerticalAlignment="Center"  Margin="0,0,15,0"></TextBox>
+                        <TextBlock Text="Telefon" Margin="0,0,22,0"></TextBlock>
+                        <TextBox Text="{Binding PhoneNumber}" FontSize="10" Width="80" Height="15" VerticalAlignment="Center" Margin="0,0,10,0"></TextBox>
+                    </StackPanel>
+
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Adresy" HorizontalAlignment="Left" Width="62">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Kod pocztowy" Margin="0,0,4,0"></TextBlock>
+                    <TextBox Text="{Binding PostalCode}" Width="80" FontSize="10" Height="15" VerticalAlignment="Center"  Margin="0,0,15,0"></TextBox>
+                    <TextBlock Text="Telefon" Margin="0,0,22,0"></TextBlock>
+                    <TextBox Text="{Binding PhoneNumber}" FontSize="10" Width="80" Height="15" VerticalAlignment="Center" Margin="0,0,10,0"></TextBox>
+
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+        <Button Content="Zapisz" Width="100" Height="20" HorizontalAlignment="Right" VerticalAlignment="Bottom" Grid.Row="1" Margin="0,0,60,100" Command="{Binding AddNewPatientCommand}"></Button>
+
+    </Grid>
+</UserControl>

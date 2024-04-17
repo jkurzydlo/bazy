@@ -15,7 +15,7 @@
             <RowDefinition Height="23*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,50">
-        <TextBlock Text="Historia chorób" FontSize="35" Margin="0,0,10,0"></TextBlock>
+        <TextBlock Text="Historia chorób pacjenta" FontSize="35" Margin="0,0,10,0"></TextBlock>
         <TextBox Padding="4" VerticalAlignment="Center" ToolTip="Wyszukaj" Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" Width="120" Height="30"></TextBox>
         </StackPanel>
 

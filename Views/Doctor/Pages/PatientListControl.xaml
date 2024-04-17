@@ -11,12 +11,12 @@
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="13*"/>
         </Grid.RowDefinitions>
-        <TextBlock Text="Lista pacjentów" FontSize="40"></TextBlock>
 
 
-        <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" ColumnWidth="*" Style="{StaticResource DataGrid}" SelectionMode="Single" HeadersVisibility="Column" IsReadOnly="True" ItemsSource="{Binding PatientsList, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedPatient, Mode=TwoWay}" Margin="0,65,0,0" SelectionChanged="DataGrid_SelectionChanged">
+        <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" ColumnWidth="*" Style="{StaticResource DataGrid}" SelectionMode="Single" HeadersVisibility="Column" IsReadOnly="True" ItemsSource="{Binding PatientsList, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedPatient, Mode=TwoWay}" Margin="0,5,0,0" SelectionChanged="DataGrid_SelectionChanged" Grid.Row="1">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Imię" Binding="{Binding Name}" />
@@ -40,6 +40,9 @@
             </DataGrid.ContextMenu>
 
         </DataGrid>
-        <Grid/>
+        <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center">
+            <Button Content="Lista pacjentów" FontSize="10" Height="25" Width="150" HorizontalAlignment="Center" IsEnabled="False"/>
+            <Button Content="Nowy" FontSize="10" Height="25" Width="150" HorizontalAlignment="Center" Command="{Binding AddPatientCommand}"/>
+        </StackPanel>
     </Grid>
 </UserControl>

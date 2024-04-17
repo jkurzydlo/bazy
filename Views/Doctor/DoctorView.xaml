@@ -39,6 +39,10 @@
         <DataTemplate DataType="{x:Type pagesViewModels:AddDiseaseViewModel}">
             <pagesViews:AddDiseaseControl/>
         </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type pagesViewModels:AddPatientViewModel}">
+            <pagesViews:PatientAddControl/>
+        </DataTemplate>
 
     </Window.Resources>
 
