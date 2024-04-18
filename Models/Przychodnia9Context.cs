@@ -70,6 +70,9 @@ public partial class Przychodnia9Context : DbContext
             entity.Property(e => e.Street)
                 .HasMaxLength(45)
                 .HasColumnName("street");
+            entity.Property(e => e.Type)
+                .HasColumnType("enum('Zamieszkania','Zameldowania')")
+                .HasColumnName("type");
         });
 
         modelBuilder.Entity<Administrator>(entity =>

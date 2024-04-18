@@ -21,5 +21,9 @@ namespace bazy1.Views.Doctor.Pages {
 		public PatientAddControl() {
 			InitializeComponent();
 		}
-	}
+
+		private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+
+        }
+    }
 }
