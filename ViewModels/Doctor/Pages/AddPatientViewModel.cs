@@ -282,13 +282,13 @@ namespace bazy1.ViewModels.Doctor.Pages {
 				}
 				if (fieldName == "BuildingNumber" && needToValidate[fieldName])
 				{
-					if (!validate(BuildingNumber)) result = emptyFieldMsg;
+					if (string.IsNullOrEmpty(BuildingNumber) || string.IsNullOrWhiteSpace(BuildingNumber)) result = emptyFieldMsg;
 					else if (ErrorCollection.ContainsKey(fieldName))
 						ErrorCollection.Remove(fieldName);
 				}
 				if (fieldName == "BuildingNumber2" && needToValidate[fieldName])
 				{
-						if (!validate(BuildingNumber2) && !SameAddress) result = emptyFieldMsg;
+					if (string.IsNullOrEmpty(BuildingNumber) || string.IsNullOrWhiteSpace(BuildingNumber) && !SameAddress) result = emptyFieldMsg;
 						else if (ErrorCollection.ContainsKey(fieldName))
 						ErrorCollection.Remove(fieldName);
 					
@@ -297,14 +297,14 @@ namespace bazy1.ViewModels.Doctor.Pages {
 				if (fieldName == "PostalCode" && needToValidate[fieldName])
 				{
 					
-					if (!validate(PostalCode) || !Regex.Match(PostalCode, "^[0-9]{2}-[0-9]{3}$").Success)
+					if (string.IsNullOrEmpty(PostalCode) || string.IsNullOrWhiteSpace(PostalCode) || !Regex.Match(PostalCode, "^[0-9]{2}-[0-9]{3}$").Success)
 						result = "Niepoprawny format";
 					else if (ErrorCollection.ContainsKey(fieldName))
 						ErrorCollection.Remove(fieldName);
 				}
 				if (fieldName == "PostalCode2" && needToValidate[fieldName])
 				{
-						if ( (!validate(PostalCode2) || (!Regex.Match(PostalCode2, "^[0-9]{2}-[0-9]{3}$").Success)) && !SameAddress) result = "Niepoprawny format";
+						if ( (string.IsNullOrEmpty(PostalCode2) || string.IsNullOrWhiteSpace(PostalCode2) || (!Regex.Match(PostalCode2, "^[0-9]{2}-[0-9]{3}$").Success)) && !SameAddress) result = "Niepoprawny format";
 					else if (ErrorCollection.ContainsKey(fieldName))
 						ErrorCollection.Remove(fieldName);
 					
@@ -321,7 +321,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 		}
 
 		private bool validate(string data) {
-			return !string.IsNullOrEmpty(data) && !string.IsNullOrWhiteSpace(data);
+			return !string.IsNullOrEmpty(data) && !string.IsNullOrWhiteSpace(data) && !data.Any(char.IsDigit);
 		}
 		private bool validateList(string data,List<string> list) {
 			return !string.IsNullOrEmpty(data) && !string.IsNullOrWhiteSpace(data)

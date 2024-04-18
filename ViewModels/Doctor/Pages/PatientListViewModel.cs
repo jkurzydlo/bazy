@@ -11,6 +11,9 @@ using dbm = bazy1.Models;
 using System.Windows.Input;
 using Microsoft.VisualBasic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using System.ComponentModel;
+using System.Windows.Data;
 
 namespace bazy1.ViewModels.Doctor.Pages {
 	public class PatientListViewModel : ViewModelBase {
@@ -21,6 +24,47 @@ namespace bazy1.ViewModels.Doctor.Pages {
 		public ICommand ShowMedicalHistoryCommand { get; }
 		public ICommand ShowAddDiseaseCommand { get; }
 		public ICommand AddPatientCommand { get; set; }
+
+		public string PatientDetails{
+			get {
+				Console.WriteLine(DbContext.Addresses.Count());
+				var tempPatient = DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First();
+                Console.WriteLine("ile: "+DbContext.Addresses.Where(adr => adr.Patients.Contains(tempPatient)).Count());
+                string adressess ="", info = "";
+				DbContext.Addresses.Where(adr => adr.Patients.Contains(tempPatient)).ToList().
+					ForEach(adr => adressess += adr.City + " " + adr.PostalCode + " ul." + adr.Street + " " + adr.BuildingNumber+"\n");
+				info = $"Data urodzenia: {tempPatient.BirthDate.Value.ToShortDateString()}\n";
+				if (tempPatient.PhoneNumber != null) info += "Telefon: " + tempPatient.PhoneNumber + "\n";
+				if (tempPatient.Email != null) info += "Email: " + tempPatient.Email + "\n";
+				info += "Adresy:"+adressess;
+				return info;
+			}
+			set {
+			}
+		}
+		private ICollectionView patientsView;
+		private string _filterText;
+
+		public string FilterText {
+			get => _filterText;
+			set {
+				_filterText = value;
+
+				//Wyszukiwanie po nazwie
+				PatientView.Filter += (object patient) =>
+				{
+					var tempPatient = patient as Patient;
+					return tempPatient.Name.ToLower().Contains(FilterText.ToLower().Trim()) ||
+					tempPatient.Surname.ToLower().Contains(FilterText.ToLower().Trim()) ||
+					tempPatient.Pesel.ToString().ToLower().Contains(FilterText.ToLower().Trim());
+
+				};
+				OnPropertyChanged(nameof(FilterText));
+
+			}
+		}
+
+		public ICollectionView PatientView { get => patientsView; set => patientsView = value; }
 
 
 		public PatientListViewModel(User user, DoctorViewModel viewModel) {
@@ -33,6 +77,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			doctor = DbContext.Doctors.Where(doctor => doctor.UserId == user.Id).First();
 			//Console.WriteLine("dok: " + .Count());
 			_patientsList = new(DbContext.Patients.Where(patient => patient.Doctors.Contains(doctor)).ToList());
+			PatientView = CollectionViewSource.GetDefaultView(_patientsList);
 			Console.WriteLine("cn:"+_patientsList.Count());
 			Console.WriteLine(doctor.Offices.Count());
 			Console.WriteLine($"id:{doctor.UserId}, {doctor.Id}");

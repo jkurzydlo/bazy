@@ -24,7 +24,7 @@
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Jednostka chorobowa" Binding="{Binding Name}" />
-                <DataGridTextColumn Header="Data rozpoznania" Binding="{Binding DateFrom}"  />
+                <DataGridTextColumn Header="Data rozpoznania" Binding="{Binding DateFrom, StringFormat='{}{0:dd/MM/yyyy}'}"/>
                 <DataGridTextColumn Header="Data zakończenia" Binding="{Binding DateTo}"  />
                 <DataGridTextColumn Header="Dodatkowe informacje" Binding="{Binding Comments}"  />
                 <DataGridTextColumn Header="Przepisane leki" Binding="{

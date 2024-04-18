@@ -1,4 +1,5 @@
 ﻿using bazy1.Models;
+using bazy1.Models.Part;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -13,6 +14,8 @@ using System.Windows.Input;
 namespace bazy1.ViewModels.Doctor.Pages {
 	public class MedicalHistoryViewModel : ViewModelBase {
 		private ObservableCollection<Disease> diesasesList;
+		private ObservableCollection<DiseasePart> diesasesPartList = [];
+
 		private Patient patient;
 		private List<Medicine> _medicines;
 		private string _medicineDetails;
@@ -25,9 +28,13 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			//DbContext.Patients.ForEachAsync(pat => Console.WriteLine("wsz: "+pat.Diseases.Count));
 			//diesasesList = new(DbContext.Patients.Where(patient => patient.Id == this.patient.Id).First().Diseases);
 			diesasesList = new(DbContext.Diseases.Where(dis => dis.Patients.Contains(patient)));
+            foreach (var d in diesasesList)
+            {
+				//diesasesPartList.Add(new() { Comments = d.Comments, DateFrom = d.DateFrom.Value.Year})
+            }
 
-			//Console.WriteLine("chr: "+diesasesList.Count());
-			DiseasesView = CollectionViewSource.GetDefaultView(diesasesList);
+            //Console.WriteLine("chr: "+diesasesList.Count());
+            DiseasesView = CollectionViewSource.GetDefaultView(diesasesList);
 		}
 
 		public ObservableCollection<Disease> DiseasesList {

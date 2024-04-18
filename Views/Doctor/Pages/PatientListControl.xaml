@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
 
 
-        <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" ColumnWidth="*" Style="{StaticResource DataGrid}" SelectionMode="Single" HeadersVisibility="Column" IsReadOnly="True" ItemsSource="{Binding PatientsList, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedPatient, Mode=TwoWay}" Margin="0,5,0,0" SelectionChanged="DataGrid_SelectionChanged" Grid.Row="1">
+        <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" ColumnWidth="*" Style="{StaticResource DataGrid}" SelectionMode="Single" HeadersVisibility="Column" IsReadOnly="True" ItemsSource="{Binding PatientView, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedPatient, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,0" SelectionChanged="DataGrid_SelectionChanged" Grid.Row="1">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Imię" Binding="{Binding Name}" />
@@ -27,6 +27,15 @@
                 <DataGridTextColumn Header="Najbliższa wizyta" Binding="{Binding NextVisit}"/>
 
             </DataGrid.Columns>
+            <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{
+                          Binding RelativeSource={
+                            RelativeSource FindAncestor, 
+                            AncestorType={x:Type UserControl}},
+                          Path=DataContext.PatientDetails}" Margin="10" />
+                </DataTemplate>
+            </DataGrid.RowDetailsTemplate>
 
             <DataGrid.ContextMenu>
 
@@ -43,6 +52,8 @@
         <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center">
             <Button Content="Lista pacjentów" FontSize="10" Height="25" Width="150" HorizontalAlignment="Center" IsEnabled="False"/>
             <Button Content="Nowy" FontSize="10" Height="25" Width="150" HorizontalAlignment="Center" Command="{Binding AddPatientCommand}"/>
+            <TextBox Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="10" Height="25" Width="150" Margin="10,0,0,0" HorizontalAlignment="Right"/>
+
         </StackPanel>
     </Grid>
 </UserControl>

@@ -11,6 +11,7 @@ namespace bazy1.ViewModels.Doctor.Pages
     using dbm = Models;
     public class AddDiseaseViewModel : ViewModelBase
     {
+        private Patient _selectedPatient;
         public ICommand AddDiseaseCommand { get; }
 		public string Name { 
             get => _name;
@@ -26,24 +27,33 @@ namespace bazy1.ViewModels.Doctor.Pages
                 OnPropertyChanged(nameof(Description));
             }
         }
-		public DateOnly Date {
+		public DateTime DateFrom {
             get => _date;
             set{
                 _date = value;
-                OnPropertyChanged(nameof(Date));
+                OnPropertyChanged(nameof(DateFrom));
+            }
+        }
+
+		public Patient SelectedPatient { 
+            get => _selectedPatient;
+            set {
+                _selectedPatient = value;
+                OnPropertyChanged(nameof(SelectedPatient));
             }
         }
 
 		private dbm.Doctor doctor;
         private string _name, _description;
-        private DateOnly _date;
+        private DateTime _date = DateTime.Now;
         public AddDiseaseViewModel(dbm.Patient patient) {
+            SelectedPatient = patient;
             AddDiseaseCommand = new BasicCommand((object obj) =>
             {
                 Console.WriteLine(patient.Name);
                 Disease disease = new Disease();
                 disease.Comments = Description;
-                disease.DateFrom = Date.ToDateTime(new TimeOnly(0, 0, 0));
+                disease.DateFrom = DateTime.Parse(DateFrom.ToString());
                 if (!string.IsNullOrEmpty(Name) && !string.IsNullOrWhiteSpace(Name))
                 {
                     Patient tempPatient;  
