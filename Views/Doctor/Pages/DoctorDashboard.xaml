@@ -7,12 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock Text="Ekran główny" FontSize="50"></TextBlock>
-        <TextBlock>
-            <Run Text="Witaj, "/>
-            <Run Text="{Binding CurrentUser.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-            <Run Text=" "/>
-            <Run Text="{Binding CurrentUser.Surname, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-        </TextBlock>
-            </Grid>
+
+
+    </Grid>
 </UserControl>

@@ -32,6 +32,13 @@
             <pagesViews:FirstLoginControl/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type pagesViewModels:MedicalHistoryViewModel}">
+            <pagesViews:MedicalHistoryControl/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type pagesViewModels:AddDiseaseViewModel}">
+            <pagesViews:AddDiseaseControl/>
+        </DataTemplate>
 
     </Window.Resources>
 
@@ -43,8 +50,8 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical">
-            <Button x:Name="listPatientButton" Width="100" Height="20" Content="Lista pacjentów" Command="{Binding ShowPatientListViewCommand}"/>
-            <Button x:Name="scheduleButton" Width="100" Height="20" Content="Terminarz" Command="{Binding ShowScheduleViewCommand}"/>
+            <Button x:Name="listPatientButton" Width="auto" Height="20" Content="Lista pacjentów" Command="{Binding ShowPatientListViewCommand}"/>
+            <Button x:Name="scheduleButton" Width="auto" Height="20" Content="Terminarz" Command="{Binding ShowScheduleViewCommand}"/>
             <TextBlock x:Name="userRemove" Text="Zmień dane użytkownika"></TextBlock>
 
         </StackPanel>

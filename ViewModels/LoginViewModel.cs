@@ -10,12 +10,15 @@ using System.Windows.Markup;
 
 namespace bazy1.ViewModels
 {
-    class LoginViewModel : ViewModelBase {
+    class LoginViewModel : ViewModelBase
+    {
 
 
         private string _username;
         private string _password;
         private string _errorMessage;
+        private string _loginMessage;
+        private string _passwordMessage;
 
         public ICommand LoginCommand { get; }
         private IUserRepository userRepository;
@@ -25,22 +28,27 @@ namespace bazy1.ViewModels
         //Jeśli nie udało się zalogować - okno cały czas widoczne
         private bool isVisible = true;
 
-        public LoginViewModel() {
+        public LoginViewModel()
+        {
             userRepository = new UserRepository();
 
+            //Wygeneruj pierwsze konto admina
+            ((UserRepository)userRepository).adminGenerate();
             //ustawiamy komendę dla viewmodelu
             LoginCommand = new BasicCommand(ExecuteLoginCommand, CanExecuteLoginCommand);
         }
-        private bool CanExecuteLoginCommand(object obj) {
+        private bool CanExecuteLoginCommand(object obj)
+        {
             return !(string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password));
         }
 
-        private void ExecuteLoginCommand(object obj) {
+        private void ExecuteLoginCommand(object obj)
+        {
             var isValid = userRepository.authenticate(new System.Net.NetworkCredential(Username, Password));
-            if(isValid)
+            if (isValid)
             {
-                Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(Username),null);
-                LoginCompleted(this, new UserEventArgs(userRepository.findByUsername(Username).Type,userRepository.findByUsername(Username).FirstLogin));// Użytkownik zalogowany, wywołaj komendę z LoginCompleted -> ukryj okno
+                Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(Username), null);
+                LoginCompleted(this, new UserEventArgs(userRepository.findByUsername(Username).Type, userRepository.findByUsername(Username).FirstLogin));// Użytkownik zalogowany, wywołaj komendę z LoginCompleted -> ukryj okno
             }
             else
             {
@@ -49,32 +57,59 @@ namespace bazy1.ViewModels
         }
 
         //Przy zmianie którejś ze składowych wywołać OnPropertyChanged
-        public string Username {
+        public string Username
+        {
             get => _username;
-            set {
+            set
+            {
                 _username = value;
                 OnPropertyChanged(nameof(Username));
             }
         }
 
-        public string Password {
+        public string Password
+        {
             get => _password;
-            set {
+            set
+            {
                 _password = value;
                 OnPropertyChanged(nameof(Password));
             }
         }
-        public string ErrorMessage {
+        public string ErrorMessage
+        {
             get => _errorMessage;
-            set {
+            set
+            {
                 _errorMessage = value;
                 OnPropertyChanged(nameof(ErrorMessage));
             }
         }
-        public bool IsVisible {
+        public bool IsVisible
+        {
             get => isVisible;
-            set {
+            set
+            {
                 isVisible = value;
+            }
+        }
+
+        public string LoginMessage
+        {
+            get => _loginMessage;
+            set
+            {
+                _loginMessage = value;
+                OnPropertyChanged(nameof(LoginMessage));
+            }
+        }
+        public string PasswordMessage
+        {
+            get => _passwordMessage;
+            set
+            {
+                _passwordMessage = value;
+                OnPropertyChanged(nameof(PasswordMessage));
             }
         }
     }

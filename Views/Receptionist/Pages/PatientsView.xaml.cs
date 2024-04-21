@@ -22,8 +22,8 @@ namespace bazy1.Views.Receptionist.Pages
             // Sprawdzenie czy DataContext jest typu ReceptionistViewModel
             if (DataContext is ReceptionistViewModel viewModel)
             {
-                // Pobieranie pacjentów za pomocą metody UpdatePatients z ReceptionistViewModel
-                viewModel.UpdatePatients();
+                // Pobranie listy pacjentów z ViewModel
+                viewModel.Patients = viewModel.PatientRepository.GetPatients();
             }
         }
 

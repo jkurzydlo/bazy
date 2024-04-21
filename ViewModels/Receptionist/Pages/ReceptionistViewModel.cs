@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using bazy1.Models.Part;
 using bazy1.Models;
 using bazy1.ViewModels.Admin;
 using bazy1.ViewModels.Admin.Pages;
@@ -35,7 +36,7 @@ namespace bazy1.ViewModels.Receptionist
 
         public ReceptionistViewModel()
         {
-            _databaseService = new DatabaseService(new Przychodnia9Context());
+            _databaseService = new DatabaseService(new PrzychodniaContext());
 
             // Pobierz listę użytkowników (to tylko przykład)
             Users = DatabaseService.getDbContext().Users.Select(u => new UserPart()

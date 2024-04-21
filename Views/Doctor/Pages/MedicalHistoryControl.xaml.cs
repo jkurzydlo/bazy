@@ -16,18 +16,13 @@ using System.Windows.Shapes;
 namespace bazy1.Views.Doctor.Pages
 {
     /// <summary>
-    /// Logika interakcji dla klasy PatientListControl.xaml
+    /// Logika interakcji dla klasy MedicalHistoryControl.xaml
     /// </summary>
-    public partial class PatientListControl : UserControl
+    public partial class MedicalHistoryControl : UserControl
     {
-        public PatientListControl()
+        public MedicalHistoryControl()
         {
             InitializeComponent();
-        }
-
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
         }
     }
 }

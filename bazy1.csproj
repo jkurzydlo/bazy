@@ -9,10 +9,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="ViewModels\Receptionist\Pages\ReceptionistViewModel.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <None Remove="Fonts\Dosis-ExtraLight.ttf" />
+    <None Remove="Fonts\Dosis-Light.ttf" />
+    <None Remove="Fonts\Dosis-Regular.ttf" />
     <None Remove="img\bg.jpg" />
     <None Remove="img\doctor.png" />
     <None Remove="img\health%402x.png" />
@@ -20,16 +19,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Page Remove="Views\Receptionist\Pages\AddPatientWindow.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\Receptionist\Pages\AddPatientWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </None>
-  </ItemGroup>
-
-  <ItemGroup>
+    <Resource Include="Fonts\Dosis-ExtraLight.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\Dosis-Light.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\Dosis-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="img\bg.jpg" />
     <Resource Include="img\doctor.png" />
     <Resource Include="img\health.png" />
@@ -37,13 +35,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="13.0.1" />
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="BootstrapIcons.AspNetCore" Version="1.11.0" />
-    <PackageReference Include="Dapper" Version="2.1.35" />
-    <PackageReference Include="EntityFramework" Version="6.4.4" />
-    <PackageReference Include="MahApps.Metro" Version="2.4.10" />
-    <PackageReference Include="MaterialDesignThemes" Version="5.0.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="JacekMatulewski.WpfUtils" Version="1.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -53,8 +49,25 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
+    <PackageReference Include="MvvmDialogs" Version="9.1.2" />
     <PackageReference Include="MySql.EntityFrameworkCore" Version="8.0.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="SimpleModal.WPF" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\Receptionist\" />
+    <Folder Include="ViewModels\Receptionist\Pages\" />
+    <Folder Include="Views\Receptionist\" />
+    <Folder Include="Views\Receptionist\Pages\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Fonts\Dosis-Bold.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Fonts\Dosis-ExtraBold.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

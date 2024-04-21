@@ -1,13 +1,23 @@
+ï»¿using bazy1.Models;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using System.ComponentModel;
 
 namespace bazy1.ViewModels
 {
-	public abstract class ViewModelBase : INotifyPropertyChanged //Klasa bazowa, wszystkie viewmodele bêd¹ z niej dziedziczyæ	
-	{
-		public event PropertyChangedEventHandler? PropertyChanged;
-		public void OnPropertyChanged(string propertyName)
-		{
-			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-		}
-	}
+    public abstract class ViewModelBase : INotifyPropertyChanged //Klasa bazowa, wszystkie viewmodele bï¿½dï¿½ z niej dziedziczyï¿½	
+    {
+        static ViewModelBase()
+        {
+            if (DbContext == null) DbContext = new PrzychodniaContext();
+        }
+
+        public static PrzychodniaContext DbContext { get; set; }
+
+        public event PropertyChangedEventHandler? PropertyChanged;
+        public void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+    }
 }
