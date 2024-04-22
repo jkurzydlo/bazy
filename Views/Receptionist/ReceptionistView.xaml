@@ -4,42 +4,40 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewModels="clr-namespace:bazy1.ViewModels.Receptionist"
+        xmlns:pagesViewModels="clr-namespace:bazy1.ViewModels.Receptionist.Pages"
+        xmlns:pagesViews="clr-namespace:bazy1.Views.Receptionist.Pages"
         mc:Ignorable="d"
-        xmlns:pagesViewModels="clr-namespace:bazy1.ViewModels.Admin.Pages"
-        xmlns:pagesViews="clr-namespace:bazy1.Views.Admin.Pages"
         Title="ReceptionistView" Height="450" Width="800"
         WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <!-- Ustawia ReceptionistViewModel jako kontekst danych dla tego widoku-->
+        <viewModels:ReceptionistViewModel/>
+    </Window.DataContext>
 
     <Window.Resources>
-        <DataTemplate DataType="{x:Type pagesViewModels:AddUserViewModel}">
-            <pagesViews:UserAddControl/>
+        <DataTemplate DataType="{x:Type pagesViewModels:PatientRegistrationViewModel}">
+            <pagesViews:PatientRegistrationView/>
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type pagesViewModels:ListUserViewModel}">
-            <pagesViews:UserListControl/>
+        <DataTemplate DataType="{x:Type pagesViewModels:AppointmentManagementViewModel}">
+            <pagesViews:AppointmentManagementView/>
         </DataTemplate>
 
+        <!-- inne widoki.. -->
     </Window.Resources>
 
     <Grid>
-		<!-- Panel górny -->
-		<Grid HorizontalAlignment="Right" VerticalAlignment="Top" Margin="10">
-			<Button Content="Wyloguj" Command="{Binding LogoutCommand}" />
-		</Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Vertical">
+            <Button Width="auto" Height="20" Content="Rejestracja pacjenta" Command="{Binding ShowPatientRegistrationCommand}"/>
+            <Button Width="auto" Height="20" Content="Zarządzanie wizytami" Command="{Binding ShowAppointmentManagementCommand}"/>
+            <!-- Dodaj inne przyciski lub interfejsy użytkownika dla innych funkcji recepcjonisty -->
+        </StackPanel>
 
-		<!-- Menu boczne -->
-		<Grid Width="100" HorizontalAlignment="Left" VerticalAlignment="Stretch" Background="LightGray">
-			<StackPanel VerticalAlignment="Center" Margin="10">
-				<Button Content="Pacjenci" Command="{Binding ShowPatientsCommand}" Margin="0 0 0 10" HorizontalAlignment="Center"/>
-				<Button Content="Wizyty" Command="{Binding ShowAppointmentsCommand}" Margin="0 0 0 10" HorizontalAlignment="Center"/>
-			</StackPanel>
-		</Grid>
-
-		<!-- Zawartość główna -->
-		<Grid Margin="220 10 10 10">
-			<!-- Tutaj można dodać zawartość głównego interfejsu użytkownika dla recepcjonisty -->
-			<TextBlock Text="{Binding Caption}" Margin="10"/>
-			<ContentControl Content="{Binding CurrentViewModel}" Margin="10"/>
-		</Grid>
-	</Grid>
+        <ContentControl Content="{Binding CurrentViewModel}" Grid.Column="1"/>
+    </Grid>
 </Window>
+

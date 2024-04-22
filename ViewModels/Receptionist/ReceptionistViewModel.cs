@@ -1,49 +1,82 @@
 ﻿using bazy1.Models;
 using bazy1.Repositories;
-using bazy1.ViewModels.Doctor;
-using bazy1.Views.Receptionist.Pages;
-using System.Collections.Generic;
+using bazy1.ViewModels.Receptionist.Pages;
+using System;
 using System.Windows.Input;
 
 namespace bazy1.ViewModels.Receptionist
 {
-    public class ReceptionistViewModel : DoctorViewModel
+    public class ReceptionistViewModel : ViewModelBase
     {
-        private readonly PatientRepository _patientRepository;
+        private ViewModelBase _currentViewModel;
+        private string _caption;
+        private User _currentUser;
+        private IUserRepository _userRepository;
 
-        public ICommand ShowPatientsCommand { get; }
-
-        private List<Patient> _patients;
-        public List<Patient> Patients
-        {
-            get { return _patients; }
-            set
-            {
-                _patients = value;
-                OnPropertyChanged(nameof(Patients));
-            }
-        }
+        public ICommand ShowPatientRegistrationCommand { get; }
+        public ICommand ShowAppointmentManagementCommand { get; }
 
         public ReceptionistViewModel()
         {
-            _patientRepository = new PatientRepository();
-            Patients = _patientRepository.GetPatients();
-
-            ShowPatientsCommand = new RelayCommand(ExecuteShowPatientsCommand);
+            _userRepository = new UserRepository();
+            CurrentUser = new User();
+            LoadCurrentUser();
+            ShowPatientRegistrationCommand = new BasicCommand(ExecuteShowPatientRegistrationCommand);
+            ShowAppointmentManagementCommand = new BasicCommand(ExecuteShowAppointmentManagementCommand);
+            ExecuteShowPatientRegistrationCommand(null); // Wyświetlanie domyślnego widoku po uruchomieniu aplikacji
         }
 
-        private void ExecuteShowPatientsCommand(object obj)
+        public User CurrentUser
         {
-            PatientsView patientsView = new PatientsView();
-            patientsView.DataContext = this; // Przekazujemy bieżący widok modelu do PatientsView
-            patientsView.Show();
+            get => _currentUser;
+            set
+            {
+                _currentUser = value;
+                OnPropertyChanged(nameof(CurrentUser));
+            }
         }
-        public void UpdatePatients()
+
+        public ViewModelBase CurrentViewModel
         {
-            Patients = _patientRepository.GetPatients();
+            get => _currentViewModel;
+            set
+            {
+                _currentViewModel = value;
+                OnPropertyChanged(nameof(CurrentViewModel));
+            }
+        }
+
+        public string Caption
+        {
+            get => _caption;
+            set
+            {
+                _caption = value;
+                OnPropertyChanged(nameof(Caption));
+            }
+        }
+
+        private void ExecuteShowPatientRegistrationCommand(object obj)
+        {
+            // Ustawiamy widok rejestracji pacjenta
+            CurrentViewModel = new PatientRegistrationViewModel();
+            Caption = "Rejestracja pacjenta";
+        }
+
+        private void ExecuteShowAppointmentManagementCommand(object obj)
+        {
+            // Ustawiamy widok zarządzania wizytami
+            CurrentViewModel = new AppointmentManagementViewModel();
+            Caption = "Zarządzanie wizytami";
+        }
+
+        private void LoadCurrentUser()
+        {
+            // Tutaj wczytujemy dane użytkownika
         }
     }
 }
+
 
 
 

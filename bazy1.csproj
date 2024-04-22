@@ -9,6 +9,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ViewModels\Receptionist\RelayCommand.cs" />
+    <Compile Remove="Views\Doctor\DoctorView.xaml.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Fonts\Dosis-ExtraLight.ttf" />
     <None Remove="Fonts\Dosis-Light.ttf" />
     <None Remove="Fonts\Dosis-Regular.ttf" />
@@ -16,6 +21,10 @@
     <None Remove="img\doctor.png" />
     <None Remove="img\health%402x.png" />
     <None Remove="img\health.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Views\Doctor\DoctorView.xaml" />
   </ItemGroup>
 
   <ItemGroup>

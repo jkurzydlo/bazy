@@ -17,11 +17,11 @@ namespace bazy1.ViewModels.Doctor
     public class DoctorViewModel : ViewModelBase
     {
 
-        private ViewModelBase _currentViewModel;
+        private ViewModelBase? _currentViewModel;
         private string _caption;
         private bool _firstLogin = true;
         private string errorMessage;
-        private FirstLoginViewModel _firstLoginViewModel;
+        private FirstLoginViewModel? _firstLoginViewModel;
         private string _tag;
         public ICommand ShowDashboardLoggedInCommand { get; }
         public ICommand Klik { get; set; }
@@ -31,7 +31,7 @@ namespace bazy1.ViewModels.Doctor
         //komendy dla wszystkich widoków w oknie
         public ICommand ShowDashboardViewCommand { get; }
 
-        private void ExecuteShowDashboardViewCommand(object obj)
+        private void ExecuteShowDashboardViewCommand(object? obj)
         {
             //Jeżeli użytkownik loguje się po raz pierwszy wyświetl widok zmiany hasła, jeśli nie - ekran główny
             //_currentUser.Surname = "dsds";
@@ -99,45 +99,60 @@ namespace bazy1.ViewModels.Doctor
 
         public DoctorViewModel()
         {
+            _currentUser = new User();
+            _userRepository = new UserRepository();
+            _currentViewModel = null;
+            _caption = string.Empty;
+            errorMessage = string.Empty;
+            _firstLoginViewModel = null;
+            _tag = string.Empty;
+
             Klik = new BasicCommand((object obj) => CurrentUser.Surname = "lmao");
             Console.WriteLine("nowy model");
 
-            _userRepository = new UserRepository();
-            CurrentUser = new User();
             loadCurrentUser();
             ExecuteShowDashboardViewCommand(null);
             ShowDashboardViewCommand = new BasicCommand(ExecuteShowDashboardViewCommand);
             ShowPatientListViewCommand = new BasicCommand(ExecuteShowPatientListViewCommand);
             ShowScheduleViewCommand = new BasicCommand(ExecuteShowScheduleViewCommand);
             ShowDashboardLoggedInCommand = new BasicCommand((object obj) => {
-
-
-                FirstLoginViewModel = (FirstLoginViewModel)CurrentViewModel;
-                if (!string.IsNullOrEmpty(FirstLoginViewModel.Password) && !string.IsNullOrEmpty(FirstLoginViewModel.PasswordRepeat))
+                if (CurrentViewModel is FirstLoginViewModel firstLoginViewModel)
                 {
-                    if (FirstLoginViewModel.Password.Equals(FirstLoginViewModel.PasswordRepeat))
+                    if (!string.IsNullOrEmpty(firstLoginViewModel.Password) && !string.IsNullOrEmpty(firstLoginViewModel.PasswordRepeat))
                     {
-                        CurrentViewModel = new Pages.DashboardViewModel(_currentUser);
-                        _firstLogin = false;
+                        if (firstLoginViewModel.Password.Equals(firstLoginViewModel.PasswordRepeat))
+                        {
+                            CurrentViewModel = new Pages.DashboardViewModel(_currentUser);
+                            _firstLogin = false;
+                        }
                     }
                 }
             });
         }
 
+
         //Znajdź w bazie użytkownika o danych podanych w polu logowania i ustaw jako właściwość CurrentUser
         private void loadCurrentUser()
         {
-            User? user = _userRepository.findByUsername(Thread.CurrentPrincipal.Identity.Name);
-            if (user != null)
+            try
             {
-                CurrentUser.Id = user.Id;
-                CurrentUser.Name = user.Name;
-                CurrentUser.Surname = user.Surname;
-                CurrentUser.Login = user.Login;
-                CurrentUser.Type = user.Type;
-                CurrentUser.Password = user.Password;
-                CurrentUser.FirstLogin = user.FirstLogin;
-                Console.Write("da: " + CurrentUser.Name + CurrentUser.Surname);
+                User? user = _userRepository.findByUsername(Thread.CurrentPrincipal.Identity.Name);
+                if (user != null)
+                {
+                    CurrentUser.Id = user.Id;
+                    CurrentUser.Name = user.Name;
+                    CurrentUser.Surname = user.Surname;
+                    CurrentUser.Login = user.Login;
+                    CurrentUser.Type = user.Type;
+                    CurrentUser.Password = user.Password;
+                    CurrentUser.FirstLogin = user.FirstLogin;
+                    Console.Write("da: " + CurrentUser.Name + CurrentUser.Surname);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Obsługa wyjątku - możesz zalogować błąd lub podjąć inne działania
+                Console.WriteLine("Błąd podczas ładowania bieżącego użytkownika: " + ex.Message);
             }
         }
 
