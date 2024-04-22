@@ -1,12 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using bazy1.ViewModels.Receptionist.Pages;
+using System.Windows;
 
 namespace bazy1.Views.Receptionist.Pages
 {
-    internal class AddPatientWindow
+    public partial class AddPatientWindow : Window
     {
+        public AddPatientWindow()
+        {
+            InitializeComponent();
+            DataContext = new AddPatientViewModel();
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Tutaj mozesz dodac logikę zwiazana z obsluga zdarzenia dodawania pacjenta,
+            // ale w przypadku uzycia wzorca MVVM, zalecane jest wywołanie komendy z ViewModelu
+            // np. ((AddPatientViewModel)DataContext).AddPatientCommand.Execute(null);
+        }
+
+        private void PhoneNumberTextBox_PreviewTextInput(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            // Mozesz dodac logikę weryfikacji wprowadzanych danych,
+            // na przyklad, czy wprowadzane znaki są cyframi itp.
+        }
     }
 }

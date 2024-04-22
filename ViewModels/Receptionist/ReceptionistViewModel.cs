@@ -3,6 +3,8 @@ using bazy1.Repositories;
 using bazy1.ViewModels.Receptionist.Pages;
 using System;
 using System.Windows.Input;
+using System.Collections.Generic;
+using bazy1.Views.Receptionist.Pages;
 
 namespace bazy1.ViewModels.Receptionist
 {
@@ -59,14 +61,14 @@ namespace bazy1.ViewModels.Receptionist
         private void ExecuteShowPatientRegistrationCommand(object obj)
         {
             // Ustawiamy widok rejestracji pacjenta
-            //CurrentViewModel = new PatientRegistrationViewModel();
+            CurrentViewModel = new AddPatientViewModel();
             Caption = "Rejestracja pacjenta";
         }
 
         private void ExecuteShowAppointmentManagementCommand(object obj)
         {
             // Ustawiamy widok zarządzania wizytami
-            //CurrentViewModel = new AppointmentManagementViewModel();
+            CurrentViewModel = new AddAppointmentWindow();
             Caption = "Zarządzanie wizytami";
         }
 
