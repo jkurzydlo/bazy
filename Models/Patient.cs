@@ -5,7 +5,7 @@ namespace bazy1.Models;
 
 public partial class Patient
 {
-    public int? Pesel { get; set; }
+    public long? Pesel { get; set; }
 
     public string? PhoneNumber { get; set; }
 

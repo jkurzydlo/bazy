@@ -56,8 +56,6 @@
         <StackPanel Orientation="Vertical">
             <Button x:Name="listPatientButton" Width="auto" Height="20" Content="Lista pacjentów" Command="{Binding ShowPatientListViewCommand}"/>
             <Button x:Name="scheduleButton" Width="auto" Height="20" Content="Terminarz" Command="{Binding ShowScheduleViewCommand}"/>
-            <TextBlock x:Name="userRemove" Text="Zmień dane użytkownika"></TextBlock>
-
         </StackPanel>
 
         <ContentControl Content="{Binding CurrentViewModel}" Grid.Column="2"/>

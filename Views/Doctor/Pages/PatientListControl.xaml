@@ -1,11 +1,14 @@
 ﻿<UserControl x:Class="bazy1.Views.Doctor.Pages.PatientListControl"
+             xmlns:jm="clr-namespace:JacekMatulewski.WpfUtils;assembly=JacekMatulewski.WpfUtils"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:bazy1.Views.Doctor.Pages"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             
+             >
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -22,7 +25,7 @@
                 <DataGridTextColumn Header="Imię" Binding="{Binding Name}" />
                 <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}"  />
                 <DataGridTextColumn Header="PESEL" Binding="{Binding Pesel}"  />
-                <DataGridTextColumn Header="Kontakt" Binding="{Binding PhoneNumber}"  />
+                <DataGridTextColumn Header="Telefon" Binding="{Binding PhoneNumber}"  />
                 <DataGridTextColumn Header="Ostatnia wizyta" Binding="{Binding LastVisit}"/>
                 <DataGridTextColumn Header="Najbliższa wizyta" Binding="{Binding NextVisit}"/>
 
@@ -42,7 +45,7 @@
                 <ContextMenu>
                     <MenuItem Header="Historia przebytych chorób" Command="{Binding ShowMedicalHistoryCommand}" />
                     <MenuItem Header="Dodaj schorzenie" Command="{Binding ShowAddDiseaseCommand}" />
-
+                    <MenuItem Header="Usuń pacjenta" Command="{Binding Source={x:Reference deletePatientBox}, Path=Show}" CommandParameter="Usunąć?"/>
 
                 </ContextMenu>
 
@@ -55,5 +58,8 @@
             <TextBox Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="10" Height="25" Width="150" Margin="10,0,0,0" HorizontalAlignment="Right"/>
 
         </StackPanel>
+        <jm:MessageDialogBox x:Name="deletePatientBox" Caption="Usunąć pacjenta?" Icon="Question" Buttons="YesNo" CommandYes="{Binding PatientDeleteCommand, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+
     </Grid>
+
 </UserControl>

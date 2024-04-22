@@ -24,7 +24,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center">
-            <Button Content="Lista pacjentów" FontSize="10" Height="25" Width="150" HorizontalAlignment="Center"/>
+            <Button Content="Lista pacjentów" FontSize="10" Height="25" Width="150" HorizontalAlignment="Center" Command="{Binding ShowPatientListCommand}"/>
             <Button Content="Nowy" FontSize="10" Height="25" Width="150" HorizontalAlignment="Center" Command="{Binding AddPatientCommand}" IsEnabled="False"/>
         </StackPanel>
 

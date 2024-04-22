@@ -24,19 +24,24 @@ namespace bazy1.ViewModels.Doctor.Pages {
 		public ICommand ShowMedicalHistoryCommand { get; }
 		public ICommand ShowAddDiseaseCommand { get; }
 		public ICommand AddPatientCommand { get; set; }
+		public ICommand PatientDeleteCommand { get; set; }
+
 
 		public string PatientDetails{
 			get {
-				Console.WriteLine(DbContext.Addresses.Count());
-				var tempPatient = DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First();
-                Console.WriteLine("ile: "+DbContext.Addresses.Where(adr => adr.Patients.Contains(tempPatient)).Count());
-                string adressess ="", info = "";
-				DbContext.Addresses.Where(adr => adr.Patients.Contains(tempPatient)).ToList().
-					ForEach(adr => adressess += adr.City + " " + adr.PostalCode + " ul." + adr.Street + " " + adr.BuildingNumber+"\n");
-				info = $"Data urodzenia: {tempPatient.BirthDate.Value.ToShortDateString()}\n";
-				if (tempPatient.PhoneNumber != null) info += "Telefon: " + tempPatient.PhoneNumber + "\n";
-				if (tempPatient.Email != null) info += "Email: " + tempPatient.Email + "\n";
-				info += "Adresy:"+adressess;
+				string adressess = "", info = "";
+				if (SelectedPatient != null)
+				{
+					Console.WriteLine(DbContext.Addresses.Count());
+					var tempPatient = DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First();
+					Console.WriteLine("ile: " + DbContext.Addresses.Where(adr => adr.Patients.Contains(tempPatient)).Count());
+					DbContext.Addresses.Where(adr => adr.Patients.Contains(tempPatient)).ToList().
+						ForEach(adr => adressess += adr.City + " " + adr.PostalCode + " ul." + adr.Street + " " + adr.BuildingNumber + "\n");
+					info = $"Data urodzenia: {tempPatient.BirthDate.Value.ToShortDateString()}\n";
+					if (tempPatient.PhoneNumber != null) info += "Telefon: " + tempPatient.PhoneNumber + "\n";
+					if (tempPatient.Email != null) info += "Email: " + tempPatient.Email + "\n";
+					info += "Adresy:" + adressess;
+				}
 				return info;
 			}
 			set {
@@ -70,7 +75,14 @@ namespace bazy1.ViewModels.Doctor.Pages {
 		public PatientListViewModel(User user, DoctorViewModel viewModel) {
 
 			AddPatientCommand = new BasicCommand(obj => viewModel.CurrentViewModel = new AddPatientViewModel(doctor,viewModel));
-
+			PatientDeleteCommand = new BasicCommand(obj =>
+			{
+				DbContext.Database.ExecuteSql($"Delete from patient_diesease where patient_id = {SelectedPatient.Id}");
+				DbContext.Database.ExecuteSql($"Delete from patient_address where patient_id = {SelectedPatient.Id}");
+				DbContext.Database.ExecuteSql($"Delete from doctor_has_patient where patient_id = {SelectedPatient.Id}");
+				DbContext.SaveChanges();
+				viewModel.CurrentViewModel = new PatientListViewModel(user, viewModel);
+			});
 
 			Console.WriteLine(user.Name + user.Surname+user.Id);
 			this.user = user;

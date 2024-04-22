@@ -394,6 +394,7 @@ public partial class Przychodnia9Context : DbContext
             entity.Property(e => e.NextVisit)
                 .HasColumnType("date")
                 .HasColumnName("nextVisit");
+            entity.Property(e => e.Pesel).HasColumnName("pesel");
             entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(45)
                 .HasColumnName("phoneNumber");

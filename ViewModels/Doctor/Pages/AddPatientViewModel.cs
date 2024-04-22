@@ -337,7 +337,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 
 			
 			this.doctor = doctor;
-			ShowPatientListCommand = new BasicCommand(obj => this.parentViewModel = parentViewModel);
+			ShowPatientListCommand = new BasicCommand(obj => parentViewModel.ShowPatientListViewCommand.Execute(obj)); ;
 			AddNewPatientCommand = new BasicCommand((object obj) =>
 			{
                 foreach (var err in ErrorCollection)
@@ -388,7 +388,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 					patient.PhoneNumber = PhoneNumber;
 					patient.Addresses.Add(new Address() { City = this.City, PostalCode = this.PostalCode, Street = this.Street, BuildingNumber = this.BuildingNumber, Type="Zamieszkania" });
 					if (SecondAddressVisible == Visibility.Visible) patient.Addresses.Add(new Address() { City = this.City2, PostalCode = this.PostalCode2, Street = this.Street2, BuildingNumber = this.BuildingNumber2, Type="Zameldowania" });
-					//patient.Pesel = Pesel;
+					patient.Pesel = long.Parse(Pesel);
 					doctor.Patients.Add(patient);
 					DbContext.SaveChanges();
 				}
