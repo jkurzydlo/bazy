@@ -1,7 +1,10 @@
 ﻿using bazy1.ViewModels;
 using System;
+using bazy1.Repositories;
+using System.Windows;
+using System.Windows.Input;
 
-namespace bazy1.Views.Receptionist.Pages
+namespace bazy1.ViewModels.Receptionist.Pages
 {
     public class AppointmentViewModel : ViewModelBase
     {

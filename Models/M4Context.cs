@@ -107,7 +107,7 @@ public partial class M4Context : DbContext
                 .HasColumnName("id");
             entity.Property(e => e.NotificationId).HasColumnName("Notification_id");
             entity.Property(e => e.PatientId).HasColumnName("Patient_id");
-            entity.Property(e => e.Date)
+            entity.Property(e => e.DateTime)
                 .HasMaxLength(45)
                 .HasColumnName("date");
             entity.Property(e => e.Goal)
@@ -333,25 +333,15 @@ public partial class M4Context : DbContext
                 .HasConstraintName("fk_Notification_Appointment1");
         });
 
+
+
         modelBuilder.Entity<Office>(entity =>
         {
-            entity.HasKey(e => new { e.Id, e.DoctorUserIdUser, e.DoctorId, e.DoctorUserId }).HasName("PRIMARY");
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
 
             entity.ToTable("office");
 
-            entity.HasIndex(e => new { e.DoctorId, e.DoctorUserId }, "fk_Office_Doctor1_idx");
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("id");
-            entity.Property(e => e.DoctorUserIdUser).HasColumnName("Doctor_User_idUser");
-            entity.Property(e => e.DoctorId).HasColumnName("Doctor_id");
-            entity.Property(e => e.DoctorUserId).HasColumnName("Doctor_User_id");
-
-            entity.HasOne(d => d.Doctor).WithMany(p => p.Offices)
-                .HasForeignKey(d => new { d.DoctorId, d.DoctorUserId })
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_Office_Doctor1");
+            entity.Property(e => e.Id).HasColumnName("id");
         });
 
         modelBuilder.Entity<Patient>(entity =>

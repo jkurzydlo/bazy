@@ -1,5 +1,6 @@
 ﻿using bazy1.Models;
 using bazy1.Repositories;
+using bazy1.ViewModels.Receptionist.Pages;
 using System;
 using System.Windows;
 

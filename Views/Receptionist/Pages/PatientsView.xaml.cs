@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 using bazy1.ViewModels.Receptionist;
+using bazy1.Repositories;
 
 namespace bazy1.Views.Receptionist.Pages
 {
@@ -23,7 +24,7 @@ namespace bazy1.Views.Receptionist.Pages
             if (DataContext is ReceptionistViewModel viewModel)
             {
                 // Pobranie listy pacjentów z ViewModel
-                viewModel.Patients = viewModel.PatientRepository.GetPatients();
+                viewModel.Patients = viewModel._patientRepository.GetPatients();
             }
         }
 

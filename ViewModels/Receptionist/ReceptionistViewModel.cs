@@ -5,6 +5,7 @@ using System;
 using System.Windows.Input;
 using System.Collections.Generic;
 using bazy1.Views.Receptionist.Pages;
+using System.Threading;
 
 namespace bazy1.ViewModels.Receptionist
 {
@@ -14,6 +15,8 @@ namespace bazy1.ViewModels.Receptionist
         private string _caption;
         private User _currentUser;
         private IUserRepository _userRepository;
+        private List<Patient> _patients;
+        public PatientRepository _patientRepository;
 
         public ICommand ShowPatientRegistrationCommand { get; }
         public ICommand ShowAppointmentManagementCommand { get; }
@@ -21,6 +24,7 @@ namespace bazy1.ViewModels.Receptionist
         public ReceptionistViewModel()
         {
             _userRepository = new UserRepository();
+            _patientRepository = new PatientRepository();
             CurrentUser = new User();
             LoadCurrentUser();
             ShowPatientRegistrationCommand = new BasicCommand(ExecuteShowPatientRegistrationCommand);
@@ -58,6 +62,16 @@ namespace bazy1.ViewModels.Receptionist
             }
         }
 
+        public List<Patient> Patients // Dodaj właściwość do przechowywania listy pacjentów
+        {
+            get => _patients;
+            set
+            {
+                _patients = value;
+                OnPropertyChanged(nameof(Patients));
+            }
+        }
+
         private void ExecuteShowPatientRegistrationCommand(object obj)
         {
             // Ustawiamy widok rejestracji pacjenta
@@ -68,7 +82,7 @@ namespace bazy1.ViewModels.Receptionist
         private void ExecuteShowAppointmentManagementCommand(object obj)
         {
             // Ustawiamy widok zarządzania wizytami
-            CurrentViewModel = new AddAppointmentWindow();
+            CurrentViewModel = new AppointmentViewModel();
             Caption = "Zarządzanie wizytami";
         }
 
@@ -87,6 +101,8 @@ namespace bazy1.ViewModels.Receptionist
                     CurrentUser.Password = user.Password;
                     CurrentUser.FirstLogin = user.FirstLogin;
                     Console.Write("da: " + CurrentUser.Name + CurrentUser.Surname);
+
+                    Patients = _patientRepository.GetPatients();
                 }
             }
             catch (Exception ex)

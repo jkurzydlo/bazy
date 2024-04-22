@@ -108,7 +108,7 @@ public partial class PrzychodniaContext : DbContext
                 .HasColumnName("id");
             entity.Property(e => e.NotificationId).HasColumnName("Notification_id");
             entity.Property(e => e.PatientId).HasColumnName("Patient_id");
-            entity.Property(e => e.Date)
+            entity.Property(e => e.DateTime)
                 .HasMaxLength(45)
                 .HasColumnName("date");
             entity.Property(e => e.Goal)
