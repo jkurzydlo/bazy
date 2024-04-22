@@ -49,7 +49,7 @@ namespace bazy1.Repositories
                                 Id = Convert.ToInt32(reader["Id"]),
                                 Name = reader["Name"].ToString(),
                                 Surname = reader["Surname"].ToString(),
-                                Pesel = Convert.ToInt32(reader["Pesel"]),
+                                Pesel = reader["Pesel"].ToString(),
                                 PhoneNumber = reader["PhoneNumber"].ToString(),
                                 Email = reader["Email"].ToString()
                             };
@@ -64,6 +64,32 @@ namespace bazy1.Repositories
             }
             return patients;
         }
+
+        public bool AddPatient(Patient patient)
+        {
+            try
+            {
+                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                {
+                    conn.Open();
+                    string query = "INSERT INTO pacjenci (Name, Surname, Pesel, PhoneNumber, Email) VALUES (@Name, @Surname, @Pesel, @PhoneNumber, @Email)";
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@Name", patient.Name);
+                    cmd.Parameters.AddWithValue("@Surname", patient.Surname);
+                    cmd.Parameters.AddWithValue("@Pesel", patient.Pesel);
+                    cmd.Parameters.AddWithValue("@PhoneNumber", patient.PhoneNumber);
+                    cmd.Parameters.AddWithValue("@Email", patient.Email);
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    return rowsAffected > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error adding patient to the database: " + ex.Message);
+                return false;
+            }
+        }
     }
 }
+
 

@@ -13,7 +13,7 @@ namespace bazy1.Views.Receptionist
         public ReceptionistView()
         {
             InitializeComponent();
-            DataContext = new ReceptionistViewModel();
+            Console.WriteLine(DataContext.ToString());
         }
     }
 }

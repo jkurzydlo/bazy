@@ -59,20 +59,39 @@ namespace bazy1.ViewModels.Receptionist
         private void ExecuteShowPatientRegistrationCommand(object obj)
         {
             // Ustawiamy widok rejestracji pacjenta
-            CurrentViewModel = new PatientRegistrationViewModel();
+            //CurrentViewModel = new PatientRegistrationViewModel();
             Caption = "Rejestracja pacjenta";
         }
 
         private void ExecuteShowAppointmentManagementCommand(object obj)
         {
             // Ustawiamy widok zarządzania wizytami
-            CurrentViewModel = new AppointmentManagementViewModel();
+            //CurrentViewModel = new AppointmentManagementViewModel();
             Caption = "Zarządzanie wizytami";
         }
 
         private void LoadCurrentUser()
         {
-            // Tutaj wczytujemy dane użytkownika
+            try
+            {
+                User? user = _userRepository.findByUsername(Thread.CurrentPrincipal.Identity.Name);
+                if (user != null)
+                {
+                    CurrentUser.Id = user.Id;
+                    CurrentUser.Name = user.Name;
+                    CurrentUser.Surname = user.Surname;
+                    CurrentUser.Login = user.Login;
+                    CurrentUser.Type = user.Type;
+                    CurrentUser.Password = user.Password;
+                    CurrentUser.FirstLogin = user.FirstLogin;
+                    Console.Write("da: " + CurrentUser.Name + CurrentUser.Surname);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Obsługa wyjątku - możesz zalogować błąd lub podjąć inne działania
+                Console.WriteLine("Błąd podczas ładowania bieżącego użytkownika: " + ex.Message);
+            }
         }
     }
 }

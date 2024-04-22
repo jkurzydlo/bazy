@@ -15,8 +15,8 @@
     </Window.DataContext>
 
     <Window.Resources>
-        <DataTemplate DataType="{x:Type pagesViewModels:PatientRegistrationViewModel}">
-            <pagesViews:PatientRegistrationView/>
+        <DataTemplate DataType="{x:Type pagesViewModels:AddPatientWindow}">
+            <pagesViews:AddPatientWindow/>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type pagesViewModels:AppointmentManagementViewModel}">
