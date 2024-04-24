@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 
@@ -20,11 +21,26 @@ namespace bazy1.ViewModels.Doctor.Pages {
 		private List<Medicine> _medicines;
 		private string _medicineDetails;
 		private string? _filterText;
+		//public ICommand ShowAddMedicationCommand { get; set; }
 
-		public MedicalHistoryViewModel(Patient patient) {
+
+		public MedicalHistoryViewModel(Patient patient, DoctorViewModel viewModel) {
 			this.patient = patient;
+
+			var disease = new Disease() { Id = 99 };
+			string nazwa = "Witamina K";
+			//DbContext.Database.ExecuteSql($"insert into medicine(name) values({nazwa})");
+			//"select dm.id from disease_medicine join patient p join diesease d where d. "
+			//DbContext.Database.ExecuteSql($"insert into diesease_medicine values({disease.Id},LAST_INSERT_ID())");
+			//DbContext.Database.ExecuteSql($"insert into patient_diesease values({disease.Id},{patient.Id})");
+			DbContext.SaveChanges();
+			var ans = DbContext.Database.SqlQuery<string>($"select med.name from  ((patient p join patient_diesease pd on p.id=pd.patient_id) join diesease_medicine dm on pd.disease_id = dm.diesease_id) join medicine med on med.id = dm.medicine_id where p.id={patient.Id}");
+			ans.ToList().ForEach(System.Console.WriteLine);
+
 			Console.Write("pacjent:"+patient.Name);
-			_medicines = patient.Medicines.ToList();
+			_medicines = [];
+			patient.Diseases.ToList().ForEach(dis => dis.Medicines.ToList().ForEach(med => _medicines.Add(med)));
+			Console.WriteLine("medcs: " + _medicines.Count());
 			//DbContext.Patients.ForEachAsync(pat => Console.WriteLine("wsz: "+pat.Diseases.Count));
 			//diesasesList = new(DbContext.Patients.Where(patient => patient.Id == this.patient.Id).First().Diseases);
 			diesasesList = new(DbContext.Diseases.Where(dis => dis.Patients.Contains(patient)));

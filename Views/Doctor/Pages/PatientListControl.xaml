@@ -45,6 +45,7 @@
                 <ContextMenu>
                     <MenuItem Header="Historia przebytych chorób" Command="{Binding ShowMedicalHistoryCommand}" />
                     <MenuItem Header="Dodaj schorzenie" Command="{Binding ShowAddDiseaseCommand}" />
+                    <MenuItem Header="Przepisz leki" Command="{Binding ShowAddMedicationCommand}"/>
                     <MenuItem Header="Usuń pacjenta" Command="{Binding Source={x:Reference deletePatientBox}, Path=Show}" CommandParameter="Usunąć?"/>
 
                 </ContextMenu>

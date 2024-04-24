@@ -5,7 +5,7 @@ namespace bazy1.Models;
 
 public partial class Patient
 {
-    public long? Pesel { get; set; }
+    public string? Pesel { get; set; }
 
     public string? PhoneNumber { get; set; }
 
@@ -36,6 +36,4 @@ public partial class Patient
     public virtual ICollection<Disease> Diseases { get; set; } = new List<Disease>();
 
     public virtual ICollection<Doctor> Doctors { get; set; } = new List<Doctor>();
-
-    public virtual ICollection<Medicine> Medicines { get; set; } = new List<Medicine>();
 }

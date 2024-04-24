@@ -215,16 +215,18 @@ namespace bazy1.ViewModels.Doctor.Pages {
 				}
 				if(fieldName == "BirthDate" && needToValidate[fieldName])
 				{
-                    if (BirthDate == null || BirthDate.Year < 1800)
+                    if (BirthDate == null || BirthDate.Year < 1800 || BirthDate.Date.Year > DateTime.Now.Year || BirthDate.DayOfYear > DateTime.Now.DayOfYear)
                     result = "Niepoprawna data";
 					else if (ErrorCollection.ContainsKey(fieldName))
 						ErrorCollection.Remove(fieldName);
 				}
 				if(fieldName == "Pesel" && needToValidate[fieldName])
 				{
-					//walidacja peselu
+					if (!PeselValidator.isValid(Pesel)) result = "Niepoprawny PESEL";
+					else if (ErrorCollection.ContainsKey(fieldName))
+						ErrorCollection.Remove(fieldName);
 				}
-                if (fieldName == "Sex" && needToValidate[fieldName])
+				if (fieldName == "Sex" && needToValidate[fieldName])
                 {
 					if (!validateList(Sex, Sexes)) result = "Nie wybrano płci";
 					else if (ErrorCollection.ContainsKey(fieldName))
@@ -366,9 +368,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 					needToValidate[prop.Key] = true;
                 }
 				
-				var pv = PESELValidator.isValid("00000000000");
-
-				var doc = DbContext.Doctors.Where(doc => this.doctor.Id == doc.Id).First();
+                var doc = DbContext.Doctors.Where(doc => this.doctor.Id == doc.Id).First();
                 Console.WriteLine(ErrorCollection.Count);
                 if (ErrorCollection.Count == 0)
 				{
@@ -388,7 +388,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 					patient.PhoneNumber = PhoneNumber;
 					patient.Addresses.Add(new Address() { City = this.City, PostalCode = this.PostalCode, Street = this.Street, BuildingNumber = this.BuildingNumber, Type="Zamieszkania" });
 					if (SecondAddressVisible == Visibility.Visible) patient.Addresses.Add(new Address() { City = this.City2, PostalCode = this.PostalCode2, Street = this.Street2, BuildingNumber = this.BuildingNumber2, Type="Zameldowania" });
-					patient.Pesel = long.Parse(Pesel);
+					patient.Pesel = Pesel;
 					doctor.Patients.Add(patient);
 					DbContext.SaveChanges();
 				}

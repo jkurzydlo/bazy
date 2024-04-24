@@ -25,7 +25,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 		public ICommand ShowAddDiseaseCommand { get; }
 		public ICommand AddPatientCommand { get; set; }
 		public ICommand PatientDeleteCommand { get; set; }
-
+		public ICommand ShowAddMedicationCommand { get; set; }
 
 		public string PatientDetails{
 			get {
@@ -73,6 +73,9 @@ namespace bazy1.ViewModels.Doctor.Pages {
 
 
 		public PatientListViewModel(User user, DoctorViewModel viewModel) {
+			ShowAddMedicationCommand = new BasicCommand(obj => {
+				viewModel.CurrentViewModel = new AddMedicationViewModel(SelectedPatient,viewModel);
+			});
 
 			AddPatientCommand = new BasicCommand(obj => viewModel.CurrentViewModel = new AddPatientViewModel(doctor,viewModel));
 			PatientDeleteCommand = new BasicCommand(obj =>
@@ -98,7 +101,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			ShowMedicalHistoryCommand = new BasicCommand((object obj) => {
 				Console.WriteLine(SelectedPatient.Name + SelectedPatient.Surname);
 				Console.WriteLine("sel: " + DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First().Diseases.Count);
-				if (SelectedPatient != null) viewModel.CurrentViewModel = new MedicalHistoryViewModel(DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First());
+				if (SelectedPatient != null) viewModel.CurrentViewModel = new MedicalHistoryViewModel(DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First(),viewModel);
 				});
 			ShowAddDiseaseCommand = new BasicCommand((object obj) =>
 			{

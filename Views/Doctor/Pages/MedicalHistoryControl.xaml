@@ -46,6 +46,7 @@
 
                 <ContextMenu>
                     <MenuItem Header="Historia przebytych chorób" Command="{Binding ShowMedicalHistoryCommand}" />
+                    <MenuItem Header="Historia przebytych chorób" Command="{Binding AddMedicationCommand}" />
 
                 </ContextMenu>
 

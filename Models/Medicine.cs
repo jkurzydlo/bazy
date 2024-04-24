@@ -11,7 +11,11 @@ public partial class Medicine
 
     public int Id { get; set; }
 
-    public virtual ICollection<Patient> Patients { get; set; } = new List<Patient>();
+    public int? Amount { get; set; }
+
+    public string? Comments { get; set; }
+
+    public virtual ICollection<Disease> Dieseases { get; set; } = new List<Disease>();
 
     public virtual ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
 }

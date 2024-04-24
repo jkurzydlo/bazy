@@ -161,6 +161,7 @@ namespace bazy1.ViewModels.Doctor {
 				OnPropertyChanged(nameof(ErrorMessage));
 			}
 		}
+		public List<Medicine> Medicines { get; set; } = [];
 
 		public FirstLoginViewModel FirstLoginViewModel { get => _firstLoginViewModel; set {
 				_firstLoginViewModel = value;
