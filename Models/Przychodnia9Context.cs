@@ -333,6 +333,7 @@ public partial class Przychodnia9Context : DbContext
             entity.Property(e => e.Dose)
                 .HasMaxLength(45)
                 .HasColumnName("dose");
+            entity.Property(e => e.Fraction).HasColumnName("fraction");
             entity.Property(e => e.Name)
                 .HasMaxLength(45)
                 .HasColumnName("name");
@@ -459,6 +460,9 @@ public partial class Przychodnia9Context : DbContext
             entity.Property(e => e.ExpirationDate)
                 .HasColumnType("date")
                 .HasColumnName("expirationDate");
+            entity.Property(e => e.Pdf)
+                .HasColumnType("blob")
+                .HasColumnName("pdf");
 
             entity.HasOne(d => d.Patient).WithMany(p => p.Prescriptions)
                 .HasForeignKey(d => d.PatientId)

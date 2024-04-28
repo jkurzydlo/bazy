@@ -1,4 +1,5 @@
-﻿using bazy1.Models.Repositories;
+﻿using bazy1.Models;
+using bazy1.Models.Repositories;
 using bazy1.Repositories;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,11 @@ namespace bazy1.ViewModels {
         private bool isVisible = true;
 
         public LoginViewModel() {
+            PrescriptionGenerator gen = new();
+            var prescription = new Prescription() { Patient = new Patient() { Pesel = "02658769845", Name="Adam", Surname="Nowak",
+                Addresses = new List<Address>() { new Address() { City = "Warszawa", BuildingNumber = "124", Street = "Prosta" } } },
+                Medicines = new List<Medicine>() { new Medicine() {Name="Trexan", Amount = 2, Dose="10 mg",Comments="1 raz na dobę przez 3 miesiące" } } };
+            gen.generate(prescription);
             userRepository = new UserRepository();
 
             //Wygeneruj pierwsze konto admina

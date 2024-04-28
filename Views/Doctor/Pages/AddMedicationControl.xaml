@@ -119,7 +119,7 @@
                                     </DataGridTextColumn>
                                         <DataGridTextColumn Header="Dawkowanie">
                                             <DataGridTextColumn.Binding>
-                                                <Binding Path="Name">
+                                                <Binding Path="Dose">
                                                     <Binding.ValidationRules>
                                                         <vrs:EmptyTextVR></vrs:EmptyTextVR>
                                                     </Binding.ValidationRules>
@@ -146,7 +146,7 @@
                     <Button Content="Dodaj" Width="120" Height="25" HorizontalAlignment="Left" Margin="140,25,0,0" Command="{Binding AddMedicineCommand}"></Button>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,40,0,0">
                             <TextBlock Text="Data realizacji od dnia: " VerticalAlignment="Center"></TextBlock>
-                            <DatePicker Width="120" Height="25"></DatePicker>
+                            <DatePicker ToolTip="{Binding ErrorCollection[Date]}" Style="{StaticResource TooltipStyle}" Width="120" Height="25" SelectedDate="{Binding Date, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}"></DatePicker>
                             <Button Content="Wystaw receptę" Width="120" Height="25" HorizontalAlignment="Left" Command="{Binding AddPrescriptionCommand}"></Button>
                         </StackPanel>
                     </StackPanel>

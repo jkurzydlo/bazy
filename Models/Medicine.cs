@@ -15,6 +15,8 @@ public partial class Medicine
 
     public string? Comments { get; set; }
 
+    public float? Fraction { get; set; }
+
     public virtual ICollection<Disease> Dieseases { get; set; } = new List<Disease>();
 
     public virtual ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();

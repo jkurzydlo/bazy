@@ -15,39 +15,22 @@
             <RowDefinition Height="23*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="0,0,0,50">
-        <TextBlock Text="Historia chorób pacjenta" FontSize="35" Margin="0,0,10,0"></TextBlock>
-        <TextBox Padding="4" VerticalAlignment="Center" ToolTip="Wyszukaj" Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" Width="120" Height="30"></TextBox>
+            <TextBlock Text="Historia chorób pacjenta" FontSize="35" Margin="0,0,10,0"></TextBlock>
+            <TextBox Padding="4" VerticalAlignment="Center" ToolTip="Wyszukaj" Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" Width="120" Height="30"></TextBox>
         </StackPanel>
 
-        
-        <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" ColumnWidth="*" Style="{StaticResource DataGrid}" SelectionMode="Single" HeadersVisibility="Column" IsReadOnly="True" ItemsSource="{Binding DiseasesView, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedPatient, Mode=TwoWay}" Margin="0,52,0,72" Grid.RowSpan="2">
+        <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" ColumnWidth="*" Style="{StaticResource DataGrid}" SelectionMode="Single" HeadersVisibility="Column" IsReadOnly="True" ItemsSource="{Binding DiseasesView, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedDisease, Mode=TwoWay}" Margin="0,52,0,72" Grid.RowSpan="2">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Jednostka chorobowa" Binding="{Binding Name}" />
                 <DataGridTextColumn Header="Data rozpoznania" Binding="{Binding DateFrom, StringFormat='{}{0:dd/MM/yyyy}'}"/>
                 <DataGridTextColumn Header="Dodatkowe informacje" Binding="{Binding Comments}"  />
-                <DataGridTextColumn Header="Przepisane leki" Binding="{
-                          Binding RelativeSource={
-                            RelativeSource FindAncestor, 
-                            AncestorType={x:Type UserControl}},
-                          Path=DataContext.Medicines}"/>
             </DataGrid.Columns>
-            <DataGrid.RowDetailsTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{
-                          Binding RelativeSource={
-                            RelativeSource FindAncestor, 
-                            AncestorType={x:Type UserControl}},
-                          Path=DataContext.MedicineDetails}" Margin="10" />
-                </DataTemplate>
-            </DataGrid.RowDetailsTemplate>
 
             <DataGrid.ContextMenu>
 
                 <ContextMenu>
-                    <MenuItem Header="Historia przebytych chorób" Command="{Binding ShowMedicalHistoryCommand}" />
-                    <MenuItem Header="Historia przebytych chorób" Command="{Binding AddMedicationCommand}" />
-
+                    <MenuItem Header="Przepisz leki" Command="{Binding ShowAddMedicationCommand}" />
                 </ContextMenu>
 
             </DataGrid.ContextMenu>

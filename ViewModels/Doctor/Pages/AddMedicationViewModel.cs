@@ -1,6 +1,7 @@
 ﻿using bazy1.Models;
 using bazy1.Utils;
 using Microsoft.EntityFrameworkCore;
+using Mysqlx.Resultset;
 using Org.BouncyCastle.Utilities.Encoders;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.Net.Mail;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace bazy1.ViewModels.Doctor.Pages
@@ -19,6 +21,7 @@ namespace bazy1.ViewModels.Doctor.Pages
     {
 
         private string _amount, _dose, _name, _comments;
+		private DateTime _date = DateTime.Now.Date;
         public Patient SelectedPatient { get; set; }
         public ICommand AddMedicineCommand { get; set; }
 		private DoctorViewModel parentViewModel;
@@ -33,6 +36,7 @@ namespace bazy1.ViewModels.Doctor.Pages
                 OnPropertyChanged(nameof(Medicines));
             }
         }
+		public Disease disease;
 
 		public string Amount {
             get => _amount;
@@ -69,8 +73,17 @@ namespace bazy1.ViewModels.Doctor.Pages
 				OnPropertyChanged(nameof(Comments));
 			}
 		}
+		public DateTime Date {
+			get => _date;
+			set {
+                Console.WriteLine("data:"+Date);
+                needToValidate["Date"] = true;
+				_date = value;
+				OnPropertyChanged(nameof(Date));
+			}
+		}
 
-        private ObservableCollection<Medicine> medicines = [];
+		private ObservableCollection<Medicine> medicines = [];
 
 		//walidacja
 		private bool validate(string data) {
@@ -104,6 +117,12 @@ namespace bazy1.ViewModels.Doctor.Pages
 					else if (ErrorCollection.ContainsKey(fieldName))
 						ErrorCollection.Remove(fieldName);
 				}
+				if (fieldName == "Date" && needToValidate[fieldName])
+				{
+					if (Date == null|| Date.Date < DateTime.Now.Date) result = "Niepoprawna data";
+					else if (ErrorCollection.ContainsKey(fieldName))
+						ErrorCollection.Remove(fieldName);
+				}
 
 
 				if (ErrorCollection.ContainsKey(fieldName)) ErrorCollection[fieldName] = result;
@@ -116,9 +135,10 @@ namespace bazy1.ViewModels.Doctor.Pages
 
 		}
 
-		public AddMedicationViewModel(Patient patient, DoctorViewModel parentViewModel) {
+		public AddMedicationViewModel(Patient patient, Disease disease, DoctorViewModel parentViewModel) {
 			this.parentViewModel = parentViewModel;
 			Medicines = new(parentViewModel.Medicines);
+			this.disease = disease;
 			parentViewModel.Medicines = [];
 
 
@@ -133,8 +153,15 @@ namespace bazy1.ViewModels.Doctor.Pages
 			{
 				if (Medicines.Count != 0)
 				{
-					SelectedPatient.Prescriptions.Add(new Prescription { Medicines = Medicines });
+					//SelectedPatient.Diseases.Where(d => d.Id == disease.Id).First().Medicines.Add(Medicines.tol);
+					SelectedPatient.Prescriptions.Add(new Prescription { Medicines = this.Medicines, DateOfPrescription = Date });
+					Console.WriteLine("mesd:" + Medicines.Count());
 					DbContext.SaveChanges();
+
+					PrescriptionGenerator generator = new();
+					//generator.generate();
+
+                    medicines.Clear();
 				}
 			});
 
@@ -168,7 +195,7 @@ namespace bazy1.ViewModels.Doctor.Pages
                     }
 					//DbContext.SaveChanges();
 					parentViewModel.Medicines = medicines.ToList();
-					parentViewModel.CurrentViewModel = new AddMedicationViewModel(patient,parentViewModel);
+					parentViewModel.CurrentViewModel = new AddMedicationViewModel(patient,disease,parentViewModel);
 				}
 
 				Console.WriteLine("romzd: " + ErrorCollection.Count());

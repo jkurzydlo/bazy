@@ -41,6 +41,24 @@ namespace bazy1.ViewModels.Doctor.Pages {
 					if (tempPatient.PhoneNumber != null) info += "Telefon: " + tempPatient.PhoneNumber + "\n";
 					if (tempPatient.Email != null) info += "Email: " + tempPatient.Email + "\n";
 					info += "Adresy:" + adressess;
+					info += "Przyjmowane leki:\n";
+					string tempDoses = "";
+					var names = DbContext.Database.SqlQueryRaw<string>("select med.name from patient_diesease pd join prescription pr on pr.patient_id=pd.patient_id" +
+				" join prescription_medicine pm on pm.prescription_id = pr.id" +
+				$" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPatient.Id}").ToList();
+
+					var dosages = DbContext.Database.SqlQueryRaw<string>("select med.dose from patient_diesease pd join prescription pr on pr.patient_id=pd.patient_id" +
+" join prescription_medicine pm on pm.prescription_id = pr.id" +
+$" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPatient.Id} ").ToList();
+					string tempMedicines = "";
+
+					for (int i = 0; i < names.Count; i++)
+					{
+						tempMedicines += $"{names[i]}: {dosages[i]}\n";
+					}
+					info += tempMedicines;
+
+
 				}
 				return info;
 			}
@@ -74,8 +92,10 @@ namespace bazy1.ViewModels.Doctor.Pages {
 
 		public PatientListViewModel(User user, DoctorViewModel viewModel) {
 			ShowAddMedicationCommand = new BasicCommand(obj => {
-				viewModel.CurrentViewModel = new AddMedicationViewModel(SelectedPatient,viewModel);
+				viewModel.CurrentViewModel = new AddMedicationViewModel(SelectedPatient,null,viewModel);
 			});
+			PrescriptionGenerator p = new();
+			//p.generate();
 
 			AddPatientCommand = new BasicCommand(obj => viewModel.CurrentViewModel = new AddPatientViewModel(doctor,viewModel));
 			PatientDeleteCommand = new BasicCommand(obj =>
@@ -101,7 +121,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			ShowMedicalHistoryCommand = new BasicCommand((object obj) => {
 				Console.WriteLine(SelectedPatient.Name + SelectedPatient.Surname);
 				Console.WriteLine("sel: " + DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First().Diseases.Count);
-				if (SelectedPatient != null) viewModel.CurrentViewModel = new MedicalHistoryViewModel(DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First(),viewModel);
+				if (SelectedPatient != null) viewModel.CurrentViewModel = new MedicalHistoryViewModel(DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First(),null,viewModel);
 				});
 			ShowAddDiseaseCommand = new BasicCommand((object obj) =>
 			{

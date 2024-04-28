@@ -15,6 +15,8 @@ public partial class Prescription
 
     public int PatientId { get; set; }
 
+    public byte[]? Pdf { get; set; }
+
     public virtual Patient Patient { get; set; } = null!;
 
     public virtual ICollection<Medicine> Medicines { get; set; } = new List<Medicine>();
