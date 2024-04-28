@@ -87,7 +87,10 @@
                             <TextBox Width="120" VerticalAlignment="Top" Margin="0,0,10,0" Text="{Binding Dose, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" ToolTip="{Binding ErrorCollection[Dose]}" Style="{StaticResource TooltipStyle}"></TextBox>
                             <TextBlock Text="Liczba opakowań" FontSize="15" Margin="0,0,10,0"></TextBlock>
                             <TextBox Width="120" VerticalAlignment="Top" Margin="0,0,10,0" Text="{Binding Amount, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" ToolTip="{Binding ErrorCollection[Amount]}" Style="{StaticResource TooltipStyle}"></TextBox>
-                        </StackPanel>
+                                <TextBlock Text="Odpłatność (w %)" FontSize="15" Margin="0,0,10,0"></TextBlock>
+                                <TextBox Width="120" VerticalAlignment="Top" Margin="0,0,10,0" Text="{Binding Fraction, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True}" ToolTip="{Binding ErrorCollection[Fraction]}" Style="{StaticResource TooltipStyle}"></TextBox>
+
+                            </StackPanel>
 
 
                         <StackPanel Orientation="Vertical">

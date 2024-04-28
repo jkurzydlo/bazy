@@ -30,10 +30,16 @@ namespace bazy1.ViewModels {
 
         public LoginViewModel() {
             PrescriptionGenerator gen = new();
-            var prescription = new Prescription() { Patient = new Patient() { Pesel = "02658769845", Name="Adam", Surname="Nowak",
+            var prescription = new Prescription() {Doctor = new Models.Doctor() { Name = "Jan", Surname="Kowalski", PhoneNumber = "2234569797",
+                Specializations = new List<Specialization>() {new Specialization { Name = "Chirurg" } } },
+                Patient = new Patient() { Pesel = "02658769845", Name="Adam", Surname="Nowak",
                 Addresses = new List<Address>() { new Address() { City = "Warszawa", BuildingNumber = "124", Street = "Prosta" } } },
-                Medicines = new List<Medicine>() { new Medicine() {Name="Trexan", Amount = 2, Dose="10 mg",Comments="1 raz na dobę przez 3 miesiące" } } };
-            gen.generate(prescription);
+                Medicines = new List<Medicine>() { new Medicine() { Fraction = 1F, Name="Trexan", Amount = 2, Dose="10 mg",Comments="1 raz na dobę przez 3 miesiące" },
+                new Medicine() {Name="Naproxen", Amount = 2, Dose = "20ml", Comments="3 razy dziennie po posiłku", Fraction=0.5F } },
+                DateOfPrescription = DateTime.Now
+                
+            };
+            //gen.generate(prescription);
             userRepository = new UserRepository();
 
             //Wygeneruj pierwsze konto admina

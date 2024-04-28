@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using bazy1.Models;
-
+using QuestPDF;
 using dbm = bazy1.Models;
 using System.Windows.Input;
 using Microsoft.VisualBasic;
@@ -14,6 +14,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using System.ComponentModel;
 using System.Windows.Data;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
 
 namespace bazy1.ViewModels.Doctor.Pages {
 	public class PatientListViewModel : ViewModelBase {
@@ -34,6 +36,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 				{
 					Console.WriteLine(DbContext.Addresses.Count());
 					var tempPatient = DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First();
+					if (tempPatient.SecondName != null) info += "Drugie imię: " + tempPatient.SecondName + "\n";
 					Console.WriteLine("ile: " + DbContext.Addresses.Where(adr => adr.Patients.Contains(tempPatient)).Count());
 					DbContext.Addresses.Where(adr => adr.Patients.Contains(tempPatient)).ToList().
 						ForEach(adr => adressess += adr.City + " " + adr.PostalCode + " ul." + adr.Street + " " + adr.BuildingNumber + "\n");
@@ -91,10 +94,11 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 
 
 		public PatientListViewModel(User user, DoctorViewModel viewModel) {
+
 			ShowAddMedicationCommand = new BasicCommand(obj => {
 				viewModel.CurrentViewModel = new AddMedicationViewModel(SelectedPatient,null,viewModel);
 			});
-			PrescriptionGenerator p = new();
+			//PrescriptionGenerator p = new();
 			//p.generate();
 
 			AddPatientCommand = new BasicCommand(obj => viewModel.CurrentViewModel = new AddPatientViewModel(doctor,viewModel));

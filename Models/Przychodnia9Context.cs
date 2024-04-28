@@ -447,6 +447,8 @@ public partial class Przychodnia9Context : DbContext
 
             entity.HasIndex(e => e.Id, "idRecepty_UNIQUE").IsUnique();
 
+            entity.HasIndex(e => new { e.DoctorId, e.DoctorUserId }, "pr_dc_fk");
+
             entity.Property(e => e.Id)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("id");
@@ -457,17 +459,23 @@ public partial class Przychodnia9Context : DbContext
             entity.Property(e => e.DateOfPrescription)
                 .HasColumnType("date")
                 .HasColumnName("dateOfPrescription");
-            entity.Property(e => e.ExpirationDate)
-                .HasColumnType("date")
-                .HasColumnName("expirationDate");
+            entity.Property(e => e.DoctorId).HasColumnName("doctor_id");
+            entity.Property(e => e.DoctorUserId).HasColumnName("doctor_user_id");
             entity.Property(e => e.Pdf)
                 .HasColumnType("blob")
                 .HasColumnName("pdf");
+            entity.Property(e => e.RealisationDate)
+                .HasColumnType("date")
+                .HasColumnName("realisationDate");
 
             entity.HasOne(d => d.Patient).WithMany(p => p.Prescriptions)
                 .HasForeignKey(d => d.PatientId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_Prescription_Patient1");
+
+            entity.HasOne(d => d.Doctor).WithMany(p => p.Prescriptions)
+                .HasForeignKey(d => new { d.DoctorId, d.DoctorUserId })
+                .HasConstraintName("pr_dc_fk");
 
             entity.HasMany(d => d.Medicines).WithMany(p => p.Prescriptions)
                 .UsingEntity<Dictionary<string, object>>(

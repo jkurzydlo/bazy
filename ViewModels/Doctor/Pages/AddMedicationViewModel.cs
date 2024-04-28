@@ -20,7 +20,7 @@ namespace bazy1.ViewModels.Doctor.Pages
     public class AddMedicationViewModel : ViewModelBase, IDataErrorInfo
     {
 
-        private string _amount, _dose, _name, _comments;
+        private string _amount, _dose, _name, _comments,_fraction;
 		private DateTime _date = DateTime.Now.Date;
         public Patient SelectedPatient { get; set; }
         public ICommand AddMedicineCommand { get; set; }
@@ -46,6 +46,14 @@ namespace bazy1.ViewModels.Doctor.Pages
 				OnPropertyChanged(nameof(Amount));
             }
         }
+		public string Fraction {
+			get => _fraction;
+			set { 
+			_fraction = value;
+				needToValidate["Fraction"] = true;
+				OnPropertyChanged(nameof(Fraction));
+			}
+		}
 		public string Dose {
 			get => _dose;
             set {
@@ -117,6 +125,12 @@ namespace bazy1.ViewModels.Doctor.Pages
 					else if (ErrorCollection.ContainsKey(fieldName))
 						ErrorCollection.Remove(fieldName);
 				}
+				if (fieldName == "Fraction" && needToValidate[fieldName])
+				{
+					if (!validate(Fraction) || !int.TryParse(Fraction, out int tempDFraction)) result = "Niepoprawny format";
+					else if (ErrorCollection.ContainsKey(fieldName))
+						ErrorCollection.Remove(fieldName);
+				}
 				if (fieldName == "Date" && needToValidate[fieldName])
 				{
 					if (Date == null|| Date.Date < DateTime.Now.Date) result = "Niepoprawna data";
@@ -136,13 +150,15 @@ namespace bazy1.ViewModels.Doctor.Pages
 		}
 
 		public AddMedicationViewModel(Patient patient, Disease disease, DoctorViewModel parentViewModel) {
+			var tmp = patient;
 			this.parentViewModel = parentViewModel;
 			Medicines = new(parentViewModel.Medicines);
 			this.disease = disease;
 			parentViewModel.Medicines = [];
 
 
-			SelectedPatient = patient;
+			SelectedPatient = DbContext.Patients.Where(pat => pat.Id == patient.Id).First();
+			DbContext.Update(SelectedPatient);
 			//DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First().Prescriptions;
 			//Walidacja wyłączona po załadowaniu widoku
 			foreach (var field in GetType().GetProperties().
@@ -153,13 +169,13 @@ namespace bazy1.ViewModels.Doctor.Pages
 			{
 				if (Medicines.Count != 0)
 				{
+					Prescription pr = new Prescription { Medicines = this.Medicines, DateOfPrescription = DateTime.Now, RealisationDate = Date, Doctor = DbContext.Doctors.Where(doc => doc.UserId == parentViewModel.CurrentUser.Id).First(), Patient = DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First()};
 					//SelectedPatient.Diseases.Where(d => d.Id == disease.Id).First().Medicines.Add(Medicines.tol);
-					SelectedPatient.Prescriptions.Add(new Prescription { Medicines = this.Medicines, DateOfPrescription = Date });
 					Console.WriteLine("mesd:" + Medicines.Count());
+					DbContext.Update(pr);
 					DbContext.SaveChanges();
-
 					PrescriptionGenerator generator = new();
-					//generator.generate();
+					generator.generate(pr, DbContext.Doctors.Where(doc => doc.UserId == parentViewModel.CurrentUser.Id).First());
 
                     medicines.Clear();
 				}
@@ -172,12 +188,13 @@ namespace bazy1.ViewModels.Doctor.Pages
 
 			AddMedicineCommand = new BasicCommand((obj) =>
             {
+				
                 //Zrobione po to żeby odświeżyć wartości i tym samym uruchomić walidację po kliknięciu przycisku
 
 				if (ErrorCollection.Count == 0)
 				{
-					medicines.Add(new Medicine { Dose = Dose, Amount = int.Parse(Amount), Name = Name, Comments = Comments });
-					Prescription prescription = new() { Medicines = medicines };
+					medicines.Add(new Medicine { Dose = Dose, Amount = int.Parse(Amount), Name = Name, Comments = Comments, Fraction = float.Parse(Fraction)/100F });
+					Prescription prescription = new() { Medicines = medicines, DateOfPrescription = DateTime.Now, RealisationDate = Date };
 
 					foreach (var prop in needToValidate)
 					{
@@ -193,7 +210,6 @@ namespace bazy1.ViewModels.Doctor.Pages
                     {
 						//DbContext.Medicines.Add(item);
                     }
-					//DbContext.SaveChanges();
 					parentViewModel.Medicines = medicines.ToList();
 					parentViewModel.CurrentViewModel = new AddMedicationViewModel(patient,disease,parentViewModel);
 				}
