@@ -30,7 +30,6 @@ namespace bazy1.ViewModels.Doctor.Pages
         private void ExecutePasswordChangeCommand(object obj)
         {
 
-<<<<<<< HEAD
 
             var watch = new Stopwatch();
             watch.Start();
@@ -63,11 +62,6 @@ namespace bazy1.ViewModels.Doctor.Pages
                 }
             }
             Console.WriteLine(ErrorMessage);
-=======
-		public FirstLoginViewModel() {
-			PasswordChangeCommand = new BasicCommand(ExecutePasswordChangeCommand);
-		}
->>>>>>> master
 
         }
         public FirstLoginViewModel(User user)
@@ -76,7 +70,6 @@ namespace bazy1.ViewModels.Doctor.Pages
             _currentUser = user;
         }
 
-<<<<<<< HEAD
         public string Password
         {
             get => _password;
@@ -105,61 +98,6 @@ namespace bazy1.ViewModels.Doctor.Pages
                 OnPropertyChanged(ErrorMessage);
             }
         }
-=======
-			
-			var watch = new Stopwatch();
-			watch.Start();
-			var db = new Przychodnia9Context();
-			watch.Stop();
-			Console.WriteLine("czas"+ watch.ElapsedMilliseconds);
-			_currentUser.Surname = "sds";
-			Console.WriteLine($"id2: {_currentUser.Name}");
-			Console.WriteLine("hasło: "+Password + PasswordRepeat);
-			//Console.WriteLine($"Rozmiar: {db.Users.Where(e => e.Id == _currentUser.Id).Count()}");
-			//Console.WriteLine(db.Users.Count());
-			if (!string.IsNullOrEmpty(Password) && !string.IsNullOrEmpty(PasswordRepeat))
-			{
-				if (Password.Equals(PasswordRepeat))
-				{
-					var hash = BCrypt.Net.BCrypt.HashPassword(Password);
-
-					watch.Start();
-					Console.WriteLine("ok");
-					db.Users.Where(e => e.Id == _currentUser.Id).First().Hash = hash;
-					db.Users.Where(e => e.Id == _currentUser.Id).First().Password = Password;
-					db.Users.Where(e => e.Id == _currentUser.Id).First().FirstLogin = false;
-					watch.Stop();
-					Console.WriteLine("czas oper: " + watch.ElapsedMilliseconds);
-					db.SaveChanges();
-				}
-				else
-				{
-					ErrorMessage = "Hasła nie są zgodne";
-				}
-			}
-			Console.WriteLine(ErrorMessage);
-			
-		}
-		public FirstLoginViewModel(User user) {
-			PasswordChangeCommand = new BasicCommand(ExecutePasswordChangeCommand);
-			_currentUser = user;
-		}
-
-		public string Password {
-			get => _password;
-			set {
-				_password = value;
-				OnPropertyChanged(nameof(Password));
-			}
-		}
-		public string PasswordRepeat {
-			get => _passwordRepeat;
-			set {
-				_passwordRepeat = value;
-				OnPropertyChanged(nameof(PasswordRepeat));
-			}
-		}
->>>>>>> master
 
     }
 }

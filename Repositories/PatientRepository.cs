@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ﻿using bazy1.Models;
 using MySql.Data.MySqlClient;
 using System;
@@ -94,18 +93,3 @@ namespace bazy1.Repositories
 }
 
 
-=======
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace bazy1.Repositories
-{
-    class PatientRepository : RepositoryBase
-    {
-      //  public runQuery();
-    }
-}
->>>>>>> master

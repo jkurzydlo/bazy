@@ -2,7 +2,6 @@
 using bazy1.Repositories;
 using bazy1.ViewModels.Admin.Pages;
 using bazy1.ViewModels.Doctor.Pages;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +17,6 @@ namespace bazy1.ViewModels.Doctor
     public class DoctorViewModel : ViewModelBase
     {
 
-<<<<<<< HEAD
         private ViewModelBase? _currentViewModel;
         private string _caption;
         private bool _firstLogin = true;
@@ -27,17 +25,6 @@ namespace bazy1.ViewModels.Doctor
         private string _tag;
         public ICommand ShowDashboardLoggedInCommand { get; }
         public ICommand Klik { get; set; }
-=======
-		private ViewModelBase _currentViewModel;
-		private string _caption;
-		private bool _firstLogin = true;
-		private string errorMessage;
-		private FirstLoginViewModel _firstLoginViewModel;
-		private string _tag;
-		public ICommand ShowDashboardLoggedInCommand { get; }
-		public ICommand Klik { get; set; }
-
->>>>>>> master
 
 
 
@@ -49,21 +36,7 @@ namespace bazy1.ViewModels.Doctor
             //Jeżeli użytkownik loguje się po raz pierwszy wyświetl widok zmiany hasła, jeśli nie - ekran główny
             //_currentUser.Surname = "dsds";
 
-<<<<<<< HEAD
             Console.WriteLine("executeshowdashobard ");
-=======
-			//Console.WriteLine(_currentUser.FirstLogin + CurrentUser.Login);
-			if (_currentUser.FirstLogin)
-			{
-	CurrentViewModel = new FirstLoginViewModel(_currentUser);	
-			}
-			else
-			{
-			CurrentViewModel = new Pages.DashboardViewModel(_currentUser);
-			}	
-			Caption2 = "Ekran główny";
-		}
->>>>>>> master
 
             //Console.WriteLine(_currentUser.FirstLogin + CurrentUser.Login);
             if ((bool)_currentUser.FirstLogin)
@@ -77,23 +50,7 @@ namespace bazy1.ViewModels.Doctor
             Caption2 = "Ekran główny";
         }
 
-<<<<<<< HEAD
         public ICommand ShowPatientListViewCommand { get; }
-=======
-		private void ExecuteShowPatientListViewCommand(object obj) {
-			
-			if (!_currentUser.FirstLogin || !_firstLogin) //Jeśli użytkownik nie loguje się pierwszy raz -> zmienił hasło -> daj dostęp do przycisków
-			{			
-				Console.WriteLine("nazwisko:"+CurrentUser.Surname);
-
-				//Ustawiamy viewmodel dla widoku listy użytkowników
-				CurrentViewModel = new PatientListViewModel(_currentUser,this);
-				Caption2 = "Lista pacjentów";
-				Console.WriteLine("dasdas");
-			}
-			
-		}
->>>>>>> master
 
         private void ExecuteShowPatientListViewCommand(object obj)
         {
@@ -123,29 +80,6 @@ namespace bazy1.ViewModels.Doctor
             }
         }
 
-		public ICommand ShowPrescriptionViewCommand { get; }
-		private void ExecuteShowPrescriptionViewCommand(object obj) {
-			if (!_currentUser.FirstLogin || !_firstLogin)
-			{
-                foreach (var item in DbContext.Prescriptions)
-                {
-                    Console.WriteLine(item.DoctorId);
-                }
-
-					var sz = DbContext.Prescriptions.Where(
-					pr => pr.DoctorUserId == CurrentUser.Id);
-
-				var ab = DbContext.Prescriptions.Include("Patient").
-					Where(pr => pr.DoctorUserId == CurrentUser.Id).ToList();
-
-				//var pat = DbContext.Patients.Where(pat => pat.Prescriptions.Contains())
-                //Console.WriteLine("roz: "+ab.First().Patient.Id);
-                //Ustawiamy viewmodel dla widoku listy recept
-                CurrentViewModel = new PrescriptionsViewModel(ab,DbContext.Doctors.Where(doc=> doc.UserId == CurrentUser.Id).First());
-				Caption2 = "Lista recept";
-			}
-
-		}
 
         private User _currentUser;
         private IUserRepository _userRepository;
@@ -163,7 +97,6 @@ namespace bazy1.ViewModels.Doctor
             }
         }
 
-<<<<<<< HEAD
         public DoctorViewModel()
         {
             _currentUser = new User();
@@ -196,50 +129,6 @@ namespace bazy1.ViewModels.Doctor
                 }
             });
         }
-=======
-		public DoctorViewModel() {
-			ShowPrescriptionViewCommand = new BasicCommand(ExecuteShowPrescriptionViewCommand);
-			Klik = new BasicCommand((object obj) => CurrentUser.Surname = "lmao");
-			Console.WriteLine("nowy model");
-			
-			_userRepository = new UserRepository();
-			CurrentUser = new User();
-			loadCurrentUser();
-			ExecuteShowDashboardViewCommand(null);
-			ShowDashboardViewCommand = new BasicCommand(ExecuteShowDashboardViewCommand);
-			ShowPatientListViewCommand = new BasicCommand(ExecuteShowPatientListViewCommand);
-			ShowScheduleViewCommand = new BasicCommand(ExecuteShowScheduleViewCommand);
-			ShowDashboardLoggedInCommand = new BasicCommand((object obj) => {
-
-				
-				FirstLoginViewModel = (FirstLoginViewModel)CurrentViewModel;
-				if (!string.IsNullOrEmpty(FirstLoginViewModel.Password) && !string.IsNullOrEmpty(FirstLoginViewModel.PasswordRepeat))
-				{
-					if (FirstLoginViewModel.Password.Equals(FirstLoginViewModel.PasswordRepeat))
-					{
-						CurrentViewModel = new Pages.DashboardViewModel(_currentUser);
-						_firstLogin = false;
-					}
-				}
-			} );
-		}
-
-		//Znajdź w bazie użytkownika o danych podanych w polu logowania i ustaw jako właściwość CurrentUser
-		private void loadCurrentUser() {
-			User? user = _userRepository.findByUsername(Thread.CurrentPrincipal.Identity.Name);
-			if (user != null)
-			{
-				CurrentUser.Id = user.Id;
-				CurrentUser.Name = user.Name;
-				CurrentUser.Surname = user.Surname;
-				CurrentUser.Login = user.Login;
-				CurrentUser.Type = user.Type;
-				CurrentUser.Password = user.Password;
-				CurrentUser.FirstLogin = user.FirstLogin;
-				Console.Write("da: "+CurrentUser.Name + CurrentUser.Surname);
-			}
-		}
->>>>>>> master
 
 
         //Znajdź w bazie użytkownika o danych podanych w polu logowania i ustaw jako właściwość CurrentUser
@@ -282,7 +171,6 @@ namespace bazy1.ViewModels.Doctor
         {
             get => _caption;
 
-<<<<<<< HEAD
             set
             {
                 _caption = value;
@@ -298,14 +186,6 @@ namespace bazy1.ViewModels.Doctor
                 OnPropertyChanged(nameof(Tag));
             }
         }
-=======
-		public string ErrorMessage { get => errorMessage; set {
-				errorMessage = value;
-				OnPropertyChanged(nameof(ErrorMessage));
-			}
-		}
-		public List<Medicine> Medicines { get; set; } = [];
->>>>>>> master
 
         public string ErrorMessage
         {

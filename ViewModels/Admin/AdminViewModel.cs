@@ -22,20 +22,12 @@ namespace bazy1.ViewModels.Admin
     public class AdminViewModel : ViewModelBase
     {
 
-<<<<<<< HEAD
         private ViewModelBase _currentViewModel;
-=======
-		private ViewModelBase _currentViewModel;
->>>>>>> master
         private string _caption;
         private DatabaseService _databaseService;
         private User _currentUser;
         private List<UserPart> _users;
-<<<<<<< HEAD
         public ICommand RefreshCommand { get; set; }
-=======
-        public ICommand RefreshCommand{ get; set; }
->>>>>>> master
 
         public List<UserPart> Users
         {
@@ -67,11 +59,10 @@ namespace bazy1.ViewModels.Admin
             Caption2 = "Lista użytkowników";
             Console.WriteLine("dasdas");
         }
-        
+
 
         public AdminViewModel()
         {
-<<<<<<< HEAD
             // RefreshCommand = new BasicCommand((object obj) => CurrentViewModel);
 
             _databaseService = new DatabaseService(new PrzychodniaContext());
@@ -82,17 +73,6 @@ namespace bazy1.ViewModels.Admin
                     Surname = u.Surname,
                     Type = u.Type
                 }).ToList();
-=======
-           // RefreshCommand = new BasicCommand((object obj) => CurrentViewModel);
-
-			_databaseService = new DatabaseService(new Przychodnia9Context());
-            Users = 
-                DatabaseService.getDbContext().Users.Select(u => new UserPart(){
-                Name = u.Name,
-               Surname = u.Surname,
-                Type = u.Type
-            }).ToList();
->>>>>>> master
 
             ShowAddUserViewCommand = new BasicCommand(ExecuteShowAddUserViewCommand);
             ShowUserListViewCommand = new BasicCommand(ExecuteShowUserListViewCommand);
@@ -120,13 +100,5 @@ namespace bazy1.ViewModels.Admin
                 OnPropertyChanged(nameof(CurrentViewModel));
             }
         }
-<<<<<<< HEAD
-=======
-
-
-
-
-
->>>>>>> master
     }
 }

@@ -1,10 +1,4 @@
-<<<<<<< HEAD
 ﻿using bazy1.Repositories;
-=======
-﻿using bazy1.Models;
-using bazy1.Models.Repositories;
-using bazy1.Repositories;
->>>>>>> master
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,23 +28,8 @@ namespace bazy1.ViewModels
         //Jeśli nie udało się zalogować - okno cały czas widoczne
         private bool isVisible = true;
 
-<<<<<<< HEAD
         public LoginViewModel()
         {
-=======
-        public LoginViewModel() {
-            PrescriptionGenerator gen = new();
-            var prescription = new Prescription() {Doctor = new Models.Doctor() { Name = "Jan", Surname="Kowalski", PhoneNumber = "2234569797",
-                Specializations = new List<Specialization>() {new Specialization { Name = "Chirurg" } } },
-                Patient = new Patient() { Pesel = "02658769845", Name="Adam", Surname="Nowak",
-                Addresses = new List<Address>() { new Address() { City = "Warszawa", BuildingNumber = "124", Street = "Prosta" } } },
-                Medicines = new List<Medicine>() { new Medicine() { Fraction = 1F, Name="Trexan", Amount = 2, Dose="10 mg",Comments="1 raz na dobę przez 3 miesiące" },
-                new Medicine() {Name="Naproxen", Amount = 2, Dose = "20ml", Comments="3 razy dziennie po posiłku", Fraction=0.5F } },
-                DateOfPrescription = DateTime.Now
-                
-            };
-            //gen.generate(prescription);
->>>>>>> master
             userRepository = new UserRepository();
 
             //Wygeneruj pierwsze konto admina
@@ -115,40 +94,24 @@ namespace bazy1.ViewModels
             }
         }
 
-<<<<<<< HEAD
         public string LoginMessage
         {
             get => _loginMessage;
             set
             {
-=======
-		public string LoginMessage {
-            get => _loginMessage;
-            set {
->>>>>>> master
                 _loginMessage = value;
                 OnPropertyChanged(nameof(LoginMessage));
             }
         }
-<<<<<<< HEAD
         public string PasswordMessage
         {
             get => _passwordMessage;
             set
             {
-=======
-		public string PasswordMessage {
-            get => _passwordMessage;
-            set {
->>>>>>> master
                 _passwordMessage = value;
                 OnPropertyChanged(nameof(PasswordMessage));
             }
         }
-<<<<<<< HEAD
     }
-=======
-	}
->>>>>>> master
 
 }
