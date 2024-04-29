@@ -15,7 +15,11 @@ public partial class Doctor
 
     public int UserId { get; set; }
 
+<<<<<<< HEAD
     public virtual ICollection<Office> Offices { get; set; } = new List<Office>();
+=======
+    public virtual ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
+>>>>>>> master
 
     public virtual User User { get; set; } = null!;
 

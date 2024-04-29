@@ -21,6 +21,15 @@ public partial class Patient
 
     public DateTime? LastVisit { get; set; }
 
+<<<<<<< HEAD
+=======
+    public string Sex { get; set; } = null!;
+
+    public DateTime? BirthDate { get; set; }
+
+    public string? SecondName { get; set; }
+
+>>>>>>> master
     public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
     public virtual ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
@@ -30,6 +39,7 @@ public partial class Patient
     public virtual ICollection<Disease> Diseases { get; set; } = new List<Disease>();
 
     public virtual ICollection<Doctor> Doctors { get; set; } = new List<Doctor>();
-
-    public virtual ICollection<Medicine> Medicines { get; set; } = new List<Medicine>();
+	public override string ToString() {
+		return Name+" "+Surname;
+	}
 }
