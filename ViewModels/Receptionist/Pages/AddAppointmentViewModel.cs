@@ -3,6 +3,7 @@ using System;
 using bazy1.Repositories;
 using System.Windows;
 using System.Windows.Input;
+using System.Collections.ObjectModel;
 
 namespace bazy1.ViewModels.Receptionist.Pages
 {
@@ -12,6 +13,7 @@ namespace bazy1.ViewModels.Receptionist.Pages
         private string _goal;
         private int _notificationId;
         private int _patientId;
+        private DateTime _selectedAppointment;
 
         public string DateTime
         {
@@ -52,6 +54,17 @@ namespace bazy1.ViewModels.Receptionist.Pages
                 OnPropertyChanged(nameof(PatientId));
             }
         }
+        public ObservableCollection<DateTime> AvailableAppointments { get; set; }
+        public DateTime SelectedAppointment
+        {
+            get => _selectedAppointment;
+            set
+            {
+                _selectedAppointment = value;
+                OnPropertyChanged(nameof(SelectedAppointment));
+            }
+        }
+
     }
 }
 

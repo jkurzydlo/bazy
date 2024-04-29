@@ -19,6 +19,8 @@ public partial class Workhour
 
     public int ReceptionistUserId { get; set; }
 
+    public DayOfWeek DayOfWeek { get; set; }
+
     public virtual Doctor Doctor { get; set; } = null!;
 
     public virtual Receptionist Receptionist { get; set; } = null!;
