@@ -3,6 +3,7 @@ using bazy1.Models.Repositories;
 using bazy1.Repositories;
 using bazy1.ViewModels.Admin.Pages;
 using bazy1.ViewModels.Doctor.Pages;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -76,6 +77,29 @@ namespace bazy1.ViewModels.Doctor {
 			}
 		}
 
+		public ICommand ShowPrescriptionViewCommand { get; }
+		private void ExecuteShowPrescriptionViewCommand(object obj) {
+			if (!_currentUser.FirstLogin || !_firstLogin)
+			{
+                foreach (var item in DbContext.Prescriptions)
+                {
+                    Console.WriteLine(item.DoctorId);
+                }
+
+					var sz = DbContext.Prescriptions.Where(
+					pr => pr.DoctorUserId == CurrentUser.Id);
+
+				var ab = DbContext.Prescriptions.Include("Patient").
+					Where(pr => pr.DoctorUserId == CurrentUser.Id).ToList();
+
+				//var pat = DbContext.Patients.Where(pat => pat.Prescriptions.Contains())
+                //Console.WriteLine("roz: "+ab.First().Patient.Id);
+                //Ustawiamy viewmodel dla widoku listy recept
+                CurrentViewModel = new PrescriptionsViewModel(ab,DbContext.Doctors.Where(doc=> doc.UserId == CurrentUser.Id).First());
+				Caption2 = "Lista recept";
+			}
+
+		}
 
 		private User _currentUser;
 		private IUserRepository _userRepository;
@@ -91,6 +115,7 @@ namespace bazy1.ViewModels.Doctor {
 		}
 
 		public DoctorViewModel() {
+			ShowPrescriptionViewCommand = new BasicCommand(ExecuteShowPrescriptionViewCommand);
 			Klik = new BasicCommand((object obj) => CurrentUser.Surname = "lmao");
 			Console.WriteLine("nowy model");
 			

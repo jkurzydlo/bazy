@@ -158,7 +158,8 @@ namespace bazy1.ViewModels.Doctor.Pages
 
 
 			SelectedPatient = DbContext.Patients.Where(pat => pat.Id == patient.Id).First();
-			DbContext.Update(SelectedPatient);
+            Console.WriteLine("wybrany pacjent: "+SelectedPatient.Name);
+            DbContext.Update(SelectedPatient);
 			//DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First().Prescriptions;
 			//Walidacja wyłączona po załadowaniu widoku
 			foreach (var field in GetType().GetProperties().
@@ -169,14 +170,20 @@ namespace bazy1.ViewModels.Doctor.Pages
 			{
 				if (Medicines.Count != 0)
 				{
-					Prescription pr = new Prescription { Medicines = this.Medicines, DateOfPrescription = DateTime.Now, RealisationDate = Date, Doctor = DbContext.Doctors.Where(doc => doc.UserId == parentViewModel.CurrentUser.Id).First(), Patient = DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First()};
+                    Console.WriteLine(
+						DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First().Name);
+                    Prescription pr = new Prescription { Medicines = this.Medicines, DateOfPrescription = DateTime.Now, RealisationDate = Date, Doctor = DbContext.Doctors.Where(doc => doc.UserId == parentViewModel.CurrentUser.Id).First(), Patient = DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First()};
 					//SelectedPatient.Diseases.Where(d => d.Id == disease.Id).First().Medicines.Add(Medicines.tol);
 					Console.WriteLine("mesd:" + Medicines.Count());
 					DbContext.Update(pr);
 					DbContext.SaveChanges();
 					PrescriptionGenerator generator = new();
-					generator.generate(pr, DbContext.Doctors.Where(doc => doc.UserId == parentViewModel.CurrentUser.Id).First());
-
+					generator.generate(
+						DbContext.Prescriptions.Include("Medicines").
+						Include("Patient").Include("Patient.Addresses").
+						Where(p => pr.Id == p.Id).First(),
+						DbContext.Doctors.Where(d => d.UserId == parentViewModel.CurrentUser.Id).First());
+                    Console.WriteLine("doc: "+DbContext.Doctors.Where(doc => doc.UserId == parentViewModel.CurrentUser.Id).First().Name);
                     medicines.Clear();
 				}
 			});
@@ -194,7 +201,7 @@ namespace bazy1.ViewModels.Doctor.Pages
 				if (ErrorCollection.Count == 0)
 				{
 					medicines.Add(new Medicine { Dose = Dose, Amount = int.Parse(Amount), Name = Name, Comments = Comments, Fraction = float.Parse(Fraction)/100F });
-					Prescription prescription = new() { Medicines = medicines, DateOfPrescription = DateTime.Now, RealisationDate = Date };
+					Prescription prescription = new() { Medicines = medicines, DateOfPrescription = DateTime.Now, RealisationDate = Date, Patient = SelectedPatient, Doctor = DbContext.Doctors.Where(doc => doc.UserId == parentViewModel.CurrentUser.Id).First() };
 
 					foreach (var prop in needToValidate)
 					{

@@ -9,13 +9,19 @@ using QuestPDF.Infrastructure;
 
 namespace bazy1 {
 	public class PrescriptionGenerator {
-		public void generate(Prescription prescription, Doctor doctor) {
+		public string generate(Prescription prescription, Doctor doctor) {
             Console.WriteLine("genruje sie;");
             //ViewModels.ViewModelBase.DbContext.Doctors.Where(doc => doc.Patients.Contains(prescription.Patient)).Where(doc => )
 
             QuestPDF.Settings.License = LicenseType.Community;
+			string fileTitle = Directory.GetCurrentDirectory() + "\\" + 
+				prescription.Id + 
+				DateTime.Now.Day.ToString() +
+				DateTime.Now.Month + 
+				DateTime.Now.Year.ToString() +
+				".pdf";
 
-			var doc = Document.Create(container =>
+			Document.Create(container =>
 			{
 				container.Page(page =>
 				{
@@ -37,8 +43,8 @@ namespace bazy1 {
 
 
 						table.Cell().Row(2).ColumnSpan(2).BorderLeft(1F).Text("Pacjent\n" +
-							prescription.Patient.Name + " " + prescription.Patient.Surname + "\n" + ViewModels.ViewModelBase.DbContext.Addresses.Where(adr => adr.Patients.Contains(prescription.Patient)).First().City +
-							ViewModels.ViewModelBase.DbContext.Addresses.Where(adr => adr.Patients.Contains(prescription.Patient)).First().Street != null ? ViewModels.ViewModelBase.DbContext.Addresses.Where(adr => adr.Patients.Contains(prescription.Patient)).First().Street : ""+ViewModels.ViewModelBase.DbContext.Addresses.Where(adr => adr.Patients.Contains(prescription.Patient)).First().BuildingNumber).AlignLeft();
+							prescription.Patient.Name + " " + prescription.Patient.Surname + "\n" + prescription.Patient.Addresses.ElementAt(0).City +
+							 prescription.Patient.Addresses.ElementAt(0).Street +" " +prescription.Patient.Addresses.ElementAt(0).BuildingNumber).AlignLeft();
 						table.Cell().Row(3).ColumnSpan(2).BorderBottom(1F).BorderLeft(1F).Text("\n\n\n\nPESEL: " + prescription.Patient.Pesel).AlignLeft();
 
 						table.Cell().Row(2).RowSpan(2).Column(2).Border(1F).Text("Uprawnienia dodatkowe\n").AlignLeft();
@@ -66,20 +72,15 @@ namespace bazy1 {
 
 
 
-			});
-			prescription.Pdf = doc.GeneratePdf();
-			ViewModels.ViewModelBase.DbContext.Update(prescription);
+			}).GeneratePdf(fileTitle);
+
+			prescription.Pdf = fileTitle;
+			//prescription.Pdf = doc.GenerateImages((int index) => { return DateTime.Now.ToString(); });
+			//ViewModels.ViewModelBase.DbContext.Update(prescription.Medicines);
+
+			//Console.WriteLine("pdff:"+prescription.Pdf);
 			ViewModels.ViewModelBase.DbContext.SaveChanges();
-
-			foreach (var item in prescription.Pdf)
-            {
-                Console.WriteLine(item);
-            }
-
-
-
-
-
+			return fileTitle;
         }
 
 

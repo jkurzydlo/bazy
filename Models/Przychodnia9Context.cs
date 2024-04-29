@@ -462,7 +462,7 @@ public partial class Przychodnia9Context : DbContext
             entity.Property(e => e.DoctorId).HasColumnName("doctor_id");
             entity.Property(e => e.DoctorUserId).HasColumnName("doctor_user_id");
             entity.Property(e => e.Pdf)
-                .HasColumnType("blob")
+                .HasMaxLength(100)
                 .HasColumnName("pdf");
             entity.Property(e => e.RealisationDate)
                 .HasColumnType("date")

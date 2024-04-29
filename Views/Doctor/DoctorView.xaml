@@ -51,6 +51,10 @@
             <pagesViews:PatientAddControl/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type pagesViewModels:PrescriptionsViewModel}">
+            <pagesViews:PrescriptionListView/>
+        </DataTemplate>
+
     </Window.Resources>
 
 
@@ -63,6 +67,8 @@
         <StackPanel Orientation="Vertical">
             <Button x:Name="listPatientButton" Width="auto" Height="20" Content="Lista pacjentów" Command="{Binding ShowPatientListViewCommand}"/>
             <Button x:Name="scheduleButton" Width="auto" Height="20" Content="Terminarz" Command="{Binding ShowScheduleViewCommand}"/>
+            <Button x:Name="precriptionButton" Width="auto" Height="20" Content="Wystawione recepty" Command="{Binding ShowPrescriptionViewCommand}"/>
+
         </StackPanel>
 
         <ContentControl Content="{Binding CurrentViewModel}" Grid.Column="2"/>

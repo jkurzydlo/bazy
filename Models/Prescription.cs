@@ -15,7 +15,7 @@ public partial class Prescription
 
     public int PatientId { get; set; }
 
-    public byte[]? Pdf { get; set; }
+    public string? Pdf { get; set; }
 
     public int? DoctorId { get; set; }
 
