@@ -21,9 +21,8 @@ namespace bazy1.Views.Doctor.Pages {
 	public partial class FirstLoginControl : UserControl {
 
 		public FirstLoginControl() {
-			InitializeComponent();
-
 			Console.WriteLine("utworzono");
+			InitializeComponent();
 		}
 	}
 
