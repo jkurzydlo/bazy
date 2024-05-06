@@ -1,8 +1,10 @@
 ﻿using bazy1.Models;
 using bazy1.Models.Repositories;
 using bazy1.Repositories;
+using bazy1.Utils;
 using bazy1.ViewModels.Admin.Pages;
 using bazy1.ViewModels.Doctor.Pages;
+using bazy1.Views.Doctor.Pages;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -11,6 +13,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using static bazy1.ViewModels.Doctor.Pages.AddMedicationViewModel;
 using FirstLoginViewModel = bazy1.ViewModels.Doctor.Pages.FirstLoginViewModel;
 
 namespace bazy1.ViewModels.Doctor {
@@ -40,11 +43,15 @@ namespace bazy1.ViewModels.Doctor {
 			//Console.WriteLine(_currentUser.FirstLogin + CurrentUser.Login);
 			if (_currentUser.FirstLogin)
 			{
+
 	CurrentViewModel = new FirstLoginViewModel(_currentUser);	
 			}
 			else
 			{
-			CurrentViewModel = new Pages.DashboardViewModel(_currentUser);
+				if (CurrentViewModel is PrescriptionsViewModel viewModel)
+				{
+				}
+				CurrentViewModel = new Pages.DashboardViewModel(_currentUser);
 			}	
 			Caption2 = "Ekran główny";
 		}
@@ -56,13 +63,29 @@ namespace bazy1.ViewModels.Doctor {
 			if (!_currentUser.FirstLogin || !_firstLogin) //Jeśli użytkownik nie loguje się pierwszy raz -> zmienił hasło -> daj dostęp do przycisków
 			{			
 				Console.WriteLine("nazwisko:"+CurrentUser.Surname);
+				//Ustawiamy adres osadzonej przeglądarki wyświetlającej recepty, tak żeby nie był nullem
+				if (CurrentViewModel is PrescriptionsViewModel viewModel)
+				{
 
+				}
 				//Ustawiamy viewmodel dla widoku listy użytkowników
 				CurrentViewModel = new PatientListViewModel(_currentUser,this);
 				Caption2 = "Lista pacjentów";
 				Console.WriteLine("dasdas");
 			}
 			
+		}
+
+		private void ViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) {
+			throw new NotImplementedException();
+		}
+
+		public ICommand ShowReferralViewCommand { get; }
+		private void ExecuteShowReferralViewCommand(object obj) {
+		if(!_currentUser.FirstLogin || !_firstLogin)
+			{
+				CurrentViewModel = new ReferralViewViewModel(DbContext.Referrals.Include("Doctor").Include("Patient").Where(r => r.DoctorUserId == _currentUser.Id).ToList(), DbContext.Doctors.Where(doc => doc.UserId == _currentUser.Id).First());
+			}
 		}
 
 		public ICommand ShowScheduleViewCommand { get; }
@@ -115,6 +138,7 @@ namespace bazy1.ViewModels.Doctor {
 		}
 
 		public DoctorViewModel() {
+			ShowReferralViewCommand = new BasicCommand(ExecuteShowReferralViewCommand);
 			ShowPrescriptionViewCommand = new BasicCommand(ExecuteShowPrescriptionViewCommand);
 			Klik = new BasicCommand((object obj) => CurrentUser.Surname = "lmao");
 			Console.WriteLine("nowy model");
@@ -187,6 +211,7 @@ namespace bazy1.ViewModels.Doctor {
 			}
 		}
 		public List<Medicine> Medicines { get; set; } = [];
+		public Dictionary<Medicine,MedicinePart> MedicineDataGrid { get; set; } = [];
 
 		public FirstLoginViewModel FirstLoginViewModel { get => _firstLoginViewModel; set {
 				_firstLoginViewModel = value;

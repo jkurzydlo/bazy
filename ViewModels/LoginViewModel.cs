@@ -1,8 +1,12 @@
 ﻿using bazy1.Models;
 using bazy1.Models.Repositories;
 using bazy1.Repositories;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Principal;
 using System.Text;
@@ -29,18 +33,20 @@ namespace bazy1.ViewModels {
         private bool isVisible = true;
 
         public LoginViewModel() {
-            PrescriptionGenerator gen = new();
-            var prescription = new Prescription() {Doctor = new Models.Doctor() { Name = "Jan", Surname="Kowalski", PhoneNumber = "2234569797",
+			File.WriteAllText("C:\\utut.txt", "dsfsdfsd");
+            Console.WriteLine(File.ReadAllText("C:\\utut.txt"));
+
+			var prescription = new Prescription() {Doctor = new Models.Doctor() { Name = "Jan", Surname="Kowalski", PhoneNumber = "2234569797",
                 Specializations = new List<Specialization>() {new Specialization { Name = "Chirurg" } } },
                 Patient = new Patient() { Pesel = "02658769845", Name="Adam", Surname="Nowak",
                 Addresses = new List<Address>() { new Address() { City = "Warszawa", BuildingNumber = "124", Street = "Prosta" } } },
                 Medicines = new List<Medicine>() { new Medicine() { Fraction = 1F, Name="Trexan", Amount = 2, Dose="10 mg",Comments="1 raz na dobę przez 3 miesiące" },
                 new Medicine() {Name="Naproxen", Amount = 2, Dose = "20ml", Comments="3 razy dziennie po posiłku", Fraction=0.5F } },
                 DateOfPrescription = DateTime.Now
+
                 
             };
-            //gen.generate(prescription);
-            userRepository = new UserRepository();
+			userRepository = new UserRepository();
 
             //Wygeneruj pierwsze konto admina
             ((UserRepository)userRepository).adminGenerate();
