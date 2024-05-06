@@ -1,11 +1,12 @@
-﻿using System;
+﻿using bazy1.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace bazy1.Models.Repositories
+namespace bazy1.Repositories
 {
     public interface IUserRepository
     {

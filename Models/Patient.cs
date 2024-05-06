@@ -21,12 +21,6 @@ public partial class Patient
 
     public DateTime? LastVisit { get; set; }
 
-    public string Sex { get; set; } = null!;
-
-    public DateTime? BirthDate { get; set; }
-
-    public string? SecondName { get; set; }
-
     public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
     public virtual ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
