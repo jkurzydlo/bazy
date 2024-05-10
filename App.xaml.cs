@@ -4,6 +4,7 @@ using bazy1.ViewModels.Doctor;
 using bazy1.Views;
 using bazy1.Views.Admin;
 using bazy1.Views.Doctor;
+using bazy1.Views.Receptionist;
 using CommunityToolkit.Mvvm.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
 using MvvmDialogs;
@@ -39,6 +40,10 @@ namespace bazy1
 					var mainView = new AdminView();
 					loginView.Close();
 					mainView.Show();
+				}else if (((UserEventArgs)e).UserType.Equals("recepcjonista"))
+				{
+					var mainView = new ReceptionistView();
+					loginView.Close(); mainView.Show();
 				}
 			};
 			loginView.Show();

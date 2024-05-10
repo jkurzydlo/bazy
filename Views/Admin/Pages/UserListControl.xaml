@@ -95,8 +95,5 @@
         </Button>
         <jm:MessageDialogBox x:Name="dialogBox" Caption="Zapisać? " Icon="Question" Buttons="YesNo" CommandYes="{Binding ModifyUserCommand}" />
         <jm:MessageDialogBox x:Name="deleteBox" Caption="Usunąć użytkownika?" Icon="Question" Buttons="YesNo" CommandYes="{Binding DeleteUserCommand}" />
-
-
-
     </Grid>
 </UserControl>

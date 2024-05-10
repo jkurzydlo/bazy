@@ -23,6 +23,8 @@ public partial class User
 
     public DateTime? LastLogin { get; set; }
 
+    public string? Email { get; set; }
+
     public virtual ICollection<Administrator> Administrators { get; set; } = new List<Administrator>();
 
     public virtual ICollection<Doctor> Doctors { get; set; } = new List<Doctor>();

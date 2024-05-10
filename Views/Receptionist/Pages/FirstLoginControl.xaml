@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="bazy1.Views.Receptionist.Pages.FirstLoginControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:bazy1.Views.Receptionist"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:controls="clr-namespace:bazy1.CustomControls"
+             xmlns:cond="using:SamuelBlanchard.Controls.Statements"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+
+        <StackPanel>
+
+            <TextBlock Text="Ustaw nowe hasło" HorizontalAlignment="Center" FontWeight="Bold"/>
+            <TextBlock Text="Nowe hasło:" Margin="0,50,0,0"/>
+            <controls:BindPasswordBox x:Name="PasswordBox" Margin="0,20,0,0" Foreground="Black" Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock Text="Powtórz nowe hasło:" Margin="0,20,0,0"/>
+            <controls:BindPasswordBox x:Name="PasswordBox2" Margin="0,20,0,0" Foreground="Black" Password="{Binding PasswordRepeat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBlock x:Name="t1" Text="{Binding DataContext.FirstLoginViewModel.ErrorMessage, RelativeSource={RelativeSource AncestorType=local:ReceptionistView}, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" Foreground="Aquamarine" FontSize="80"/>
+            <TextBlock x:Name="t2" Text="{Binding ErrorMessage, Mode=TwoWay, NotifyOnSourceUpdated=True,UpdateSourceTrigger=PropertyChanged}" Foreground="Black"/>
+            <Button x:Name="newPasswordButton" Content="Ustaw hasło" Height="30" Width="100">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <i:InvokeCommandAction Command="{Binding PasswordChangeCommand}" />
+                        <i:InvokeCommandAction Command="{Binding DataContext.ShowDashboardLoggedInCommand, RelativeSource={RelativeSource AncestorType=local:ReceptionistView}}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+
+
+
+            </Button>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -29,8 +29,6 @@ public partial class Przychodnia9Context : DbContext
 
     public virtual DbSet<Medicine> Medicines { get; set; }
 
-    public virtual DbSet<Notification> Notifications { get; set; }
-
     public virtual DbSet<Office> Offices { get; set; }
 
     public virtual DbSet<Patient> Patients { get; set; }
@@ -49,7 +47,7 @@ public partial class Przychodnia9Context : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySQL("Server=localhost;Database=przychodnia9;Uid=root;Pwd=12345;");
+        => optionsBuilder.UseMySQL("Server=localhost;Database=przychodnia9;Uid=root;Pwd=12345");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -104,20 +102,26 @@ public partial class Przychodnia9Context : DbContext
 
         modelBuilder.Entity<Appointment>(entity =>
         {
-            entity.HasKey(e => new { e.Id, e.NotificationId, e.PatientId }).HasName("PRIMARY");
+            entity.HasKey(e => new { e.Id, e.PatientId, e.DoctorId, e.DoctorUserId }).HasName("PRIMARY");
 
             entity.ToTable("appointment");
+
+            entity.HasIndex(e => new { e.DoctorId, e.DoctorUserId }, "doctor_id");
 
             entity.HasIndex(e => e.PatientId, "fk_Appointment_Patient1_idx");
 
             entity.Property(e => e.Id)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("id");
-            entity.Property(e => e.NotificationId).HasColumnName("Notification_id");
             entity.Property(e => e.PatientId).HasColumnName("Patient_id");
+            entity.Property(e => e.DoctorId).HasColumnName("doctor_id");
+            entity.Property(e => e.DoctorUserId).HasColumnName("doctor_user_id");
             entity.Property(e => e.Date)
-                .HasMaxLength(45)
+                .HasColumnType("datetime")
                 .HasColumnName("date");
+            entity.Property(e => e.DateTo)
+                .HasColumnType("datetime")
+                .HasColumnName("dateTo");
             entity.Property(e => e.Goal)
                 .HasMaxLength(45)
                 .HasColumnName("goal");
@@ -127,29 +131,10 @@ public partial class Przychodnia9Context : DbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_Appointment_Patient1");
 
-            entity.HasMany(d => d.Receptionists).WithMany(p => p.Appointments)
-                .UsingEntity<Dictionary<string, object>>(
-                    "AppointmentHasReceptionist",
-                    r => r.HasOne<Receptionist>().WithMany()
-                        .HasForeignKey("ReceptionistId", "ReceptionistUserId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("fk_Appointment_has_Receptionist_Receptionist1"),
-                    l => l.HasOne<Appointment>().WithMany()
-                        .HasForeignKey("AppointmentId", "AppointmentNotificationId", "AppointmentPatientId")
-                        .OnDelete(DeleteBehavior.ClientSetNull)
-                        .HasConstraintName("fk_Appointment_has_Receptionist_Appointment1"),
-                    j =>
-                    {
-                        j.HasKey("AppointmentId", "AppointmentNotificationId", "AppointmentPatientId", "ReceptionistId", "ReceptionistUserId").HasName("PRIMARY");
-                        j.ToTable("appointment_has_receptionist");
-                        j.HasIndex(new[] { "AppointmentId", "AppointmentNotificationId", "AppointmentPatientId" }, "fk_Appointment_has_Receptionist_Appointment1_idx");
-                        j.HasIndex(new[] { "ReceptionistId", "ReceptionistUserId" }, "fk_Appointment_has_Receptionist_Receptionist1_idx");
-                        j.IndexerProperty<int>("AppointmentId").HasColumnName("Appointment_id");
-                        j.IndexerProperty<int>("AppointmentNotificationId").HasColumnName("Appointment_Notification_id");
-                        j.IndexerProperty<int>("AppointmentPatientId").HasColumnName("Appointment_Patient_id");
-                        j.IndexerProperty<int>("ReceptionistId").HasColumnName("Receptionist_id");
-                        j.IndexerProperty<int>("ReceptionistUserId").HasColumnName("Receptionist_User_id");
-                    });
+            entity.HasOne(d => d.Doctor).WithMany(p => p.Appointments)
+                .HasForeignKey(d => new { d.DoctorId, d.DoctorUserId })
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("appointment_ibfk_1");
         });
 
         modelBuilder.Entity<Category>(entity =>
@@ -339,34 +324,6 @@ public partial class Przychodnia9Context : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(45)
                 .HasColumnName("name");
-        });
-
-        modelBuilder.Entity<Notification>(entity =>
-        {
-            entity.HasKey(e => new { e.Id, e.AppointmentId, e.AppointmentNotificationId, e.AppointmentPatientId }).HasName("PRIMARY");
-
-            entity.ToTable("notification");
-
-            entity.HasIndex(e => new { e.AppointmentId, e.AppointmentNotificationId, e.AppointmentPatientId }, "fk_Notification_Appointment1_idx");
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("id");
-            entity.Property(e => e.AppointmentId).HasColumnName("Appointment_id");
-            entity.Property(e => e.AppointmentNotificationId).HasColumnName("Appointment_Notification_id");
-            entity.Property(e => e.AppointmentPatientId).HasColumnName("Appointment_Patient_id");
-            entity.Property(e => e.Date)
-                .HasColumnType("date")
-                .HasColumnName("date");
-            entity.Property(e => e.Hour)
-                .HasColumnType("time")
-                .HasColumnName("hour");
-            entity.Property(e => e.IsSent).HasColumnName("isSent");
-
-            entity.HasOne(d => d.Appointment).WithMany(p => p.Notifications)
-                .HasForeignKey(d => new { d.AppointmentId, d.AppointmentNotificationId, d.AppointmentPatientId })
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_Notification_Appointment1");
         });
 
         modelBuilder.Entity<Office>(entity =>
@@ -591,6 +548,9 @@ public partial class Przychodnia9Context : DbContext
             entity.HasIndex(e => e.Login, "login").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Email)
+                .HasMaxLength(100)
+                .HasColumnName("email");
             entity.Property(e => e.FirstLogin).HasColumnName("firstLogin");
             entity.Property(e => e.Hash)
                 .HasMaxLength(512)
@@ -617,24 +577,24 @@ public partial class Przychodnia9Context : DbContext
 
         modelBuilder.Entity<Workhour>(entity =>
         {
-            entity.HasKey(e => new { e.Id, e.ReceptionistId, e.ReceptionistUserId, e.DoctorId, e.DoctorUserId }).HasName("PRIMARY");
+            entity.HasKey(e => new { e.Id, e.DoctorId, e.DoctorUserId }).HasName("PRIMARY");
 
             entity.ToTable("workhours");
 
             entity.HasIndex(e => new { e.DoctorId, e.DoctorUserId }, "fk_WorkHours_Doctor1_idx");
 
-            entity.HasIndex(e => new { e.ReceptionistId, e.ReceptionistUserId }, "fk_WorkHours_Receptionist1_idx");
-
             entity.Property(e => e.Id)
                 .ValueGeneratedOnAdd()
                 .HasColumnName("id");
-            entity.Property(e => e.ReceptionistId).HasColumnName("Receptionist_id");
-            entity.Property(e => e.ReceptionistUserId).HasColumnName("Receptionist_User_id");
             entity.Property(e => e.DoctorId).HasColumnName("Doctor_id");
             entity.Property(e => e.DoctorUserId).HasColumnName("Doctor_User_id");
+            entity.Property(e => e.Day)
+                .HasColumnType("date")
+                .HasColumnName("day");
             entity.Property(e => e.End)
                 .HasColumnType("datetime(5)")
                 .HasColumnName("end");
+            entity.Property(e => e.Open).HasColumnName("open");
             entity.Property(e => e.Start)
                 .HasColumnType("datetime(5)")
                 .HasColumnName("start");
@@ -643,11 +603,6 @@ public partial class Przychodnia9Context : DbContext
                 .HasForeignKey(d => new { d.DoctorId, d.DoctorUserId })
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("fk_WorkHours_Doctor1");
-
-            entity.HasOne(d => d.Receptionist).WithMany(p => p.Workhours)
-                .HasForeignKey(d => new { d.ReceptionistId, d.ReceptionistUserId })
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_WorkHours_Receptionist1");
         });
 
         OnModelCreatingPartial(modelBuilder);

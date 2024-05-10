@@ -104,6 +104,7 @@ namespace bazy1.ViewModels.Admin.Pages {
 			ParentModel = parentModel;
             var tempUser = new User();
             var tempDoctor = new Models.Doctor();
+            var tempReceptionist = new Models.Receptionist();
             AddUserCommand = new BasicCommand((object obj) =>
             {
             UserCredentialsGenerator generator = new();
@@ -132,7 +133,10 @@ namespace bazy1.ViewModels.Admin.Pages {
                         }break;
                     case "Recepcjonista":
                         {
-                            
+                            tempReceptionist.User = tempUser;
+                            tempReceptionist.Name = UserName;
+                            tempReceptionist.Surname = UserSurname;
+                            DbContext.Receptionists.Add(tempReceptionist);
                         }break;
                 }
 

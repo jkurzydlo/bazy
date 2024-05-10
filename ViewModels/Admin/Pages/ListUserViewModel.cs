@@ -8,6 +8,7 @@ using MvvmDialogs;
 using System.Windows;
 using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.EntityFrameworkCore;
+using System.Windows.Controls;
 
 namespace bazy1.ViewModels.Admin.Pages {
 	public class ListUserViewModel : ViewModelBase {
@@ -18,6 +19,7 @@ namespace bazy1.ViewModels.Admin.Pages {
 		private string _name, _surname, _login, _lastLogin;
 		private Visibility _editFormVisible = Visibility.Hidden;
 		public ICommand ShowModifyPanel { get; set; }
+		private DateTime _selectedDate;
 
 		public ICommand ModifyUserCommand { get; set; }
 		public ICommand DeleteUserCommand { get; }
@@ -29,6 +31,14 @@ namespace bazy1.ViewModels.Admin.Pages {
 			}
 		}
 
+		public DateTime SelectedDate{
+			get => _selectedDate;
+			set {
+				_selectedDate = value;
+				OnPropertyChanged(nameof(SelectedDate));
+				Console.WriteLine("Możliwe daty: ");
+			}
+		}
 		public User SelectedUser {
 			get => _selectedUser;
 			set {
