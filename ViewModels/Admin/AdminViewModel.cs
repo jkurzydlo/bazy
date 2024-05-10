@@ -51,6 +51,7 @@ namespace bazy1.ViewModels.Admin
         }
 
         public ICommand ShowUserListViewCommand { get; }
+        public ICommand ShowAddWorkhoursCommand { get; set; }
 
         private void ExecuteShowUserListViewCommand(object obj)
         {
@@ -76,6 +77,7 @@ namespace bazy1.ViewModels.Admin
 
             ShowAddUserViewCommand = new BasicCommand(ExecuteShowAddUserViewCommand);
             ShowUserListViewCommand = new BasicCommand(ExecuteShowUserListViewCommand);
+            ShowAddWorkhoursCommand = new BasicCommand((object obj) => { CurrentViewModel = new WorkhoursViewModel(); });
             ExecuteShowUserListViewCommand(null);
 
         }

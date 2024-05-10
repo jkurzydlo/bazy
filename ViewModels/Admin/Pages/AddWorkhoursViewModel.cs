@@ -11,15 +11,15 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace bazy1.ViewModels.Receptionist.Pages {
-	internal class AddAppointmentViewModel : ViewModelBase {
+namespace bazy1.ViewModels.Admin.Pages {
+	internal class AddWorkhoursViewModel : ViewModelBase {
 		private DateTime _selectedDate = DateTime.Now;
 		private Workhour _selectedWorkhour;
 		private ObservableCollection<Workhour> _workhours;
 		public List<Models.Doctor> Doctors { get; set; }
 		public List<Models.Patient> Patients { get; set; }
 		private Models.Doctor _selectedDoctor = DbContext.Doctors.First();
-		private Models.Patient _selectedPatient = DbContext.Patients.First();
+		private Models.Patient _selectedPatient=DbContext.Patients.First();
 		public Dictionary<Workhour, Brush> RowColor { get; set; }
 		public Brush RowColors { get; set; } = new SolidColorBrush(Colors.Green);
 
@@ -45,18 +45,17 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 				_selectedDate = value;
 				if (_selectedDate.Date >= DateTime.Now.Date)
 				{
-
+					
 					OnPropertyChanged(nameof(SelectedDate));
 					Workhours = new(DbContext.Workhours.Where(wh => wh.DoctorId == SelectedDoctor.Id).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear));
-				}
-				else _selectedDate = DateTime.Now;
+				}else _selectedDate = DateTime.Now;
 			}
 		}
 
 		public Models.Doctor SelectedDoctor {
 			get => _selectedDoctor;
 			set {
-				_selectedDoctor = value;
+				_selectedDoctor= value;
 				OnPropertyChanged(nameof(SelectedDoctor));
 				Workhours = new(DbContext.Workhours.Where(wh => wh.DoctorId == SelectedDoctor.Id).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear));
 			}
@@ -65,14 +64,14 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 		public Models.Patient SelectedPatient {
 			get => _selectedPatient;
 			set {
-				_selectedPatient = value;
+				_selectedPatient= value;
 				OnPropertyChanged(nameof(SelectedPatient));
 			}
 		}
 
-		public ICommand AddAppointmentCommand { get; set; }
-
-		public AddAppointmentViewModel() {
+		public ICommand AddAppointmentCommand{ get; set; }
+		
+		public AddWorkhoursViewModel() {
 			AddAppointmentCommand = new BasicCommand((object obj) =>
 			{
 				DbContext.Database.ExecuteSqlRaw($"update workhours set open = false where doctor_id={SelectedDoctor.Id} && id={SelectedWorkhour.Id}");
@@ -87,9 +86,9 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 
 
 			var wh = DbContext.Workhours.Where(wh => wh.DoctorId == SelectedDoctor.Id).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear);
-			Console.WriteLine("zs: " + wh.Count());
+            Console.WriteLine("zs: "+wh.Count());
 
-			var docWorkhours = new List<TimeRange>();
+            var docWorkhours = new List<TimeRange>();
 			for (int i = 0; i < 365; i++)
 			{
 				docWorkhours.Add(new(new DateTime(2024, 5, 9, 8, 0, 0).AddDays(i),
@@ -102,34 +101,34 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 			var slots = new HashSet<TimeRange>();
 
 			Models.Doctor d1 = DbContext.Doctors.Where(doc => doc.Id == SelectedDoctor.Id).First();
-			for (int i = 0; i < 48 * 365; i++)
+			for(int i = 0; i < 48*365; i++)
 			{
 				var start = DateTime.Now.Date.AddHours(i / 2);
 				var end = start.AddHours(0.5);
-				// Console.WriteLine("lp:"+start+" "+end);
-				foreach (var d in docWorkhours)
+               // Console.WriteLine("lp:"+start+" "+end);
+                foreach (var d in docWorkhours)
 				{
-					if (d.HasInside(new TimeRange(start, end)) || d.GetRelation(new TimeRange(start, end)) == PeriodRelation.EndInside || d.GetRelation(new TimeRange(start, end)) == PeriodRelation.StartTouching || d.GetRelation(new TimeRange(start, end)) == PeriodRelation.InsideEndTouching)
-						slots.Add(new TimeRange(start, end));
+					if (d.HasInside(new TimeRange(start, end)) || d.GetRelation(new TimeRange(start,end)) == PeriodRelation.EndInside || d.GetRelation(new TimeRange(start, end)) == PeriodRelation.StartTouching || d.GetRelation(new TimeRange(start, end)) == PeriodRelation.InsideEndTouching)
+					slots.Add(new TimeRange(start,end));
 
 				}
 
 			}
 
 
-
-
-			foreach (var a in slots)
+			 
+			
+			foreach(var a in slots)
 			{
-				//Console.WriteLine("slots: "+a.Start+"->"+a.End);
-				//d1.Workhours.Add(new Workhour { Start = a.Start, End = a.End, Open = true });
-			}
+                //Console.WriteLine("slots: "+a.Start+"->"+a.End);
+                //d1.Workhours.Add(new Workhour { Start = a.Start, End = a.End, Open = true });
+            }
 
 			//12:30 - 15;
 			//18 - 23;
 			//13 - 15;
 			//d1.Appointments.Add(new Appointment { Date = })
-
+			
 			DbContext.SaveChanges();
 		}
 	}

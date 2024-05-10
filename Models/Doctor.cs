@@ -15,7 +15,9 @@ public partial class Doctor
 
     public int UserId { get; set; }
 
-    public virtual ICollection<Office> Offices { get; set; } = new List<Office>();
+    public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
+
+    public virtual ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
 
     public virtual ICollection<Referral> Referrals { get; set; } = new List<Referral>();
 
@@ -26,4 +28,9 @@ public partial class Doctor
     public virtual ICollection<Patient> Patients { get; set; } = new List<Patient>();
 
     public virtual ICollection<Specialization> Specializations { get; set; } = new List<Specialization>();
+
+	public override string ToString() {
+        return Name + " " + Surname;
+	}
+
 }

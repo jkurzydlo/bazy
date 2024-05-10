@@ -23,6 +23,15 @@
             <pagesViews:UserListControl/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type pagesViewModels:ModifyUserViewModel}">
+            <pagesViews:UserModifyControl/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type pagesViewModels:WorkhoursViewModel}">
+            <pagesViews:WorkhoursView/>
+        </DataTemplate>
+        
+
     </Window.Resources>
     
     
@@ -33,9 +42,11 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical">
-            <Button x:Name="addUserButton" Width="100" Height="20" Content="Dodaj użytkownika" Command="{Binding ShowAddUserViewCommand}"/>
-            <Button x:Name="listUserButton" Width="100" Height="20" Content="Lista użytkowników" Command="{Binding ShowUserListViewCommand}"/>
-            <TextBlock x:Name="userRemove" Text="Zmień dane użytkownika"></TextBlock>
+            <Button x:Name="addUserButton" Width="150" Height="20" Content="Dodaj użytkownika" Command="{Binding ShowAddUserViewCommand}"/>
+            <Button x:Name="listUserButton" Width="150" Height="20" Content="Lista użytkowników" Command="{Binding ShowUserListViewCommand}">
+            </Button>
+            <Button x:Name="Harmonogramy" Width="150" Height="20" Content="Harmonogramy" Command="{Binding ShowAddWorkhoursCommand}">
+            </Button>
 
         </StackPanel>
 

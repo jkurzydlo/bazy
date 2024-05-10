@@ -45,6 +45,7 @@
     <PackageReference Include="CsvHelper" Version="32.0.1" />
     <PackageReference Include="DotNetKit.Wpf.AutoCompleteComboBox" Version="1.6.0" />
     <PackageReference Include="DotNetProjects.WpfToolkit.Input" Version="6.1.94" />
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.6.0" />
     <PackageReference Include="JacekMatulewski.WpfUtils" Version="1.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3">
@@ -59,6 +60,7 @@
     <PackageReference Include="MvvmDialogs" Version="9.1.2" />
     <PackageReference Include="MySql.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="SimpleModal.WPF" Version="1.0.0" />
+    <PackageReference Include="TimePeriodLibrary.NET" Version="2.1.5" />
   </ItemGroup>
 
   <ItemGroup>

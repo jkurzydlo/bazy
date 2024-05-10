@@ -1,5 +1,4 @@
-﻿using bazy1.ViewModels.Receptionist;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,19 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace bazy1.Views.Receptionist
+namespace bazy1.Views.Receptionist.Pages
 {
     /// <summary>
-    /// Logika interakcji dla klasy ReceptionistView.xaml
+    /// Logika interakcji dla klasy AddAppointmentView.xaml
     /// </summary>
-    public partial class ReceptionistView : Window
+    public partial class AddAppointmentView : UserControl
     {
-        public ReceptionistView()
+        public AddAppointmentView()
         {
             InitializeComponent();
-            Console.WriteLine(DataContext.ToString());
         }
     }
 }

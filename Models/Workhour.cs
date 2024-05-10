@@ -15,13 +15,9 @@ public partial class Workhour
 
     public int DoctorUserId { get; set; }
 
-    public int ReceptionistId { get; set; }
+    public DateTime? Day { get; set; }
 
-    public int ReceptionistUserId { get; set; }
-
-    public DayOfWeek DayOfWeek { get; set; }
+    public bool? Open { get; set; }
 
     public virtual Doctor Doctor { get; set; } = null!;
-
-    public virtual Receptionist Receptionist { get; set; } = null!;
 }
