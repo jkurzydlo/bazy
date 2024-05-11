@@ -142,7 +142,7 @@ namespace bazy1.ViewModels.Receptionist {
 		}
 
 		public ReceptionistViewModel() {
-			AddAppointmentCommand = new BasicCommand((object obj) => { CurrentViewModel = new Pages.AddAppointmentViewModel(); });
+			AddAppointmentCommand = new BasicCommand((object obj) => { CurrentViewModel = new AddAppointmentViewModel(this); });
 			ShowReferralViewCommand = new BasicCommand(ExecuteShowReferralViewCommand);
 			ShowPrescriptionViewCommand = new BasicCommand(ExecuteShowPrescriptionViewCommand);
 

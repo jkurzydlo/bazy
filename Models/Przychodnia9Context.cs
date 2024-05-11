@@ -29,6 +29,8 @@ public partial class Przychodnia9Context : DbContext
 
     public virtual DbSet<Medicine> Medicines { get; set; }
 
+    public virtual DbSet<Notification> Notifications { get; set; }
+
     public virtual DbSet<Office> Offices { get; set; }
 
     public virtual DbSet<Patient> Patients { get; set; }
@@ -47,7 +49,7 @@ public partial class Przychodnia9Context : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySQL("Server=localhost;Database=przychodnia9;Uid=root;Pwd=12345");
+        => optionsBuilder.UseMySQL("Server=localhost;Database=przychodnia9;Uid=root;Pwd=12345;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -324,6 +326,28 @@ public partial class Przychodnia9Context : DbContext
             entity.Property(e => e.Name)
                 .HasMaxLength(45)
                 .HasColumnName("name");
+        });
+
+        modelBuilder.Entity<Notification>(entity =>
+        {
+            entity.HasKey(e => new { e.Id, e.AppointmentId, e.AppointmentPatientId, e.AppointmentDoctorId, e.AppointmentDoctorUserId }).HasName("PRIMARY");
+
+            entity.ToTable("notification");
+
+            entity.HasIndex(e => new { e.AppointmentId, e.AppointmentPatientId, e.AppointmentDoctorId, e.AppointmentDoctorUserId }, "fk_Notification_appointment_idx");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("id");
+            entity.Property(e => e.AppointmentId).HasColumnName("appointment_id");
+            entity.Property(e => e.AppointmentPatientId).HasColumnName("appointment_Patient_id");
+            entity.Property(e => e.AppointmentDoctorId).HasColumnName("appointment_doctor_id");
+            entity.Property(e => e.AppointmentDoctorUserId).HasColumnName("appointment_doctor_user_id");
+
+            entity.HasOne(d => d.Appointment).WithMany(p => p.Notifications)
+                .HasForeignKey(d => new { d.AppointmentId, d.AppointmentPatientId, d.AppointmentDoctorId, d.AppointmentDoctorUserId })
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("fk_Notification_appointment");
         });
 
         modelBuilder.Entity<Office>(entity =>
