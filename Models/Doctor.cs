@@ -34,5 +34,4 @@ public partial class Doctor
 	public override string ToString() {
         return Name + " " + Surname;
 	}
-
 }

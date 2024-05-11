@@ -34,7 +34,7 @@
                                         <Setter Property="Text" Value="Zajęty" />
                                         <Setter Property="Background" Value="Red"/>
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Open}" Value="True">
+                                            <DataTrigger Binding="{Binding Open, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Value="True">
                                                 <Setter Property="Text" Value="Dostępny" />
                                                 <Setter Property="Background" Value="Green"/>
                                             </DataTrigger>

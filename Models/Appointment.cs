@@ -21,5 +21,7 @@ public partial class Appointment
 
     public virtual Doctor Doctor { get; set; } = null!;
 
+    public virtual ICollection<Notification> Notifications { get; set; } = new List<Notification>();
+
     public virtual Patient Patient { get; set; } = null!;
 }
