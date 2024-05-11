@@ -121,7 +121,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 
 		public AddReferralViewModel(Models.Doctor doctor, Patient patient) {
 
-			loadCSV(true);
+			loadCSV(false);
 
 			foreach (var field in GetType().GetProperties().
 	Where(prop => prop.PropertyType.Name == "String" || prop.PropertyType.Name == "DateTime"))

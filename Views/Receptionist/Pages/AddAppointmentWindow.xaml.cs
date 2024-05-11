@@ -12,23 +12,23 @@ namespace bazy1.Views.Receptionist.Pages
 
         public AddAppointmentWindow()
         {
-            InitializeComponent();
+            //InitializeComponent(); ;
             appointmentRepository = new AppointmentRepository();
-            DataContext = new AppointmentViewModel(); // Utwórz instancję widoku modelu
+           // DataContext = new AppointmentViewModel(); // Utwórz instancję widoku modelu
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
             // Pobierz widok modelu z kontekstu danych
-            var viewModel = (AppointmentViewModel)DataContext;
+            //var viewModel = (AppointmentViewModel)DataContext;
 
             // Utwórz nową wizytę na podstawie danych wprowadzonych przez użytkownika
             var newAppointment = new Appointment
             {
-                DateTime = viewModel.SelectedAppointment.ToString("yyyy-MM-dd HH:mm"),
-                Goal = viewModel.Goal,
-                NotificationId = viewModel.NotificationId,
-                PatientId = viewModel.PatientId
+                //DateTime = viewModel.SelectedAppointment.ToString("yyyy-MM-dd HH:mm"),
+               // Goal = viewModel.Goal,
+               // NotificationId = viewModel.NotificationId,
+               // PatientId = viewModel.PatientId
             };
 
             // Dodaj nową wizytę do bazy danych

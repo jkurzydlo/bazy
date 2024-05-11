@@ -10,9 +10,9 @@ namespace bazy1.Views.Receptionist.Pages
     {
         public PatientsView()
         {
-            InitializeComponent();
+            //InitializeComponent(); ;
             // Ustawienie kontekstu danych na nową instancję ReceptionistViewModel
-            DataContext = new ReceptionistViewModel();
+           // DataContext = new ReceptionistViewModel();
             // Zaktualizowanie danych pacjentów w widoku po utworzeniu
             UpdatePatients();
         }
@@ -21,11 +21,11 @@ namespace bazy1.Views.Receptionist.Pages
         private void UpdatePatients()
         {
             // Sprawdzenie czy DataContext jest typu ReceptionistViewModel
-            if (DataContext is ReceptionistViewModel viewModel)
-            {
+           // if (DataContext is ReceptionistViewModel viewModel)
+           // {
                 // Pobranie listy pacjentów z ViewModel
-                viewModel.Patients = viewModel._patientRepository.GetPatients();
-            }
+               // viewModel.Patients = viewModel._patientRepository.GetPatients();
+           // }
         }
 
         private void ContextMenuButton_Click(object sender, RoutedEventArgs e)

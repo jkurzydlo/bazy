@@ -48,9 +48,9 @@ namespace bazy1.Repositories
                             Appointment appointment = new Appointment
                             {
                                 Id = Convert.ToInt32(reader["Id"]),
-                                DateTime = reader["DateTime"].ToString(),
+                                //DateTime = reader["DateTime"].ToString(),
                                 Goal = reader["Goal"].ToString(),
-                                NotificationId = Convert.ToInt32(reader["NotificationId"]),
+                               // NotificationId = Convert.ToInt32(reader["NotificationId"]),
                                 PatientId = Convert.ToInt32(reader["PatientId"]),
                                 // wczytywanie relacji z innymi tabelami, jesli bedzie trzeba
                             };
@@ -75,9 +75,9 @@ namespace bazy1.Repositories
                     string query = "INSERT INTO appointments (DateTime, Goal, NotificationId, PatientId) " +
                                    "VALUES (@DateTime, @Goal, @NotificationId, @PatientId)";
                     MySqlCommand cmd = new MySqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@DateTime", appointment.DateTime);
+                    //cmd.Parameters.AddWithValue("@DateTime", appointment.DateTime);
                     cmd.Parameters.AddWithValue("@Goal", appointment.Goal);
-                    cmd.Parameters.AddWithValue("@NotificationId", appointment.NotificationId);
+                   // cmd.Parameters.AddWithValue("@NotificationId", appointment.NotificationId);
                     cmd.Parameters.AddWithValue("@PatientId", appointment.PatientId);
 
                     int rowsAffected = cmd.ExecuteNonQuery();
@@ -100,6 +100,7 @@ namespace bazy1.Repositories
 
             foreach (var workhour in workhours)
             {
+                /*
                 if (workhour.DayOfWeek == date.DayOfWeek)
                 {
                     DateTime start = date.Date.Add(workhour.Start.Value.TimeOfDay);
@@ -108,15 +109,15 @@ namespace bazy1.Repositories
                     while (start < end)
                     {
                         // Sprawdź, czy termin jest już zajęty
-                        if (!DatabaseService.getDbContext().Appointments.Any(a => DateTime.Parse(a.DateTime) == start))
-                        {
-                            availableAppointments.Add(start);
-                        }
+                       // if (!DatabaseService.getDbContext().Appointments.Any(a => DateTime.Parse(a.DateTime) == start))
+                       // {
+                       //     availableAppointments.Add(start);
+                       // }
 
                         // Przejdź do następnego możliwego terminu wizyty
                         start = start.AddMinutes(20);
                     }
-                }
+                }*/
             }
 
             return availableAppointments;

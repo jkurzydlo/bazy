@@ -17,8 +17,10 @@ using System.Windows.Input;
 using System.Collections.Generic;
 using bazy1.Views.Receptionist.Pages;
 using System.Threading;
+using bazy1.ViewModels.Receptionist.Pages;
+using bazy1.ViewModels;
 
-namespace bazy1.ViewModels.Receptionist{
+namespace bazy1.ViewModels.Receptionist {
 
 	public class ReceptionistViewModel : ViewModelBase {
 
@@ -30,8 +32,8 @@ namespace bazy1.ViewModels.Receptionist{
 		private string _tag;
 		public ICommand ShowDashboardLoggedInCommand { get; }
 
-        public ICommand ShowPatientRegistrationCommand { get; }
-        public ICommand ShowAppointmentManagementCommand { get; }
+		public ICommand ShowPatientRegistrationCommand { get; }
+		public ICommand ShowAppointmentManagementCommand { get; }
 
 		//komendy dla wszystkich widoków w oknie
 		public ICommand ShowDashboardViewCommand { get; }
@@ -85,7 +87,7 @@ namespace bazy1.ViewModels.Receptionist{
 		}
 
 		public ICommand ShowScheduleViewCommand { get; }
-		public ICommand AddAppointmentCommand{ get; }
+		public ICommand AddAppointmentCommand { get; }
 
 		private void ExecuteShowScheduleViewCommand(object obj) {
 
@@ -118,13 +120,13 @@ namespace bazy1.ViewModels.Receptionist{
 				CurrentViewModel = new PrescriptionsViewModel(ab, DbContext.Doctors.Where(doc => doc.UserId == CurrentUser.Id).First());
 				Caption2 = "Lista recept";
 			}
-
-        private void ExecuteShowPatientRegistrationCommand(object obj)
-        {
-            // Ustawiamy widok rejestracji pacjenta
-            CurrentViewModel = new AddPatientViewModel();
-            Caption = "Rejestracja pacjenta";
 		}
+
+			private void ExecuteShowPatientRegistrationCommand(object obj) {
+				// Ustawiamy widok rejestracji pacjenta
+				//CurrentViewModel = new AddPatientViewModel();
+				//Caption = "Rejestracja pacjenta";
+			}
 
 		private User _currentUser;
 		private IUserRepository _userRepository;
@@ -181,13 +183,7 @@ namespace bazy1.ViewModels.Receptionist{
 				CurrentUser.FirstLogin = user.FirstLogin;
 				Console.Write("da: " + CurrentUser.Name + CurrentUser.Surname);
 
-                    Patients = _patientRepository.GetPatients();
-                }
-            }
-            catch (Exception ex)
-            {
-                // Obsługa wyjątku - możesz zalogować błąd lub podjąć inne działania
-                Console.WriteLine("Błąd podczas ładowania bieżącego użytkownika: " + ex.Message);
+				//Patients = _patientRepository.GetPatients();
 			}
 		}
 
@@ -233,3 +229,5 @@ namespace bazy1.ViewModels.Receptionist{
 		}
 	}
 }
+
+

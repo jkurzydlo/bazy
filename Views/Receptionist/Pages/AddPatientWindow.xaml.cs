@@ -7,8 +7,8 @@ namespace bazy1.Views.Receptionist.Pages
     {
         public AddPatientWindow()
         {
-            InitializeComponent();
-            DataContext = new AddPatientViewModel();
+			//InitializeComponent(); ;
+           // DataContext = new AddPatientViewModel();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
