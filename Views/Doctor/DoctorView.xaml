@@ -24,6 +24,13 @@
             <pagesViews:PatientListControl/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type pagesViewModels:AddMedicationViewModel}">
+            <AdornerDecorator>
+        <pagesViews:AddMedicationControl/>
+            </AdornerDecorator>
+        </DataTemplate>
+
+
         <DataTemplate DataType="{x:Type pagesViewModels:ScheduleViewModel}">
             <pagesViews:ScheduleControl/>
         </DataTemplate>

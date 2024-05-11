@@ -8,10 +8,10 @@ namespace bazy1.ViewModels
     {
         static ViewModelBase()
         {
-            if (DbContext == null) DbContext = new PrzychodniaContext();
+            if (DbContext == null) DbContext = new Przychodnia9Context();
         }
 
-        public static PrzychodniaContext DbContext { get; set; }
+        public static Przychodnia9Context DbContext { get; set; }
 
         public event PropertyChangedEventHandler? PropertyChanged;
         public void OnPropertyChanged(string propertyName)

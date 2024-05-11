@@ -10,14 +10,14 @@ namespace bazy1
     internal class DatabaseService
     {
 
-        private static PrzychodniaContext _dbContext;
+        private static Przychodnia9Context _dbContext;
 
-        public DatabaseService(PrzychodniaContext dbContext)
+        public DatabaseService(Przychodnia9Context dbContext)
         {
             _dbContext = dbContext;
         }
 
-        public static PrzychodniaContext getDbContext()
+        public static Przychodnia9Context getDbContext()
         {
             return _dbContext;
         }

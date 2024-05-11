@@ -8,12 +8,17 @@
         xmlns:pagesViewModels="clr-namespace:bazy1.ViewModels.Admin.Pages"
         xmlns:pagesViews="clr-namespace:bazy1.Views.Admin.Pages"
         mc:Ignorable="d"
-        Title="AdminView" Height="450" Width="800">
+            xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
+
+        md:DialogServiceViews.IsRegistered="True"
+        Title="AdminView" Height="450" Width="1200">
     <Window.DataContext>
         <!-- Ustawia MainViewModel jako viewmodel dla tego widoku-->
         <viewModels:AdminViewModel/>
     </Window.DataContext>
 
+    
+    
     <Window.Resources>
         <DataTemplate DataType="{x:Type pagesViewModels:AddUserViewModel}">
             <pagesViews:UserAddControl/>
