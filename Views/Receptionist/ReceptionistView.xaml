@@ -3,29 +3,32 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:bazy1.Views.Receptionist"
-        xmlns:viewModels="clr-namespace:bazy1.ViewModels.Receptionist"
+        xmlns:viewModels="clr-namespace:bazy1.ViewModels"
         xmlns:pagesViewModels="clr-namespace:bazy1.ViewModels.Receptionist.Pages"
         xmlns:pagesViews="clr-namespace:bazy1.Views.Receptionist.Pages"
         mc:Ignorable="d"
-        Title="ReceptionistView" Height="450" Width="800">
+        Title="ReceptionistView" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <!-- Ustawia ReceptionistViewModel jako kontekst danych dla tego widoku-->
-        <viewModels:ReceptionistViewModel/>
+        <viewModels:LoginViewModel/>
     </Window.DataContext>
 
     <Window.Resources>
-        <DataTemplate DataType="{x:Type pagesViewModels:FirstLoginViewModel}">
-            <pagesViews:FirstLoginControl/>
+        <DataTemplate DataType="{x:Type pagesViewModels:AddPatientViewModel}">
+            <pagesViews:AddPatientWindow/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type pagesViewModels:DashboardViewModel}">
+            <pagesViews:DashboardView/>
         </DataTemplate>
 
         <DataTemplate DataType="{x:Type pagesViewModels:AddAppointmentViewModel}">
-            <pagesViews:AddAppointmentView/>
+            <pagesViews:AddAppointmentWindow/>
         </DataTemplate>
 
         <!-- inne widoki.. -->
     </Window.Resources>
-
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -33,13 +36,11 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical">
-            <Button x:Name="appointmentButton" Width="150" Height="20" Content="Umów wizytę" Command="{Binding AddAppointmentCommand}">
-            </Button>
-
+            <Button Width="auto" Height="40" Content="Rejestracja pacjenta" Command="{Binding ShowPatientRegistrationCommand}"/>
+            <Button Width="auto" Height="40" Content="Zarządzanie wizytami" Command="{Binding ShowAppointmentManagementCommand}"/>
+            <!-- Dodaj inne przyciski lub interfejsy u�ytkownika dla innych funkcji recepcjonisty -->
         </StackPanel>
 
-
-        <ContentControl Content="{Binding CurrentViewModel}" Grid.Column="2"/>
-
+        <ContentControl Content="{Binding CurrentViewModel}" Grid.Column="1"/>
     </Grid>
 </Window>

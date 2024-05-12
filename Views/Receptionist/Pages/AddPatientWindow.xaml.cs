@@ -7,8 +7,8 @@ namespace bazy1.Views.Receptionist.Pages
     {
         public AddPatientWindow()
         {
-			//InitializeComponent(); ;
-           // DataContext = new AddPatientViewModel();
+			InitializeComponent(); ;
+            DataContext = new AddPatientViewModel();
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
@@ -18,8 +18,6 @@ namespace bazy1.Views.Receptionist.Pages
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            // Tutaj mozesz dodac logikę zwiazana z obsluga zdarzenia dodawania pacjenta,
-            // ale w przypadku uzycia wzorca MVVM, zalecane jest wywołanie komendy z ViewModelu
             // np. ((AddPatientViewModel)DataContext).AddPatientCommand.Execute(null);
         }
 

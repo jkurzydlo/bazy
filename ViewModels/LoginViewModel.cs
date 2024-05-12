@@ -34,8 +34,8 @@ namespace bazy1.ViewModels
         private bool isVisible = true;
 
         public LoginViewModel() {
-			File.WriteAllText("C:\\utut.txt", "dsfsdfsd");
-            Console.WriteLine(File.ReadAllText("C:\\utut.txt"));
+			File.WriteAllText("C:\\baza\\utut.txt", "dsfsdfsd");
+            Console.WriteLine(File.ReadAllText("C:\\baza\\utut.txt"));
 
 			var prescription = new Prescription() {Doctor = new Models.Doctor() { Name = "Jan", Surname="Kowalski", PhoneNumber = "2234569797",
                 Specializations = new List<Specialization>() {new Specialization { Name = "Chirurg" } } },

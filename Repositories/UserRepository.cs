@@ -32,17 +32,17 @@ namespace bazy1.Repositories
                     connection.Open();
                     command.Connection = connection;
 
-                    string login = "admin", password = "admin"; //Pierwsze dane generowane i dostarczane przy dostarczaniu programu klientowi
+                    string login = "receptionist", password = "receptionist"; //Pierwsze dane generowane i dostarczane przy dostarczaniu programu klientowi
 
                     //Dodane Ignore, żeby dodało konkretnego admina tylko raz 
                     command.CommandText = "insert ignore into user(type,login,name,surname,hash,firstLogin,password) values(@type,@login,@name,@surname, @hash, @firstLogin, @password)";
                     command.Parameters.Add(new MySqlParameter("@type", MySqlDbType.Enum) { Value = login });
                     command.Parameters.Add(new MySqlParameter("@login", MySqlDbType.VarChar) { Value = password });
-                    command.Parameters.Add(new MySqlParameter("@name", MySqlDbType.VarChar) { Value = "admin" });
-                    command.Parameters.Add(new MySqlParameter("@surname", MySqlDbType.VarChar) { Value = "admin" });
+                    command.Parameters.Add(new MySqlParameter("@name", MySqlDbType.VarChar) { Value = "receptionist" });
+                    command.Parameters.Add(new MySqlParameter("@surname", MySqlDbType.VarChar) { Value = "receptionist" });
                     command.Parameters.Add(new MySqlParameter("@firstLogin", MySqlDbType.Byte) { Value = 1 });
                     command.Parameters.Add(new MySqlParameter("@hash", MySqlDbType.VarChar) { Value = BCrypt.Net.BCrypt.HashPassword(password) });
-                    command.Parameters.Add(new MySqlParameter("@password", MySqlDbType.VarChar) { Value = "admin" });
+                    command.Parameters.Add(new MySqlParameter("@password", MySqlDbType.VarChar) { Value = "receptionist" });
                     command.ExecuteScalar();
                 }
             }

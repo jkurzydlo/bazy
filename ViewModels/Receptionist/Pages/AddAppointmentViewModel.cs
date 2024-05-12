@@ -13,7 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 
 namespace bazy1.ViewModels.Receptionist.Pages {
-	internal class AddAppointmentViewModel : ViewModelBase {
+	public class AddAppointmentViewModel : ViewModelBase {
 		private DateTime _selectedDate = DateTime.Now;
 		private Workhour _selectedWorkhour;
 		private ObservableCollection<Workhour> _workhours;
