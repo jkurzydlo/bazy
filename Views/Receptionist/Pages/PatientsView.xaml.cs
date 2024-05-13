@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using bazy1.ViewModels.Receptionist;
 using bazy1.Repositories;
+using System.Diagnostics;
 
 namespace bazy1.Views.Receptionist.Pages
 {
@@ -20,10 +21,22 @@ namespace bazy1.Views.Receptionist.Pages
 
         private void ContextMenuButton_Click(object sender, RoutedEventArgs e)
         {
+            Console.WriteLine("laczy");
             var button = sender as Button;
             if (button != null)
             {
                 var dataGridRow = FindVisualParent<DataGridRow>(button);
+                if (dataGridRow == null)
+                {
+                    // Jeśli nie znaleziono bezpośredniego wiersza, szukaj go w rodzicach przycisku
+                    DependencyObject parent = VisualTreeHelper.GetParent(button);
+                    while (parent != null && dataGridRow == null)
+                    {
+                        dataGridRow = parent as DataGridRow;
+                        parent = VisualTreeHelper.GetParent(parent);
+                    }
+                }
+
                 if (dataGridRow != null)
                 {
                     dataGridRow.IsSelected = true;

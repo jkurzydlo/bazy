@@ -35,7 +35,7 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <!-- Przycisk otwierający menu kontekstowe -->
-                            <Button Content="Opcje" Command="{Binding DataContext.ShowContextMenuCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}"/>
+                            <Button Content="Opcje" Click="ContextMenuButton_Click" Command="{Binding DataContext.ShowContextMenuCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
