@@ -6,6 +6,7 @@
         xmlns:viewModels="clr-namespace:bazy1.ViewModels.Receptionist"
         xmlns:pagesViewModels="clr-namespace:bazy1.ViewModels.Receptionist.Pages"
         xmlns:pagesViews="clr-namespace:bazy1.Views.Receptionist.Pages"
+        xmlns:Local="clr-namespace:bazy1;assembly=bazy1"
         mc:Ignorable="d"
         Title="ReceptionistView" Height="450" Width="800"
         WindowStartupLocation="CenterScreen">
@@ -38,10 +39,9 @@
         <StackPanel Orientation="Vertical">
             <Button Width="auto" Height="40" Content="Pacjenci" Command="{Binding ShowPatientsCommand}"/>
             <Button Width="auto" Height="40" Content="Wizyty" Command="{Binding ShowAppointmentManagementCommand}"/>
-            <!-- Dodaj inne przyciski lub interfejsy użytkownika dla innych funkcji recepcjonisty -->
+            <!-- Dodaj inne przyciski lub interfejsy u�ytkownika dla innych funkcji recepcjonisty -->
         </StackPanel>
 
-        <pagesViews:PatientsView Grid.Column="1"/>
+        <ContentControl Content="{Binding CurrentViewModel}" Grid.Column="1"/>
     </Grid>
 </Window>
-

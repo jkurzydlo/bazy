@@ -7,27 +7,48 @@ using System.Text.Json;
 
 namespace bazy1.Repositories
 {
-    public class PatientRepository
+    public class PatientRepository : RepositoryBase
     {
-        private string connectionString;
-
-        public PatientRepository()
+        public PatientRepository() : base() // Wywołaj konstruktor klasy bazowej, aby ustawić połączenie
         {
-            LoadConnectionString();
         }
 
-        private void LoadConnectionString()
+        public List<Disease> GetPatientDiseases(int patientId)
         {
+            List<Disease> patientDiseases = new List<Disease>();
             try
             {
-                string json = File.ReadAllText("dbinfo.json");
-                dynamic jsonObj = JsonSerializer.Deserialize<dynamic>(json);
-                connectionString = jsonObj["ConnectionStrings"]["BazaPrzychodnia"];
+                using (MySqlConnection conn = GetConnection()) // Użyj połączenia zdefiniowanego w klasie bazowej
+                {
+                    conn.Open();
+                    string query = @"SELECT d.* 
+                             FROM disease d
+                             JOIN patient_disease pd ON d.Id = pd.Disease_id
+                             WHERE pd.Patient_id = @PatientId";
+                    MySqlCommand cmd = new MySqlCommand(query, conn);
+                    cmd.Parameters.AddWithValue("@PatientId", patientId);
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            Disease disease = new Disease
+                            {
+                                Id = Convert.ToInt32(reader["Id"]),
+                                Name = reader["Name"].ToString(),
+                                DateFrom = Convert.ToDateTime(reader["dateFrom"]),
+                                DateTo = Convert.ToDateTime(reader["dateTo"])
+                                // można dodać inne pola...
+                            };
+                            patientDiseases.Add(disease);
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Error loading database connection string: " + ex.Message);
+                Console.WriteLine("Error retrieving patient diseases from database: " + ex.Message);
             }
+            return patientDiseases;
         }
 
         public List<Patient> GetPatients()
@@ -35,10 +56,10 @@ namespace bazy1.Repositories
             List<Patient> patients = new List<Patient>();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = GetConnection()) // Użyj połączenia zdefiniowanego w klasie bazowej
                 {
                     conn.Open();
-                    string query = "SELECT * FROM pacjenci";
+                    string query = "SELECT * FROM patient";
                     MySqlCommand cmd = new MySqlCommand(query, conn);
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -69,7 +90,7 @@ namespace bazy1.Repositories
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = GetConnection()) // Użyj połączenia zdefiniowanego w klasie bazowej
                 {
                     conn.Open();
                     string query = "INSERT INTO pacjenci (Name, Surname, Pesel, PhoneNumber, Email) VALUES (@Name, @Surname, @Pesel, @PhoneNumber, @Email)";
@@ -91,5 +112,6 @@ namespace bazy1.Repositories
         }
     }
 }
+
 
 

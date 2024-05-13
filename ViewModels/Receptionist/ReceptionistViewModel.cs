@@ -1,6 +1,7 @@
 ﻿using bazy1.Models;
 using bazy1.Repositories;
 using bazy1.ViewModels.Receptionist.Pages;
+using bazy1.ViewModels;
 using System;
 using System.Windows.Input;
 using System.Collections.Generic;
@@ -20,6 +21,17 @@ namespace bazy1.ViewModels.Receptionist
 
         public ICommand ShowPatientRegistrationCommand { get; }
         public ICommand ShowAppointmentManagementCommand { get; }
+        private ViewModelBase _patientsViewModel;
+        public ViewModelBase PatientsViewModel
+        {
+            get { return _patientsViewModel; }
+            set
+            {
+                _patientsViewModel = value;
+                OnPropertyChanged(nameof(PatientsViewModel));
+            }
+        }
+
 
         public ReceptionistViewModel()
         {
@@ -30,6 +42,22 @@ namespace bazy1.ViewModels.Receptionist
             ShowPatientRegistrationCommand = new BasicCommand(ExecuteShowPatientRegistrationCommand);
             ShowAppointmentManagementCommand = new BasicCommand(ExecuteShowAppointmentManagementCommand);
             ExecuteShowPatientRegistrationCommand(null); // Wyświetlanie domyślnego widoku po uruchomieniu aplikacji
+        }
+
+        private PatientsView _patientsView;
+        public PatientsView PatientsViewInstance
+        {
+            get { return _patientsView; }
+            set
+            {
+                _patientsView = value;
+                OnPropertyChanged(nameof(PatientsViewInstance));
+            }
+        }
+        private void ShowPatients()
+        {
+            // Tworzenie i przypisanie widokmodelu PatientsViewModel
+            PatientsViewModel = new PatientListViewModel();
         }
 
         public User CurrentUser
@@ -110,6 +138,15 @@ namespace bazy1.ViewModels.Receptionist
                 // Obsługa wyjątku - możesz zalogować błąd lub podjąć inne działania
                 Console.WriteLine("Błąd podczas ładowania bieżącego użytkownika: " + ex.Message);
             }
+        }
+
+        private BasicCommand showPatientsCommand;
+        public ICommand ShowPatientsCommand => showPatientsCommand ??= new BasicCommand(ShowPatients1);
+
+        private void ShowPatients1(object commandParameter)
+        {
+            CurrentViewModel = new PatientListViewModel();
+            Caption = "Lista pacjentów";
         }
     }
 }

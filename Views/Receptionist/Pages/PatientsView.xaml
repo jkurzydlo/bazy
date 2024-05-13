@@ -19,7 +19,7 @@
         </Grid.RowDefinitions>
 
 
-        <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" ColumnWidth="*" Style="{StaticResource DataGrid}" SelectionMode="Single" HeadersVisibility="Column" IsReadOnly="True" ItemsSource="{Binding Patients}" SelectedItem="{Binding SelectedPatient}" Margin="0,5,0,0" SelectionChanged="DataGrid_SelectionChanged" Grid.Row="1">
+        <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" ColumnWidth="*" Style="{StaticResource DataGrid}" SelectionMode="Single" HeadersVisibility="Column" IsReadOnly="True" ItemsSource="{Binding Patients}" SelectedItem="{Binding SelectedPatient}" Margin="0,5,0,0" Grid.Row="1">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Imię" Binding="{Binding Name}" />
