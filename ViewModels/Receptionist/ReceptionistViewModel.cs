@@ -34,6 +34,10 @@ namespace bazy1.ViewModels.Receptionist {
 
 		public ICommand ShowPatientRegistrationCommand { get; }
 		public ICommand ShowAppointmentManagementCommand { get; }
+		public ICommand ShowDocScheduleViewCommand { get; }
+		public ICommand ShowAppointmentsCommand { get; }
+		public ICommand ShowPatientAppointmentsViewCommand { get; }
+
 
 		//komendy dla wszystkich widoków w oknie
 		public ICommand ShowDashboardViewCommand { get; }
@@ -60,14 +64,9 @@ namespace bazy1.ViewModels.Receptionist {
 
 			if (!_currentUser.FirstLogin || !_firstLogin) //Jeśli użytkownik nie loguje się pierwszy raz -> zmienił hasło -> daj dostęp do przycisków
 			{
-				Console.WriteLine("nazwisko:" + CurrentUser.Surname);
-				//Ustawiamy adres osadzonej przeglądarki wyświetlającej recepty, tak żeby nie był nullem
-				if (CurrentViewModel is PrescriptionsViewModel viewModel)
-				{
 
-				}
 				//Ustawiamy viewmodel dla widoku listy użytkowników
-				//CurrentViewModel = new PatientListViewModel(_currentUser, this);
+				CurrentViewModel = new Pages.PatientListViewModel(this);
 				Caption2 = "Lista pacjentów";
 				Console.WriteLine("dasdas");
 			}
@@ -142,9 +141,13 @@ namespace bazy1.ViewModels.Receptionist {
 		}
 
 		public ReceptionistViewModel() {
-			AddAppointmentCommand = new BasicCommand((object obj) => { CurrentViewModel = new AddAppointmentViewModel(this); });
+			//AddAppointmentCommand = new BasicCommand((object obj) => { CurrentViewModel = new AddAppointmentViewModel(this); });
 			ShowReferralViewCommand = new BasicCommand(ExecuteShowReferralViewCommand);
 			ShowPrescriptionViewCommand = new BasicCommand(ExecuteShowPrescriptionViewCommand);
+			ShowPatientAppointmentsViewCommand = new BasicCommand((object obj) =>
+			{
+				//CurrentViewModel = new PatientAppointmentsViewModel(SelectedP);
+			});
 
 			_userRepository = new UserRepository();
 			CurrentUser = new User();
@@ -153,6 +156,13 @@ namespace bazy1.ViewModels.Receptionist {
 			ShowDashboardViewCommand = new BasicCommand(ExecuteShowDashboardViewCommand);
 			ShowPatientListViewCommand = new BasicCommand(ExecuteShowPatientListViewCommand);
 			ShowScheduleViewCommand = new BasicCommand(ExecuteShowScheduleViewCommand);
+			ShowDocScheduleViewCommand = new BasicCommand((object obj) =>
+			{
+				if (!_currentUser.FirstLogin || !_firstLogin) //Jeśli użytkownik nie loguje się pierwszy raz -> zmienił hasło -> daj dostęp do przycisków
+				{
+					CurrentViewModel = new DocScheduleViewModel();
+				}
+			});
 
 			ShowDashboardLoggedInCommand = new BasicCommand((object obj) => {
 

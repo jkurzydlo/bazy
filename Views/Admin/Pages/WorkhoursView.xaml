@@ -5,52 +5,66 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:bazy1.Views.Admin.Pages"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:jm="clr-namespace:JacekMatulewski.WpfUtils;assembly=JacekMatulewski.WpfUtils"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="AliceBlue">
-
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-            <Border Background="BlueViolet">
-                <StackPanel Orientation="Vertical">
-                    <TextBlock Text="Poniedziałek" Margin="30"></TextBlock>
-                    <Button Content="Nowe godziny pracy" Width="80" Command="{Binding AddHourMonday}"></Button>
-                    <ItemsControl Grid.Column="0" ItemsSource="{Binding HoursListMonday}" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="hoursL">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text=" Od "/>
-                                    <xctk:TimePicker Value="{Binding start1}"></xctk:TimePicker>
-                                    <TextBlock Text=" Do "/>
-                                    <xctk:TimePicker Value="{Binding end1}"></xctk:TimePicker>
-                                    <Button Content="Usuń" Command="{Binding ElementName=hoursL, Path=DataContext.RemoveHourMonday}" CommandParameter="{Binding start1}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-
-                    <TextBlock Text="Wtorek" Margin="30"></TextBlock>
-                    <Button Content="Nowe godziny pracy" Width="80" Command="{Binding AddHourTuesday}"></Button>
-                    <ItemsControl Grid.Column="0" ItemsSource="{Binding HoursListTuesday}" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="hoursL2">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text=" Od "/>
-                                    <xctk:TimePicker Value="{Binding start1}"></xctk:TimePicker>
-                                    <TextBlock Text=" Do "/>
-                                    <xctk:TimePicker Value="{Binding end1}"></xctk:TimePicker>
-                                    <Button Content="Usuń" Command="{Binding ElementName=hoursL2, Path=DataContext.RemoveHourTuesday}" CommandParameter="{Binding start1}"/>
-                                </StackPanel>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-            </Border>
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="Środa" Margin="30"></TextBlock>
-                <Button Content="Nowe godziny pracy" Width="80" Command="{Binding AddHourWednesday}"></Button>
-                <ItemsControl Grid.Column="0" ItemsSource="{Binding HoursListWednesday}" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="hoursL3">
+            <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Height="auto">
+            <Border CornerRadius="10" Background="DarkViolet" Margin="10" Width="225" Height="auto">
+                <StackPanel Orientation="Vertical" Height="auto">
+                <TextBlock HorizontalAlignment="Center" Text="Poniedziałek" Margin="30"></TextBlock>
+                <Button VerticalAlignment="Center" Content="Nowe godziny pracy" Width="80" Command="{Binding AddHourMonday}"></Button>
+                <ItemsControl Grid.Column="0" ItemsSource="{Binding HoursListMonday}" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="hoursL">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text=" Od "/>
+                                <xctk:TimePicker Value="{Binding start1}"></xctk:TimePicker>
+                                <TextBlock Text=" Do "/>
+                                <xctk:TimePicker Value="{Binding end1}"></xctk:TimePicker>
+                                <Button Content="Usuń" Command="{Binding ElementName=hoursL, Path=DataContext.RemoveHourMonday}" CommandParameter="{Binding start1}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            
+            </StackPanel>
+        </Border>
+
+            <Border CornerRadius="10" Background="LightSkyBlue" Margin="10" Width="225">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                <TextBlock HorizontalAlignment="Center" Text="Wtorek" Margin="30"></TextBlock>
+                <Button Content="Nowe godziny pracy" Width="80" Command="{Binding AddHourTuesday}"></Button>
+                <ItemsControl Grid.Column="0" ItemsSource="{Binding HoursListTuesday}" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="hoursL2">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text=" Od "/>
+                                <xctk:TimePicker Value="{Binding start1}"></xctk:TimePicker>
+                                <TextBlock Text=" Do "/>
+                                <xctk:TimePicker Value="{Binding end1}"></xctk:TimePicker>
+                                <Button Content="Usuń" Command="{Binding ElementName=hoursL2, Path=DataContext.RemoveHourTuesday}" CommandParameter="{Binding start1}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </StackPanel>
+            </Border>
+
+            <Border CornerRadius="10" Background="DarkViolet" Margin="10" Width="225">
+                
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                <TextBlock  HorizontalAlignment="Center" Text="Środa" Margin="30"></TextBlock>
+                <Button Content="Nowe godziny pracy" Width="80" Command="{Binding AddHourWednesday}"></Button>
+                <ItemsControl Grid.Column="0" ItemsSource="{Binding HoursListWednesday}" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="hoursL3">
+                        <ItemsControl.ItemTemplate>
+                                <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text=" Od "/>
                                 <xctk:TimePicker Value="{Binding start1}"></xctk:TimePicker>
@@ -61,15 +75,18 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-
-                <TextBlock Text="Czwartek" Margin="30"></TextBlock>
+            </StackPanel>
+            </Border>
+            <Border CornerRadius="10" Background="LightSkyBlue" Margin="10" Width="225">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                <TextBlock HorizontalAlignment="Center" Text="Czwartek" Margin="30"></TextBlock>
                 <Button Content="Nowe godziny pracy" Width="80" Command="{Binding AddHourThursday}"></Button>
                 <ItemsControl Grid.Column="0" ItemsSource="{Binding HoursListThursday}" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="hoursL4">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <StackPanel Orientation="Horizontal" MinWidth="250">
+                            <StackPanel Orientation="Horizontal">
                                 <TextBlock Text=" Od "/>
-                                <xctk:TimePicker Value="{Binding start1}"></xctk:TimePicker>
+                                <xctk:TimePicker ValueChanged="TimePicker_ValueChanged" Value="{Binding start1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"></xctk:TimePicker>
                                 <TextBlock Text=" Do "/>
                                 <xctk:TimePicker Value="{Binding end1}"></xctk:TimePicker>
                                 <Button Content="Usuń" Command="{Binding ElementName=hoursL4, Path=DataContext.RemoveHourThursday}" CommandParameter="{Binding start1}"/>
@@ -78,8 +95,12 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </StackPanel>
+            </Border>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Border CornerRadius="10" Background="LightSkyBlue" Margin="10" HorizontalAlignment="Center" Width="225">
             <StackPanel Orientation="Vertical">
-                <TextBlock Text="Piątek" Margin="30"></TextBlock>
+                <TextBlock  Text="Piątek" Margin="30" HorizontalAlignment="Center"></TextBlock>
                 <Button Content="Nowe godziny pracy" Width="80" Command="{Binding AddHourFriday}"></Button>
                 <ItemsControl Grid.Column="0" ItemsSource="{Binding HoursListFriday}" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="hoursL5">
                     <ItemsControl.ItemTemplate>
@@ -94,8 +115,11 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-
-                <TextBlock Text="Sobota" Margin="30"></TextBlock>
+            </StackPanel>
+        </Border>
+            <Border Background="DarkViolet" Margin="10" CornerRadius="10">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="225">
+                <TextBlock Text="Sobota" HorizontalAlignment="Center" Margin="30"></TextBlock>
                 <Button Content="Nowe godziny pracy" Width="80" Command="{Binding AddHourSaturday}"></Button>
                 <ItemsControl Grid.Column="0" ItemsSource="{Binding HoursListSaturday}" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="hoursL6">
                     <ItemsControl.ItemTemplate>
@@ -110,10 +134,12 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                    
             </StackPanel>
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="Niedziela" Margin="30"></TextBlock>
+</Border>
+
+            <Border Background="LightSkyBlue" Margin="10" CornerRadius="10">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Width="225">
+                <TextBlock  Text="Niedziela" Margin="30" HorizontalAlignment="Center"></TextBlock>
                 <Button Content="Nowe godziny pracy" Width="80" Command="{Binding AddHourSunday}"></Button>
                 <ItemsControl Grid.Column="0" ItemsSource="{Binding HoursListSunday}" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="hoursL7">
                     <ItemsControl.ItemTemplate>
@@ -129,11 +155,22 @@
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
             </StackPanel>
-            <Button Content="Utwórz harmonogram" Width="120" Height="40" Command="{Binding Save}"/>
-            <ComboBox ItemsSource="{Binding Doctors}" Width="120" Height="40" SelectedItem="{Binding SelectedDoctor}"/>
-
-
+            </Border>
         </StackPanel>
 
+        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center" Width="240">
+            <Button Content="Dodaj harmonogram" Width="120" Height="30">
+                    <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                        <i:InvokeCommandAction Command="{Binding Save}"/>
+                        <i:InvokeCommandAction Command="{Binding ElementName=msgBoxError, Path=Show}" CommandParameter="{Binding MsgBoxMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </Button>
+            
+            <ComboBox VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ItemsSource="{Binding Doctors}" Width="120" Height="40" SelectedItem="{Binding SelectedDoctor}"/>
+        </StackPanel>
+
+        <jm:SimpleMessageDialogBox x:Name="msgBoxError" />
     </Grid>
 </UserControl>

@@ -17,6 +17,7 @@ using System.Windows.Data;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using bazy1.Utils;
+using bazy1.ViewModels.Receptionist.Pages;
 
 namespace bazy1.ViewModels.Doctor.Pages {
 	public class PatientListViewModel : ViewModelBase {
@@ -30,6 +31,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 		public ICommand PatientDeleteCommand { get; set; }
 		public ICommand ShowAddMedicationCommand { get; set; }
 		public ICommand ShowAddReferralCommand { get; set; }
+		public ICommand ShowAddAppointmentCommand { get; set; }
 
 		public string PatientDetails{
 			get {
@@ -97,6 +99,11 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 
 		public PatientListViewModel(User user, DoctorViewModel viewModel) {
 
+
+			ShowAddAppointmentCommand = new BasicCommand((object obj) =>
+			{
+				viewModel.CurrentViewModel = new AddAppointmentViewModel(this,SelectedPatient);
+			});
 			ShowAddMedicationCommand = new BasicCommand(obj => {
 				viewModel.CurrentViewModel = new AddMedicationViewModel(SelectedPatient,null,viewModel);
 			});

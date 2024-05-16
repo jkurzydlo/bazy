@@ -11,30 +11,71 @@ using System.Windows.Input;
 
 namespace bazy1.ViewModels.Admin.Pages
 {
-    public class WorkhoursViewModel : ViewModelBase {
+	public class WorkhoursViewModel : ViewModelBase {
 
-        public class WorkHour {
-            public string weekday { get; set; }
-            public DateTime start1 { get; set; }
-            public DateTime end1 { get; set; }
+		public class WorkHour {
+			public string weekday { get; set; }
+			public DateTime start1 { get; set; }
+			public DateTime end1 { get; set; }
 
 			public int start2 { get; set; }
 			public int end2 { get; set; }
 		}
 
-        private ObservableCollection<Models.Doctor> _doctors;
-        private Models.Doctor _selectedDoctor;
-        private List<string> _weekdays = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"];
-        private ObservableCollection<WorkHour> _HoursListMonday = [];
+		private ObservableCollection<Models.Doctor> _doctors;
+		private Models.Doctor _selectedDoctor;
+		private List<string> _weekdays = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"];
+		private ObservableCollection<WorkHour> _HoursListMonday = [];
 		private ObservableCollection<WorkHour> _HoursListTuesday = [];
 		private ObservableCollection<WorkHour> _HoursListWednesday = [];
 		private ObservableCollection<WorkHour> _HoursListThursday = [];
 		private ObservableCollection<WorkHour> _HoursListFriday = [];
 		private ObservableCollection<WorkHour> _HoursListSaturday = [];
 		private ObservableCollection<WorkHour> _HoursListSunday = [];
+		private bool _HideErrorBox = true;
 
+		public bool HideErrorBox{
+			get => _HideErrorBox;
+			set {
+				_HideErrorBox = value;
+				OnPropertyChanged(nameof(HideErrorBox));
+			}
+		}
+		private string _msgBoxMsg = "";
 
+		public string MsgBoxMessage {
+			get => _msgBoxMsg;
+			set {
+				_msgBoxMsg = value;
+				OnPropertyChanged(nameof(MsgBoxMessage));
+			}
 
+		}
+
+		private void verifyWorkhours(ObservableCollection <WorkHour> whs) {
+			foreach (var item in whs)
+			{
+
+				Console.WriteLine(item.start1 + "<- ->" + item.end1);
+                foreach (var item2 in whs)
+				{
+					if (item != item2)
+					{
+
+						if (((item2.start1 <= item.start1 && item2.end1 >= item.end1) || //np. 7-12 i 6-18
+							(item2.start1 >= item.start1 && item2.end1 <= item.end1) || // np. 7-15 i 12-14
+							(item2.start1 >= item.start1 && item2.start1 <= item.end1) ||
+							(item2.end1 <= item2.start1)) && !WorkhoursErrors.Contains("Niepoprawne godziny pracy w dniu: " + whs[0].weekday)
+							)
+						{
+							WorkhoursErrors.Add("Niepoprawne godziny pracy w dniu: " + whs[0].weekday);
+							HideErrorBox = false;
+						}
+					}
+					else Console.WriteLine("to samo");
+				}
+			}
+		}
 		private Dictionary<string, List<WorkHour>> ws = [];
         private string _selectedWeekday;
 
@@ -52,7 +93,9 @@ namespace bazy1.ViewModels.Admin.Pages
             get => _HoursListMonday;
             set {
                 _HoursListMonday = value;
-                OnPropertyChanged(nameof(HoursListMonday));
+				Console.WriteLine("dodano: " + HoursListMonday.Last().start1 + HoursListMonday.Last().end1);
+
+				OnPropertyChanged(nameof(HoursListMonday));
             }
         }
 		public ObservableCollection<WorkHour> HoursListTuesday {
@@ -139,114 +182,135 @@ namespace bazy1.ViewModels.Admin.Pages
 		public ICommand AddHourFriday { get; set; }
 		public ICommand AddHourSaturday { get; set; }
 		public ICommand AddHourSunday { get; set; }
+		public List<string> WorkhoursErrors { get; set; } = [];
 
 		public WorkhoursViewModel() {
 			Doctors = new(DbContext.Doctors);
 
 			Save = new BasicCommand((object obj) =>
 			{
-				DbContext.Database.ExecuteSqlRaw($"delete from workhours where doctor_id={SelectedDoctor.Id}");
-				DbContext.SaveChanges();
+                HideErrorBox = true;
+				WorkhoursErrors.Clear();
+				MsgBoxMessage = "";
 
-				var docWorkhours = new List<TimeRange>();
-				for (int i = 0; i < 365; i++)
+				verifyWorkhours(HoursListMonday);
+				verifyWorkhours(HoursListTuesday);
+				verifyWorkhours(HoursListWednesday);
+				verifyWorkhours(HoursListThursday);
+				verifyWorkhours(HoursListFriday);
+				verifyWorkhours(HoursListSaturday);
+				verifyWorkhours(HoursListSunday);
+
+                foreach (var item in WorkhoursErrors)
+                {
+					MsgBoxMessage += item + "\n";
+
+                }
+
+				if (SelectedDoctor == null) HideErrorBox = true;
+                if (SelectedDoctor != null && WorkhoursErrors.Count == 0)
 				{
-                    /*	
-                        docWorkhours.Add(new(new DateTime(2024, 5, 9, 8, 0, 0).AddDays(7*i),
-                            new DateTime(2024, 5, 9, 16, 0, 0).AddDays(7*i)));
-                        docWorkhours.Add(new(new DateTime(2024, 5, 9, 17, 0, 0).AddDays(7*i),
-                new DateTime(2024, 5, 9, 19, 0, 0).AddDays(7*i)));*/
+					HideErrorBox = false;
+					MsgBoxMessage = "Dodano harmonogram";
+					DbContext.Database.ExecuteSqlRaw($"delete from workhours where doctor_id={SelectedDoctor.Id}");
+					DbContext.SaveChanges();
 
-                    Console.WriteLine(HoursListMonday.Count);
-                    foreach (var a in HoursListMonday)
+					var docWorkhours = new List<TimeRange>();
+					for (int i = 0; i < 365; i++)
 					{
-						Console.WriteLine(a.start1.Hour + "->" + a.end1.Hour);
+						/*	
+							docWorkhours.Add(new(new DateTime(2024, 5, 9, 8, 0, 0).AddDays(7*i),
+								new DateTime(2024, 5, 9, 16, 0, 0).AddDays(7*i)));
+							docWorkhours.Add(new(new DateTime(2024, 5, 9, 17, 0, 0).AddDays(7*i),
+					new DateTime(2024, 5, 9, 19, 0, 0).AddDays(7*i)));*/
 
-						docWorkhours.Add(new(new DateTime(2024, 5, 6, a.start1.Hour, a.start1.Minute, 0).AddDays(7*i),
-							new DateTime(2024, 5, 6,a.end1.Hour, a.end1.Minute, 0).AddDays(7*i)));
+						Console.WriteLine(HoursListMonday.Count);
+						foreach (var a in HoursListMonday)
+						{
+
+							docWorkhours.Add(new(new DateTime(2024, 5, 6, a.start1.Hour, a.start1.Minute, 0).AddDays(7 * i),
+								new DateTime(2024, 5, 6, a.end1.Hour, a.end1.Minute, 0).AddDays(7 * i)));
+						}
+						foreach (var a in HoursListTuesday)
+						{
+
+							docWorkhours.Add(new(new DateTime(2024, 5, 7, a.start1.Hour, a.start1.Minute, 0).AddDays(7 * i),
+								new DateTime(2024, 5, 7, a.end1.Hour, a.end1.Minute, 0).AddDays(7 * i)));
+						}
+
+						foreach (var a in HoursListWednesday)
+						{
+
+							docWorkhours.Add(new(new DateTime(2024, 5, 8, a.start1.Hour, a.start1.Minute, 0).AddDays(7 * i),
+								new DateTime(2024, 5, 8, a.end1.Hour, a.end1.Minute, 0).AddDays(7 * i)));
+						}
+
+						foreach (var a in HoursListThursday)
+						{
+
+							docWorkhours.Add(new(new DateTime(2024, 5, 9, a.start1.Hour, a.start1.Minute, 0).AddDays(7 * i),
+								new DateTime(2024, 5, 9, a.end1.Hour, a.end1.Minute, 0).AddDays(7 * i)));
+						}
+
+
+						foreach (var a in HoursListFriday)
+						{
+
+							docWorkhours.Add(new(new DateTime(2024, 5, 10, a.start1.Hour, a.start1.Minute, 0).AddDays(7 * i),
+								new DateTime(2024, 5, 10, a.end1.Hour, a.end1.Minute, 0).AddDays(7 * i)));
+						}
+						foreach (var a in HoursListSaturday)
+						{
+
+							docWorkhours.Add(new(new DateTime(2024, 5, 11, a.start1.Hour, a.start1.Minute, 0).AddDays(7 * i),
+								new DateTime(2024, 5, 11, a.end1.Hour, a.end1.Minute, 0).AddDays(7 * i)));
+						}
+						foreach (var a in HoursListSunday)
+						{
+
+							docWorkhours.Add(new(new DateTime(2024, 5, 12, a.start1.Hour, a.start1.Minute, 0).AddDays(7 * i),
+								new DateTime(2024, 5, 12, a.end1.Hour, a.end1.Minute, 0).AddDays(7 * i)));
+						}
+
 					}
-					foreach (var a in HoursListTuesday)
+
+
+					var slots = new HashSet<KeyValuePair<TimeRange, TimeRange>>();
+
+					Models.Doctor d1 = DbContext.Doctors.Where(doc => doc.Id == SelectedDoctor.Id).First();
+					for (int i = 0; i < 48 * 365; i++)
 					{
-						Console.WriteLine(a.start1.Hour + "->" + a.end1.Hour);
+                        var start =  DateTime.Now.Date.AddHours((double)i / 2);
+						var end = start.AddHours(0.5);
+						 //Console.WriteLine("i->"+i+" "+start+" "+end);
+						foreach (var d in docWorkhours)
+						{
+							var blockStart = d.Start;
+							var blockEnd = d.End;
+							var block = new TimeRange(blockStart, blockEnd);
+                            if (d.HasInside(new TimeRange(start, end)) && block.HasInside(new TimeRange(start,end)))
+								slots.Add(new(new(start, end),new(blockStart,blockEnd)));
 
-						docWorkhours.Add(new(new DateTime(2024, 5, 7, a.start1.Hour, a.start1.Minute, 0).AddDays(7 * i),
-							new DateTime(2024, 5, 7, a.end1.Hour, a.end1.Minute, 0).AddDays(7 * i)));
+						}
+
 					}
-					
-					foreach (var a in HoursListWednesday)
+
+
+
+
+					foreach (var a in slots)
 					{
-						Console.WriteLine(a.start1.Hour + "->" + a.end1.Hour);
-
-						docWorkhours.Add(new(new DateTime(2024, 5, 8, a.start1.Hour, a.start1.Minute, 0).AddDays(7 * i),
-							new DateTime(2024, 5, 8, a.end1.Hour, a.end1.Minute, 0).AddDays(7 * i)));
-					}
-					
-					foreach (var a in HoursListThursday)
-					{
-						Console.WriteLine(a.start1.Hour + "->" + a.end1.Hour);
-
-						docWorkhours.Add(new(new DateTime(2024, 5, 9, a.start1.Hour, a.start1.Minute, 0).AddDays(7 * i),
-							new DateTime(2024, 5, 9, a.end1.Hour, a.end1.Minute, 0).AddDays(7 * i)));
-					}
-					
-					
-					foreach (var a in HoursListFriday)
-					{
-						Console.WriteLine(a.start1.Hour + "->" + a.end1.Hour);
-
-						docWorkhours.Add(new(new DateTime(2024, 5, 10, a.start1.Hour, a.start1.Minute, 0).AddDays(7 * i),
-							new DateTime(2024, 5, 10, a.end1.Hour, a.end1.Minute, 0).AddDays(7 * i)));
-					}
-					foreach (var a in HoursListSaturday)
-					{
-						Console.WriteLine(a.start1.Hour + "->" + a.end1.Hour);
-
-						docWorkhours.Add(new(new DateTime(2024, 5, 11, a.start1.Hour, a.start1.Minute, 0).AddDays(7 * i),
-							new DateTime(2024, 5, 11, a.end1.Hour, a.end1.Minute, 0).AddDays(7 * i)));
-					}
-					foreach (var a in HoursListSunday)
-					{
-						Console.WriteLine(a.start1.Hour + "->" + a.end1.Hour);
-
-						docWorkhours.Add(new(new DateTime(2024, 5, 12, a.start1.Hour, a.start1.Minute, 0).AddDays(7 * i),
-							new DateTime(2024, 5, 12, a.end1.Hour, a.end1.Minute, 0).AddDays(7 * i)));
+						//Console.WriteLine("slots: "+a.Start+"->"+a.End);
+						d1.Workhours.Add(new Workhour { Start = a.Key.Start, End = a.Key.End, Open = true, BlockStart=a.Value.Start, BlockEnd = a.Value.End});
 					}
 
+					//12:30 - 15;
+					//18 - 23;
+					//13 - 15;
+					//d1.Appointments.Add(new Appointment { Date = })
+
+					DbContext.SaveChanges();
 				}
-
-
-				var slots = new HashSet<TimeRange>();
-
-				Models.Doctor d1 = DbContext.Doctors.Where(doc => doc.Id == 22).First();
-				for (int i = 0; i < 48 * 365; i++)
-				{
-					var start = DateTime.Now.Date.AddHours(i / 2);
-					var end = start.AddHours(0.5);
-					// Console.WriteLine("lp:"+start+" "+end);
-					foreach (var d in docWorkhours)
-					{
-						if (d.HasInside(new TimeRange(start, end)) || d.GetRelation(new TimeRange(start, end)) == PeriodRelation.EndInside || d.GetRelation(new TimeRange(start, end)) == PeriodRelation.StartTouching || d.GetRelation(new TimeRange(start, end)) == PeriodRelation.InsideEndTouching)
-							slots.Add(new TimeRange(start, end));
-
-					}
-
-				}
-
-
-
-
-				foreach (var a in slots)
-				{
-					//Console.WriteLine("slots: "+a.Start+"->"+a.End);
-					d1.Workhours.Add(new Workhour { Start = a.Start, End = a.End, Open = true });
-				}
-
-				//12:30 - 15;
-				//18 - 23;
-				//13 - 15;
-				//d1.Appointments.Add(new Appointment { Date = })
-
-				DbContext.SaveChanges();
 			});
             RemoveHourMonday = new BasicCommand((object obj) =>
             {
@@ -278,15 +342,9 @@ namespace bazy1.ViewModels.Admin.Pages
 			});
 
 			AddHourMonday = new BasicCommand((object obj) =>
-            {
-					HoursListMonday.Add(new WorkHour {  weekday = "Poniedziałek" });
-				Console.WriteLine("---");
-				foreach (var hour in HoursListMonday)
-				{
-                    
-                    //Console.WriteLine(hour.start1.Hour+"->"+hour.end1.Hour);
-                }
-				Console.WriteLine("---");
+            {					
+				HoursListMonday.Add(new WorkHour {  weekday = "Poniedziałek" });
+
 			});
 			AddHourTuesday = new BasicCommand((object obj) =>
 			{

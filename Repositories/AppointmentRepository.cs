@@ -8,51 +8,113 @@ using bazy1;
 
 namespace bazy1.Repositories
 {
-    public class AppointmentRepository
+    public class AppointmentRepository : RepositoryBase
     {
         private string connectionString;
 
-        public AppointmentRepository()
-        {
-            LoadConnectionString();
-        }
+        private DoctorRepository doctorRepository = new();       
+        public List<Appointment> GetAppointmentsByPatientId(int id) {
 
-        private void LoadConnectionString()
-        {
-            try
-            {
-                string json = System.IO.File.ReadAllText("dbInfo.json");
-                dynamic jsonObj = JsonSerializer.Deserialize<dynamic>(json);
-                connectionString = jsonObj["ConnectionStrings"]["BazaPrzychodnia"];
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error laczenie z baza: " + ex.Message);
-            }
-        }
+			List<Appointment> appointments = new List<Appointment>();
+			try
+			{
+				using (MySqlConnection conn = GetConnection())
+				{
+					conn.Open();
+					string query = "SELECT * FROM appointment where patient_id=@id";
+                    MySqlCommand cmd = new();
+                    cmd.Connection = conn;
+                    cmd.CommandText = query;
+                    cmd.Parameters.AddWithValue("@id", id);
+					using (MySqlDataReader reader = cmd.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							Appointment appointment = new Appointment()
+							{
+								Id = Convert.ToInt32(reader["Id"]),
+								Date = reader.GetDateTime("date"),
+								Goal = reader["Goal"].ToString(),
+								PatientId = Convert.ToInt32(reader["Patient_id"]),
+								DoctorId = reader.GetInt32("doctor_id"),
+								Doctor = doctorRepository.GetById(reader.GetInt32("doctor_id"))
 
-        public List<Appointment> GetAppointments()
+							};
+							appointments.Add(appointment);
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("Error sciaganie appointments z bazy: " + ex.Message);
+			}
+			return appointments;
+		}
+
+		public Appointment GetAppointmentById(int id) {
+
+            Appointment appointment = new();
+			try
+			{
+				using (MySqlConnection conn = GetConnection())
+				{
+					conn.Open();
+					string query = "SELECT * FROM appointment where id=@id";
+					MySqlCommand cmd = new();
+					cmd.Connection = conn;
+					cmd.CommandText = query;
+					cmd.Parameters.AddWithValue("@id", id);
+					using (MySqlDataReader reader = cmd.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							Appointment tempAppointment = new Appointment()
+							{
+								Id = Convert.ToInt32(reader["Id"]),
+								Date = reader.GetDateTime("date"),
+								Goal = reader["Goal"].ToString(),
+								PatientId = Convert.ToInt32(reader["Patient_id"]),
+								DoctorId = reader.GetInt32("doctor_id"),
+								Doctor = doctorRepository.GetById(reader.GetInt32("doctor_id"))
+
+							};
+                            appointment = tempAppointment;
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("Error sciaganie appointments z bazy: " + ex.Message);
+			}
+            return appointment;
+		}
+
+
+		public List<Appointment> GetAppointments()
         {
             List<Appointment> appointments = new List<Appointment>();
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
+                using (MySqlConnection conn = GetConnection())
                 {
                     conn.Open();
-                    string query = "SELECT * FROM appointments";
+                    string query = "SELECT * FROM appointment";
                     MySqlCommand cmd = new MySqlCommand(query, conn);
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            Appointment appointment = new Appointment
+                            Appointment appointment = new Appointment()
                             {
                                 Id = Convert.ToInt32(reader["Id"]),
-                                //DateTime = reader["DateTime"].ToString(),
+                                Date = reader.GetDateTime("date"),
                                 Goal = reader["Goal"].ToString(),
-                               // NotificationId = Convert.ToInt32(reader["NotificationId"]),
-                                PatientId = Convert.ToInt32(reader["PatientId"]),
-                                // wczytywanie relacji z innymi tabelami, jesli bedzie trzeba
+                                PatientId = Convert.ToInt32(reader["Patient_id"]),
+                                DoctorId = reader.GetInt32("doctor_id"),
+                                Doctor = doctorRepository.GetById(reader.GetInt32("doctor_id"))
+
                             };
                             appointments.Add(appointment);
                         }
@@ -91,6 +153,28 @@ namespace bazy1.Repositories
             }
         }
 
+        public void RemoveAppointmentById(int id) {
+
+			try
+			{
+				using (MySqlConnection conn = GetConnection())
+				{
+					conn.Open();
+					string query = "DELETE FROM appointment where id=@id";
+					MySqlCommand cmd = new();
+					cmd.Connection = conn;
+					cmd.CommandText = query;
+					cmd.Parameters.AddWithValue("@id", id);
+                    int rowsAffected = cmd.ExecuteNonQuery();
+
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("Error sciaganie appointments z bazy: " + ex.Message);
+			}
+		}
+
         public List<DateTime> GetAvailableAppointments(int doctorId, DateTime date)
         {
             // Pobierz godziny pracy lekarza
@@ -122,7 +206,6 @@ namespace bazy1.Repositories
 
             return availableAppointments;
         }
-        // Metody do edycji, usuwania wizyt, itp. // 30.04
     }
 
 }
