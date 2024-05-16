@@ -15,5 +15,7 @@ public partial class Notification
 
     public int AppointmentDoctorUserId { get; set; }
 
+    public string? Content { get; set; }
+
     public virtual Appointment Appointment { get; set; } = null!;
 }

@@ -19,15 +19,24 @@ namespace bazy1.ViewModels.Admin.Pages {
 		public List<Models.Doctor> Doctors { get; set; }
 		public List<Models.Patient> Patients { get; set; }
 		private Models.Doctor _selectedDoctor = DbContext.Doctors.First();
-		private Models.Patient _selectedPatient=DbContext.Patients.First();
+		private Models.Patient _selectedPatient = DbContext.Patients.First();
 		public Dictionary<Workhour, Brush> RowColor { get; set; }
 		public Brush RowColors { get; set; } = new SolidColorBrush(Colors.Green);
+		private string _appointmentGoal;
 
 		public Workhour SelectedWorkhour {
 			get => _selectedWorkhour;
 			set {
 				_selectedWorkhour = value;
 				OnPropertyChanged(nameof(SelectedWorkhour));
+			}
+		}
+
+		public string AppointmentGoal{
+			get => _appointmentGoal;
+			set {
+				_appointmentGoal = value;
+				OnPropertyChanged(nameof(AppointmentGoal));
 			}
 		}
 
@@ -74,11 +83,14 @@ namespace bazy1.ViewModels.Admin.Pages {
 		public AddWorkhoursViewModel() {
 			AddAppointmentCommand = new BasicCommand((object obj) =>
 			{
-				DbContext.Database.ExecuteSqlRaw($"update workhours set open = false where doctor_id={SelectedDoctor.Id} && id={SelectedWorkhour.Id}");
-				SelectedDoctor.Appointments.Add(new Appointment { Date = SelectedDate, Patient = SelectedPatient, Goal = "cośtam" });
-				DbContext.SaveChanges();
-				Workhours = new(DbContext.Workhours.Where(wh => wh.DoctorId == SelectedDoctor.Id).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear));
+				if (!DbContext.Database.SqlQuery<bool>($"select open from appointment where date={SelectedDate}").First())
+				{
+					DbContext.Database.ExecuteSqlRaw($"update workhours set open = false where doctor_id={SelectedDoctor.Id} && id={SelectedWorkhour.Id}");
+					SelectedDoctor.Appointments.Add(new Appointment { Date = SelectedDate, Patient = SelectedPatient, Goal = AppointmentGoal });
+					DbContext.SaveChanges();
+					Workhours = new(DbContext.Workhours.Where(wh => wh.DoctorId == SelectedDoctor.Id).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear));
 
+				}
 			});
 			Doctors = DbContext.Doctors.ToList();
 			Patients = DbContext.Patients.ToList();

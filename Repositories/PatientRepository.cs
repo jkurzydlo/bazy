@@ -7,89 +7,42 @@ using System.Text.Json;
 
 namespace bazy1.Repositories
 {
-    public class PatientRepository
+    class PatientRepository : RepositoryBase
     {
-        private string connectionString;
+		private AppointmentRepository appointmentRepository = new();
+        public List<Patient> GetAll() {
+			List<Patient> patients = new();
+			try
+			{
+				using (MySqlConnection conn = GetConnection())
+				{
+					conn.Open();
+					string query = "SELECT * FROM patient";
+					MySqlCommand cmd = new MySqlCommand(query, conn);
+					using (MySqlDataReader reader = cmd.ExecuteReader())
+					{
+						while (reader.Read())
+						{
+							Patient patient = new Patient()
+							{
+								Id = reader.GetInt32("id"),
+								Name = reader.GetString("name"),
+								Surname = reader.GetString("surname"),
+							};
+							patients.Add(patient);
 
-        public PatientRepository()
-        {
-            LoadConnectionString();
-        }
+						}
 
-        private void LoadConnectionString()
-        {
-            try
-            {
-                string json = File.ReadAllText("dbinfo.json");
-                dynamic jsonObj = JsonSerializer.Deserialize<dynamic>(json);
-                connectionString = jsonObj["ConnectionStrings"]["BazaPrzychodnia"];
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error loading database connection string: " + ex.Message);
-            }
-        }
-
-        public List<Patient> GetPatients()
-        {
-            List<Patient> patients = new List<Patient>();
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
-                {
-                    conn.Open();
-                    string query = "SELECT * FROM pacjenci";
-                    MySqlCommand cmd = new MySqlCommand(query, conn);
-                    using (MySqlDataReader reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Patient patient = new Patient
-                            {
-                                Id = Convert.ToInt32(reader["Id"]),
-                                Name = reader["Name"].ToString(),
-                                Surname = reader["Surname"].ToString(),
-                                Pesel = reader["Pesel"].ToString(),
-                                PhoneNumber = reader["PhoneNumber"].ToString(),
-                                Email = reader["Email"].ToString()
-                            };
-                            patients.Add(patient);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error retrieving patients from database: " + ex.Message);
-            }
-            return patients;
-        }
-
-        public bool AddPatient(Patient patient)
-        {
-            try
-            {
-                using (MySqlConnection conn = new MySqlConnection(connectionString))
-                {
-                    conn.Open();
-                    string query = "INSERT INTO pacjenci (Name, Surname, Pesel, PhoneNumber, Email) VALUES (@Name, @Surname, @Pesel, @PhoneNumber, @Email)";
-                    MySqlCommand cmd = new MySqlCommand(query, conn);
-                    cmd.Parameters.AddWithValue("@Name", patient.Name);
-                    cmd.Parameters.AddWithValue("@Surname", patient.Surname);
-                    cmd.Parameters.AddWithValue("@Pesel", patient.Pesel);
-                    cmd.Parameters.AddWithValue("@PhoneNumber", patient.PhoneNumber);
-                    cmd.Parameters.AddWithValue("@Email", patient.Email);
-                    int rowsAffected = cmd.ExecuteNonQuery();
-                    return rowsAffected > 0;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error adding patient to the database: " + ex.Message);
-                return false;
-            }
-        }
-    }
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine("Error sciaganie patients z bazy: " + ex.Message);
+			}
+			return patients;
+		}
+	}
 }
 
 

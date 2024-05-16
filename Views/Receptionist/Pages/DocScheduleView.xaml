@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="bazy1.Views.Receptionist.Pages.DocScheduleView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:bazy1.Views.Receptionist.Pages"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Background="AliceBlue">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Orientation="Horizontal" Margin="10" VerticalAlignment="Center" Grid.Column="0">
+            <TextBlock Text="Lekarz" VerticalAlignment="Center" Margin="0,0,10,0"></TextBlock>
+            <ComboBox VerticalAlignment="Top" Width="120" Height="30" ItemsSource="{Binding DoctorsList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedItem="{Binding SelectedDoctor}"/>
+        <DatePicker Margin="10,0,0,0" VerticalAlignment="Top" Height="30" SelectedDate="{Binding SelectedDate}"></DatePicker>
+</StackPanel>
+        
+        <StackPanel Orientation="Horizontal" Grid.Column="1">
+        <ItemsControl ItemsSource="{Binding Hours}" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="hoursL9">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Margin="0">
+                            <TextBlock Text="{Binding start1, StringFormat='{}{0:HH:mm}'}"/>
+                        </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </StackPanel>
+
+        <Button Command="{Binding Test}" Content="fsd" Width="20" Height="20"/>
+    </Grid>
+</UserControl>
