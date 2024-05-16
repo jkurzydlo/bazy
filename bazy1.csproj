@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <Compile Remove="ViewModels\Receptionist\RelayCommand.cs" />
+    <Compile Remove="Views\Receptionist\Pages\ReceptionistView.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -20,6 +21,10 @@
     <None Remove="img\doctor.png" />
     <None Remove="img\health%402x.png" />
     <None Remove="img\health.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Remove="Views\Receptionist\Pages\ReceptionistView.xaml" />
   </ItemGroup>
 
   <ItemGroup>

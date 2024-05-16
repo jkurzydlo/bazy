@@ -1,35 +1,23 @@
 ﻿using bazy1.Models;
 using bazy1.Repositories;
-using bazy1.Utils;
-using bazy1.ViewModels.Admin.Pages;
-using bazy1.ViewModels.Doctor.Pages;
-using bazy1.Views.Doctor.Pages;
-using bazy1.Views.Receptionist.Pages;
-using Microsoft.EntityFrameworkCore;
+using bazy1.ViewModels.Receptionist.Pages;
+using bazy1.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Collections.Generic;
 using bazy1.Views.Receptionist.Pages;
 using System.Threading;
-using bazy1.ViewModels.Receptionist.Pages;
-using bazy1.ViewModels;
 
-namespace bazy1.ViewModels.Receptionist {
-
-	public class ReceptionistViewModel : ViewModelBase {
-
-		private ViewModelBase _currentViewModel;
-		private string _caption;
-		private bool _firstLogin = true;
-		private string errorMessage;
-		private Pages.FirstLoginViewModel _firstLoginViewModel;
-		private string _tag;
-		public ICommand ShowDashboardLoggedInCommand { get; }
+namespace bazy1.ViewModels.Receptionist
+{
+    public class ReceptionistViewModel : ViewModelBase
+    {
+        private ViewModelBase _currentViewModel;
+        private string _caption;
+        private User _currentUser;
+        private IUserRepository _userRepository;
+        private List<Patient> _patients;
+        public PatientRepository _patientRepository;
 
 		public ICommand ShowPatientRegistrationCommand { get; }
 		public ICommand ShowAppointmentManagementCommand { get; }
@@ -57,9 +45,17 @@ namespace bazy1.ViewModels.Receptionist {
 			Caption2 = "Ekran główny";
 		}
 
-		public ICommand ShowPatientListViewCommand { get; }
 
-		private void ExecuteShowPatientListViewCommand(object obj) {
+        public ReceptionistViewModel()
+        {
+            _userRepository = new UserRepository();
+            _patientRepository = new PatientRepository();
+            CurrentUser = new User();
+            LoadCurrentUser();
+            ShowPatientRegistrationCommand = new BasicCommand(ExecuteShowPatientRegistrationCommand);
+            ShowAppointmentManagementCommand = new BasicCommand(ExecuteShowAppointmentManagementCommand);
+            ExecuteShowPatientRegistrationCommand(null); // Wyświetlanie domyślnego widoku po uruchomieniu aplikacji
+        }
 
 			if (!_currentUser.FirstLogin || !_firstLogin) //Jeśli użytkownik nie loguje się pierwszy raz -> zmienił hasło -> daj dostęp do przycisków
 			{
@@ -72,72 +68,59 @@ namespace bazy1.ViewModels.Receptionist {
 
 		}
 
-		private void ViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) {
-			throw new NotImplementedException();
-		}
+        public User CurrentUser
+        {
+            get => _currentUser;
+            set
+            {
+                _currentUser = value;
+                OnPropertyChanged(nameof(CurrentUser));
+            }
+        }
 
-		public ICommand ShowReferralViewCommand { get; }
-		private void ExecuteShowReferralViewCommand(object obj) {
-			if (!_currentUser.FirstLogin || !_firstLogin)
-			{
-				//CurrentViewModel = new ReferralViewViewModel(DbContext.Referrals.Include("Doctor").Include("Patient").Where(r => r.DoctorUserId == _currentUser.Id).ToList(), DbContext.Doctors.Where(doc => doc.UserId == _currentUser.Id).First());
-			}
-		}
+        public ViewModelBase CurrentViewModel
+        {
+            get => _currentViewModel;
+            set
+            {
+                _currentViewModel = value;
+                OnPropertyChanged(nameof(CurrentViewModel));
+            }
+        }
 
-		public ICommand ShowScheduleViewCommand { get; }
-		public ICommand AddAppointmentCommand { get; }
+        public string Caption
+        {
+            get => _caption;
+            set
+            {
+                _caption = value;
+                OnPropertyChanged(nameof(Caption));
+            }
+        }
 
-		private void ExecuteShowScheduleViewCommand(object obj) {
+        public List<Patient> Patients // Dodaj właściwość do przechowywania listy pacjentów
+        {
+            get => _patients;
+            set
+            {
+                _patients = value;
+                OnPropertyChanged(nameof(Patients));
+            }
+        }
 
-			if (!_currentUser.FirstLogin || !_firstLogin)
-			{
-				//Ustawiamy viewmodel dla widoku listy użytkowników
-				CurrentViewModel = new ScheduleViewModel();
-				Caption2 = "Terminarz";
-			}
-		}
+        private void ExecuteShowPatientRegistrationCommand(object obj)
+        {
+            // Ustawiamy widok rejestracji pacjenta
+            CurrentViewModel = new AddPatientViewModel();
+            Caption = "Rejestracja pacjenta";
+        }
 
-		public ICommand ShowPrescriptionViewCommand { get; }
-		private void ExecuteShowPrescriptionViewCommand(object obj) {
-			if (!_currentUser.FirstLogin || !_firstLogin)
-			{
-				foreach (var item in DbContext.Prescriptions)
-				{
-					Console.WriteLine(item.DoctorId);
-				}
-
-				var sz = DbContext.Prescriptions.Where(
-				pr => pr.DoctorUserId == CurrentUser.Id);
-
-				var ab = DbContext.Prescriptions.Include("Patient").
-					Where(pr => pr.DoctorUserId == CurrentUser.Id).ToList();
-
-				//var pat = DbContext.Patients.Where(pat => pat.Prescriptions.Contains())
-				//Console.WriteLine("roz: "+ab.First().Patient.Id);
-				//Ustawiamy viewmodel dla widoku listy recept
-				CurrentViewModel = new PrescriptionsViewModel(ab, DbContext.Doctors.Where(doc => doc.UserId == CurrentUser.Id).First());
-				Caption2 = "Lista recept";
-			}
-		}
-
-			private void ExecuteShowPatientRegistrationCommand(object obj) {
-				// Ustawiamy widok rejestracji pacjenta
-				//CurrentViewModel = new AddPatientViewModel();
-				//Caption = "Rejestracja pacjenta";
-			}
-
-		private User _currentUser;
-		private IUserRepository _userRepository;
-
-		public User CurrentUser {
-			get {
-				return _currentUser;
-			}
-			set {
-				_currentUser = value;
-				OnPropertyChanged(nameof(CurrentUser));
-			}
-		}
+        private void ExecuteShowAppointmentManagementCommand(object obj)
+        {
+            // Ustawiamy widok zarządzania wizytami
+            CurrentViewModel = new AddAppointmentViewModel(CurrentViewModel);
+            Caption = "Zarządzanie wizytami";
+        }
 
 		public ReceptionistViewModel() {
 			//AddAppointmentCommand = new BasicCommand((object obj) => { CurrentViewModel = new AddAppointmentViewModel(this); });
@@ -192,51 +175,25 @@ namespace bazy1.ViewModels.Receptionist {
 				CurrentUser.FirstLogin = user.FirstLogin;
 				Console.Write("da: " + CurrentUser.Name + CurrentUser.Surname);
 
-				//Patients = _patientRepository.GetPatients();
-			}
-		}
+                    Patients = _patientRepository.GetPatients();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Obsługa wyjątku - możesz zalogować błąd lub podjąć inne działania
+                Console.WriteLine("Błąd podczas ładowania bieżącego użytkownika: " + ex.Message);
+            }
+        }
 
-		public ViewModelBase CurrentViewModel {
-			get => _currentViewModel;
-			set {
-				_currentViewModel = value;
-				OnPropertyChanged(nameof(CurrentViewModel));
-				Console.WriteLine("model: " + CurrentViewModel.ToString());
-			}
-		}
+        private BasicCommand showPatientsCommand;
+        public ICommand ShowPatientsCommand => showPatientsCommand ??= new BasicCommand(ShowPatients1);
 
-		public string Caption2 {
-			get => _caption;
-
-			set {
-				_caption = value;
-				OnPropertyChanged(nameof(Caption2));
-			}
-		}
-
-		public string Tag {
-			get => _tag; set {
-				_tag = value;
-				OnPropertyChanged(nameof(Tag));
-			}
-		}
-
-		public string ErrorMessage {
-			get => errorMessage; set {
-				errorMessage = value;
-				OnPropertyChanged(nameof(ErrorMessage));
-			}
-		}
-		public List<Medicine> Medicines { get; set; } = [];
-		//public Dictionary<Medicine, MedicinePart> MedicineDataGrid { get; set; } = [];
-
-		public Pages.FirstLoginViewModel FirstLoginViewModel {
-			get => _firstLoginViewModel; set {
-				_firstLoginViewModel = value;
-				OnPropertyChanged(nameof(FirstLoginViewModel));
-			}
-		}
-	}
+        private void ShowPatients1(object commandParameter)
+        {
+            CurrentViewModel = new PatientListViewModel();
+            Caption = "Lista pacjentów";
+        }
+    }
 }
 
 
