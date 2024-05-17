@@ -28,6 +28,10 @@
             <pagesViews:UserListControl/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type pagesViewModels:UpdateScheduleViewModel}">
+            <pagesViews:UpdateScheduleControl/>
+        </DataTemplate>
+
         <DataTemplate DataType="{x:Type pagesViewModels:ModifyUserViewModel}">
             <pagesViews:UserModifyControl/>
         </DataTemplate>
@@ -50,8 +54,10 @@
             <Button x:Name="addUserButton" Width="150" Height="20" Content="Dodaj użytkownika" Command="{Binding ShowAddUserViewCommand}"/>
             <Button x:Name="listUserButton" Width="150" Height="20" Content="Lista użytkowników" Command="{Binding ShowUserListViewCommand}">
             </Button>
-            <Button x:Name="Harmonogramy" Width="150" Height="20" Content="Harmonogramy" Command="{Binding ShowAddWorkhoursCommand}">
+            <Button x:Name="Nowyharmonogram" Width="150" Height="20" Content="Nowy Harmonogramm" Command="{Binding ShowAddWorkhoursCommand}">
             </Button>
+            <Button x:Name="Zmienharmonogram" Width="150" Height="20" Content="Zmień harmonogram" Command="{Binding ShowUpdateScheduleCommand}"/>
+
 
         </StackPanel>
 

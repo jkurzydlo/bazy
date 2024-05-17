@@ -22,12 +22,15 @@ namespace bazy1.ViewModels.Admin
     public class AdminViewModel : ViewModelBase
     {
 
+
+        public ICommand ShowUpdateScheduleCommand { get; set; }
 		private ViewModelBase _currentViewModel;
         private string _caption;
         private DatabaseService _databaseService;
         private User _currentUser;
         private List<UserPart> _users;
         public ICommand RefreshCommand{ get; set; }
+
 
         public List<UserPart> Users {
             get => _users;
@@ -75,6 +78,9 @@ namespace bazy1.ViewModels.Admin
             ShowAddUserViewCommand = new BasicCommand(ExecuteShowAddUserViewCommand);
             ShowUserListViewCommand = new BasicCommand(ExecuteShowUserListViewCommand);
             ShowAddWorkhoursCommand = new BasicCommand((object obj) => { CurrentViewModel = new WorkhoursViewModel(); });
+
+            Models.Doctor doc = DbContext.Doctors.Where(d => d.Id == 22).First(); //do zmiany
+            ShowUpdateScheduleCommand = new BasicCommand((object obj) => { CurrentViewModel = new  UpdateScheduleViewModel(); });
             ExecuteShowUserListViewCommand(null);
 
         }

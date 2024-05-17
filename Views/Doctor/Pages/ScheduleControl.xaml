@@ -6,7 +6,39 @@
              xmlns:local="clr-namespace:bazy1.Views.Doctor.Pages"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <TextBlock Text="Terminarz" FontSize="50"></TextBlock>
+    <Grid Background="AliceBlue">
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="8*"/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="5">
+            <DataGrid HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" Width="795" HeadersVisibility="Column" CanUserAddRows="False" IsReadOnly="true" CanUserDeleteRows="False" RowHeight="50" HorizontalAlignment="Stretch" SelectedItem="{Binding SelectedWorkhour}" ItemsSource="{Binding WorkhoursList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AutoGenerateColumns="False" Style="{StaticResource DataGrid}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="800" Header="Godziny pracy" FontSize="12"  Binding="{Binding}"/>
+                </DataGrid.Columns>
+
+                <DataGrid.RowDetailsTemplate>
+                    <DataTemplate>
+                        <TextBlock VerticalAlignment="Center" Text="{
+              Binding RelativeSource={
+                RelativeSource FindAncestor, 
+                AncestorType={x:Type UserControl}},
+              Path=DataContext.SelectedAppointments}" Margin="10" />
+                    </DataTemplate>
+                </DataGrid.RowDetailsTemplate>
+
+
+            </DataGrid>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0" VerticalAlignment="Center" Margin="5">
+            <TextBlock VerticalAlignment="Center" Text="Od "/>
+            <DatePicker SelectedDate="{Binding SelectedDateStart, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></DatePicker>
+            <TextBlock Text=" Do " VerticalAlignment="Center"/>
+            <DatePicker SelectedDate="{Binding SelectedDateEnd, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+        </StackPanel>
+
     </Grid>
 </UserControl>

@@ -23,7 +23,7 @@ namespace bazy1.ViewModels.Admin.Pages {
         {
             "Lekarz",
             "Recepcjonista",
-            "Administrator"
+            "admin"
         };
         private AdminViewModel parentModel;
         private ObservableCollection<Specialization> _specializations; //ObservableCollection aktualizuje widok przy każdej zmianie kolekcji (usunięciu elementu, dodaniu itd.)
@@ -105,6 +105,7 @@ namespace bazy1.ViewModels.Admin.Pages {
             var tempUser = new User();
             var tempDoctor = new Models.Doctor();
             var tempReceptionist = new Models.Receptionist();
+            var tempAdmin = new Models.Administrator();
             AddUserCommand = new BasicCommand((object obj) =>
             {
             UserCredentialsGenerator generator = new();
@@ -137,6 +138,11 @@ namespace bazy1.ViewModels.Admin.Pages {
                             tempReceptionist.Name = UserName;
                             tempReceptionist.Surname = UserSurname;
                             DbContext.Receptionists.Add(tempReceptionist);
+                        }break;
+                    case "admin":
+                        {
+                            tempAdmin.User = tempUser;
+                            DbContext.Administrators.Add(tempAdmin);
                         }break;
                 }
 

@@ -50,11 +50,11 @@ namespace bazy1.ViewModels.Doctor.Pages {
 					info += "Adresy:" + adressess;
 					info += "Przyjmowane leki:\n";
 					string tempDoses = "";
-					var names = DbContext.Database.SqlQueryRaw<string>("select med.name from patient_diesease pd join prescription pr on pr.patient_id=pd.patient_id" +
+					var names = DbContext.Database.SqlQueryRaw<string>("select distinct med.name from patient_diesease pd join prescription pr on pr.patient_id=pd.patient_id" +
 				" join prescription_medicine pm on pm.prescription_id = pr.id" +
 				$" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPatient.Id}").ToList();
 
-					var dosages = DbContext.Database.SqlQueryRaw<string>("select med.dose from patient_diesease pd join prescription pr on pr.patient_id=pd.patient_id" +
+					var dosages = DbContext.Database.SqlQueryRaw<string>("select distinct med.dose from patient_diesease pd join prescription pr on pr.patient_id=pd.patient_id" +
 " join prescription_medicine pm on pm.prescription_id = pr.id" +
 $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPatient.Id} ").ToList();
 					string tempMedicines = "";

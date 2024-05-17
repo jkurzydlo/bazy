@@ -93,7 +93,7 @@ namespace bazy1.ViewModels.Receptionist {
 			if (!_currentUser.FirstLogin || !_firstLogin)
 			{
 				//Ustawiamy viewmodel dla widoku listy użytkowników
-				CurrentViewModel = new ScheduleViewModel();
+				CurrentViewModel = new ScheduleViewModel(DbContext.Doctors.Where(d =>d.UserId == CurrentUser.Id).First());
 				Caption2 = "Terminarz";
 			}
 		}

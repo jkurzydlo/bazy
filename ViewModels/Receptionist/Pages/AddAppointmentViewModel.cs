@@ -102,7 +102,7 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 			if (Workhours.Count != 0 && SelectedDoctor != null && SelectedDoctor != null)
 				{
 					DbContext.Database.ExecuteSqlRaw($"update workhours set open = false where doctor_id={SelectedDoctor.Id} && id={SelectedWorkhour.Id}");
-					SelectedDoctor.Appointments.Add(new Appointment { Date = SelectedWorkhour.Start, Patient = patient , Goal = "cośtam" });
+					SelectedDoctor.Appointments.Add(new Appointment { Date = SelectedWorkhour.Start, Patient = patient , Goal = AppointmentGoal });
 					DbContext.SaveChanges();
 					//SelectedPatient.Appointments.Where(a => a.Date == SelectedWorkhour.Start).First().Notifications.Add(new Notification() { });
 					DbContext.Workhours.Where(w => w.DoctorId == SelectedDoctor.Id && w.Id == SelectedWorkhour.Id).First().Open = false;
