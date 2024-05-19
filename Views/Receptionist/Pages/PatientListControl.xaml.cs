@@ -13,17 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace bazy1.Views.Admin.Pages {
-	/// <summary>
-	/// Logika interakcji dla klasy WorkhoursView.xaml
-	/// </summary>
-	public partial class WorkhoursView : UserControl {
-		public WorkhoursView() {
-			InitializeComponent();
-		}
-
-		private void TimePicker_ValueChanged(object sender, RoutedPropertyChangedEventArgs<object> e) {
-
+namespace bazy1.Views.Receptionist.Pages
+{
+    /// <summary>
+    /// Logika interakcji dla klasy PatientListControl.xaml
+    /// </summary>
+    public partial class PatientListControl : UserControl
+    {
+        public PatientListControl()
+        {
+            InitializeComponent();
         }
     }
 }

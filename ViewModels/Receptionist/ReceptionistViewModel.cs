@@ -19,18 +19,31 @@ namespace bazy1.ViewModels.Receptionist
         private List<Patient> _patients;
         public PatientRepository _patientRepository;
 
-        public ICommand ShowPatientRegistrationCommand { get; }
-        public ICommand ShowAppointmentManagementCommand { get; }
-        private ViewModelBase _patientsViewModel;
-        public ViewModelBase PatientsViewModel
-        {
-            get { return _patientsViewModel; }
-            set
-            {
-                _patientsViewModel = value;
-                OnPropertyChanged(nameof(PatientsViewModel));
-            }
-        }
+		public ICommand ShowPatientRegistrationCommand { get; }
+		public ICommand ShowAppointmentManagementCommand { get; }
+		public ICommand ShowDocScheduleViewCommand { get; }
+		public ICommand ShowAppointmentsCommand { get; }
+		public ICommand ShowPatientAppointmentsViewCommand { get; }
+
+
+		//komendy dla wszystkich widoków w oknie
+		public ICommand ShowDashboardViewCommand { get; }
+
+		private void ExecuteShowDashboardViewCommand(object obj) {
+			//Jeżeli użytkownik loguje się po raz pierwszy wyświetl widok zmiany hasła, jeśli nie - ekran główny
+
+			if (_currentUser.FirstLogin)
+			{
+
+				CurrentViewModel = new Pages.FirstLoginViewModel(_currentUser);
+			}
+			else
+			{
+
+				CurrentViewModel = new Pages.DashboardViewModel();
+			}
+			Caption2 = "Ekran główny";
+		}
 
 
         public ReceptionistViewModel()
@@ -44,21 +57,16 @@ namespace bazy1.ViewModels.Receptionist
             ExecuteShowPatientRegistrationCommand(null); // Wyświetlanie domyślnego widoku po uruchomieniu aplikacji
         }
 
-        private PatientsView _patientsView;
-        public PatientsView PatientsViewInstance
-        {
-            get { return _patientsView; }
-            set
-            {
-                _patientsView = value;
-                OnPropertyChanged(nameof(PatientsViewInstance));
-            }
-        }
-        private void ShowPatients()
-        {
-            // Tworzenie i przypisanie widokmodelu PatientsViewModel
-            PatientsViewModel = new PatientListViewModel();
-        }
+			if (!_currentUser.FirstLogin || !_firstLogin) //Jeśli użytkownik nie loguje się pierwszy raz -> zmienił hasło -> daj dostęp do przycisków
+			{
+
+				//Ustawiamy viewmodel dla widoku listy użytkowników
+				CurrentViewModel = new Pages.PatientListViewModel(this);
+				Caption2 = "Lista pacjentów";
+				Console.WriteLine("dasdas");
+			}
+
+		}
 
         public User CurrentUser
         {
@@ -114,21 +122,58 @@ namespace bazy1.ViewModels.Receptionist
             Caption = "Zarządzanie wizytami";
         }
 
-        private void LoadCurrentUser()
-        {
-            try
-            {
-                User? user = _userRepository.findByUsername(Thread.CurrentPrincipal.Identity.Name);
-                if (user != null)
-                {
-                    CurrentUser.Id = user.Id;
-                    CurrentUser.Name = user.Name;
-                    CurrentUser.Surname = user.Surname;
-                    CurrentUser.Login = user.Login;
-                    CurrentUser.Type = user.Type;
-                    CurrentUser.Password = user.Password;
-                    CurrentUser.FirstLogin = user.FirstLogin;
-                    Console.Write("da: " + CurrentUser.Name + CurrentUser.Surname);
+		public ReceptionistViewModel() {
+			//AddAppointmentCommand = new BasicCommand((object obj) => { CurrentViewModel = new AddAppointmentViewModel(this); });
+			ShowReferralViewCommand = new BasicCommand(ExecuteShowReferralViewCommand);
+			ShowPrescriptionViewCommand = new BasicCommand(ExecuteShowPrescriptionViewCommand);
+			ShowPatientAppointmentsViewCommand = new BasicCommand((object obj) =>
+			{
+				//CurrentViewModel = new PatientAppointmentsViewModel(SelectedP);
+			});
+
+			_userRepository = new UserRepository();
+			CurrentUser = new User();
+			loadCurrentUser();
+			ExecuteShowDashboardViewCommand(null);
+			ShowDashboardViewCommand = new BasicCommand(ExecuteShowDashboardViewCommand);
+			ShowPatientListViewCommand = new BasicCommand(ExecuteShowPatientListViewCommand);
+			ShowScheduleViewCommand = new BasicCommand(ExecuteShowScheduleViewCommand);
+			ShowDocScheduleViewCommand = new BasicCommand((object obj) =>
+			{
+				if (!_currentUser.FirstLogin || !_firstLogin) //Jeśli użytkownik nie loguje się pierwszy raz -> zmienił hasło -> daj dostęp do przycisków
+				{
+					CurrentViewModel = new DocScheduleViewModel();
+				}
+			});
+
+			ShowDashboardLoggedInCommand = new BasicCommand((object obj) => {
+
+
+				FirstLoginViewModel = (Pages.FirstLoginViewModel)CurrentViewModel;
+				if (!string.IsNullOrEmpty(FirstLoginViewModel.Password) && !string.IsNullOrEmpty(FirstLoginViewModel.PasswordRepeat))
+				{
+					if (FirstLoginViewModel.Password.Equals(FirstLoginViewModel.PasswordRepeat))
+					{
+						CurrentViewModel = new Pages.DashboardViewModel();
+						_firstLogin = false;
+					}
+				}
+			});
+		}
+
+		//Znajdź w bazie użytkownika o danych podanych w polu logowania i ustaw jako właściwość CurrentUser
+		private void loadCurrentUser() {
+			User? user = _userRepository.findByUsername(Thread.CurrentPrincipal.Identity.Name);
+			if (user != null)
+			{
+				CurrentUser.Id = user.Id;
+				CurrentUser.Name = user.Name;
+				CurrentUser.Surname = user.Surname;
+				CurrentUser.Login = user.Login;
+				CurrentUser.Type = user.Type;
+				CurrentUser.Password = user.Password;
+				CurrentUser.FirstLogin = user.FirstLogin;
+				Console.Write("da: " + CurrentUser.Name + CurrentUser.Surname);
 
                     Patients = _patientRepository.GetPatients();
                 }

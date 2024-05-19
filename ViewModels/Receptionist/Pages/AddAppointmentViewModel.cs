@@ -23,6 +23,15 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 		private Models.Patient _selectedPatient = DbContext.Patients.First();
 		public Dictionary<Workhour, Brush> RowColor { get; set; }
 		public Brush RowColors { get; set; } = new SolidColorBrush(Colors.Green);
+		private string _appointmentGoal;
+
+		public string AppointmentGoal {
+			get => _appointmentGoal;
+			set {
+				_appointmentGoal = value;
+				OnPropertyChanged(nameof(AppointmentGoal));
+			}
+		}
 
 		public Workhour SelectedWorkhour {
 			get => _selectedWorkhour;
@@ -44,9 +53,9 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 			get => _selectedDate;
 			set {
 				_selectedDate = value;
-				if (_selectedDate.Date >= DateTime.Now.Date)
+				if (_selectedDate.Date >= DateTime.Now.Date && SelectedDoctor != null)
 				{
-					var doc_id = new MySqlParameter("doc_id", 22);
+					var doc_id = new MySqlParameter("doc_id", SelectedDoctor.Id);
 					var day_of_year = new MySqlParameter("day_of_year", SelectedDate.DayOfYear);
 
 
@@ -85,15 +94,15 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 
 		public ICommand AddAppointmentCommand { get; set; }
 
-		public AddAppointmentViewModel(ViewModelBase parentViewModel) {
+		public AddAppointmentViewModel(ViewModelBase parentViewModel, Patient patient) {
 			SelectedDoctor = DbContext.Doctors.ElementAt(0);
             Console.WriteLine("ldsgsd");
             AddAppointmentCommand = new BasicCommand((object obj) =>
 			{
-				if (Workhours.Count != 0)
+			if (Workhours.Count != 0 && SelectedDoctor != null && SelectedDoctor != null)
 				{
 					DbContext.Database.ExecuteSqlRaw($"update workhours set open = false where doctor_id={SelectedDoctor.Id} && id={SelectedWorkhour.Id}");
-					SelectedDoctor.Appointments.Add(new Appointment { Date = SelectedWorkhour.Start, Patient = SelectedPatient, Goal = "cośtam" });
+					SelectedDoctor.Appointments.Add(new Appointment { Date = SelectedWorkhour.Start, Patient = patient , Goal = "cośtam" });
 					DbContext.SaveChanges();
 					//SelectedPatient.Appointments.Where(a => a.Date == SelectedWorkhour.Start).First().Notifications.Add(new Notification() { });
 					DbContext.Workhours.Where(w => w.DoctorId == SelectedDoctor.Id && w.Id == SelectedWorkhour.Id).First().Open = false;
@@ -105,14 +114,18 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 			Doctors = DbContext.Doctors.Include("Workhours").ToList();
 			Patients = DbContext.Patients.ToList();
 
-			var doc_id = new MySqlParameter("doc_id", 22);
+			var doc_id = new MySqlParameter("doc_id", SelectedDoctor.Id);
 			var day_of_year = new MySqlParameter("day_of_year", SelectedDate.DayOfYear);
 
 
 			var test = DbContext.Workhours.FromSqlRaw($"select * from przychodnia9.workhours where doctor_id = @doc_id", doc_id).ToList();
 			test = test.Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear).ToList();
 			Workhours = new(test);
-			SelectedDate = SelectedDate;
+            foreach (var item in test)
+            {
+				Console.WriteLine(item.Start + " " + item.End + " " + item.Open);
+            }
+            SelectedDate = SelectedDate;
 			System.Windows.Input.CommandManager.InvalidateRequerySuggested();
 
 

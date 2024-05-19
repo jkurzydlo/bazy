@@ -19,6 +19,8 @@
             <TextBlock Text="Termin" HorizontalAlignment="Left"></TextBlock>
 
             <DatePicker Width="120" SelectedDate="{Binding SelectedDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+            <TextBlock Text="Cel wizyty"/>
+            <TextBox Text="{Binding AppointmentGoal}" MinHeight="100"/>
         </StackPanel>
 
         <StackPanel Orientation="Vertical" Grid.Column="1" VerticalAlignment="Center">

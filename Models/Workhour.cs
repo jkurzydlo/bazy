@@ -15,9 +15,11 @@ public partial class Workhour
 
     public int DoctorUserId { get; set; }
 
-    public DateTime? Day { get; set; }
+    public DateTime? BlockStart { get; set; }
 
     public bool? Open { get; set; }
+
+    public DateTime? BlockEnd { get; set; }
 
     public virtual Doctor Doctor { get; set; } = null!;
 }

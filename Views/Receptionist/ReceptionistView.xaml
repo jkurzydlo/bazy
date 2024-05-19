@@ -7,8 +7,7 @@
         xmlns:pagesViewModels="clr-namespace:bazy1.ViewModels.Receptionist.Pages"
         xmlns:pagesViews="clr-namespace:bazy1.Views.Receptionist.Pages"
         mc:Ignorable="d"
-        Title="ReceptionistView" Height="450" Width="800"
-        WindowStartupLocation="CenterScreen">
+        Title="ReceptionistView" Height="600" Width="900">
     <Window.DataContext>
         <!-- Ustawia ReceptionistViewModel jako kontekst danych dla tego widoku-->
         <viewModels:ReceptionistViewModel/>
@@ -27,7 +26,20 @@
             <pagesViews:AddAppointmentWindow/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type pagesViewModels:DocScheduleViewModel}">
+            <pagesViews:DocScheduleView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type pagesViewModels:PatientAppointmentsViewModel}">
+            <pagesViews:PatientAppointmentsView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type pagesViewModels:PatientListViewModel}">
+            <pagesViews:PatientListControl/>
+        </DataTemplate>
+
         <!-- inne widoki.. -->
+        
+        
     </Window.Resources>
 
     <Grid>
@@ -36,9 +48,14 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical">
-            <Button Width="auto" Height="40" Content="Pacjenci" Command="{Binding ShowPatientsCommand}"/>
-            <Button Width="auto" Height="40" Content="Wizyty" Command="{Binding ShowAppointmentManagementCommand}"/>
-            <!-- Dodaj inne przyciski lub interfejsy użytkownika dla innych funkcji recepcjonisty -->
+            <Button x:Name="appointmentButton" Width="150" Height="20" Content="Umów wizytę" Command="{Binding AddAppointmentCommand}">
+            </Button>
+            <Button Width="150" Height="20" Content="Lista pacjentów" Command="{Binding ShowPatientListViewCommand}"/>
+            <Button Width="150" Height="20" Content="Kalendarz wizyt" Command="{Binding ShowAppointmentsCommand}"/>
+            <Button Width="150" Height="20" Content="Harmonogramy" Command="{Binding ShowDocScheduleViewCommand}"></Button>
+            <Button Width="150" Height="20" Content="Wizyty pacjentów" Command="{Binding ShowPatientAppointmentsViewCommand}"/>
+
+
         </StackPanel>
 
         <pagesViews:PatientsView Grid.Column="1"/>

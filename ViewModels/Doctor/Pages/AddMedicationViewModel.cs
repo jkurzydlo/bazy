@@ -217,7 +217,7 @@ namespace bazy1.ViewModels.Doctor.Pages
 			Medicines = new(parentViewModel.Medicines);
 			this.disease = disease;
 			parentViewModel.Medicines = [];
-			loadXML(true);
+			loadXML(false);
 
 
 			SelectedPatient = DbContext.Patients.Where(pat => pat.Id == patient.Id).First();

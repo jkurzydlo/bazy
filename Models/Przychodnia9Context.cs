@@ -343,6 +343,9 @@ public partial class Przychodnia9Context : DbContext
             entity.Property(e => e.AppointmentPatientId).HasColumnName("appointment_Patient_id");
             entity.Property(e => e.AppointmentDoctorId).HasColumnName("appointment_doctor_id");
             entity.Property(e => e.AppointmentDoctorUserId).HasColumnName("appointment_doctor_user_id");
+            entity.Property(e => e.Content)
+                .HasMaxLength(500)
+                .HasColumnName("content");
 
             entity.HasOne(d => d.Appointment).WithMany(p => p.Notifications)
                 .HasForeignKey(d => new { d.AppointmentId, d.AppointmentPatientId, d.AppointmentDoctorId, d.AppointmentDoctorUserId })
@@ -612,9 +615,12 @@ public partial class Przychodnia9Context : DbContext
                 .HasColumnName("id");
             entity.Property(e => e.DoctorId).HasColumnName("Doctor_id");
             entity.Property(e => e.DoctorUserId).HasColumnName("Doctor_User_id");
-            entity.Property(e => e.Day)
-                .HasColumnType("date")
-                .HasColumnName("day");
+            entity.Property(e => e.BlockEnd)
+                .HasColumnType("datetime")
+                .HasColumnName("blockEnd");
+            entity.Property(e => e.BlockStart)
+                .HasColumnType("datetime")
+                .HasColumnName("blockStart");
             entity.Property(e => e.End)
                 .HasColumnType("datetime(5)")
                 .HasColumnName("end");
