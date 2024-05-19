@@ -2,11 +2,12 @@
 using bazy1.Repositories;
 using System;
 using System.Collections.ObjectModel;
+using System.Linq; // Dodane
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
 
-namespace bazy1.ViewModels.Receptionist.Pages
+namespace bazy1.ViewModels.Receptionist.Pages // Zmienione
 {
     public class PatientListViewModel : ViewModelBase
     {
@@ -16,6 +17,7 @@ namespace bazy1.ViewModels.Receptionist.Pages
 
         public PatientListViewModel()
         {
+            _patientRepository = new PatientRepository(); // Dodane
             LoadPatients();
             ShowMedicalHistoryCommand = new BasicCommand(ExecuteShowMedicalHistoryCommand);
             ShowAddDiseaseCommand = new BasicCommand(ExecuteShowAddDiseaseCommand);
@@ -46,34 +48,25 @@ namespace bazy1.ViewModels.Receptionist.Pages
 
         private void LoadPatients()
         {
-            PatientRepository patientRepository = new PatientRepository();
-            _patientsList = new ObservableCollection<Patient>(patientRepository.GetPatients());
+            _patientsList = new ObservableCollection<Patient>(_patientRepository.GetPatients());
         }
 
         private void ExecuteShowMedicalHistoryCommand(object obj)
         {
-            // Sprawdź, czy został wybrany pacjent
             if (SelectedPatient != null)
             {
-                // Pobierz listę chorób dla wybranego pacjenta z bazy danych
+                Console.WriteLine($"Wybrany pacjent: {SelectedPatient.Name} {SelectedPatient.Surname}");
                 var patientDiseases = _patientRepository.GetPatientDiseases(SelectedPatient.Id);
-
-                // Sprawdź, czy pacjent ma przypisane choroby
                 if (patientDiseases != null && patientDiseases.Any())
                 {
-                    // Przygotuj tekst historii medycznej pacjenta
                     StringBuilder medicalHistoryBuilder = new StringBuilder();
                     medicalHistoryBuilder.AppendLine($"Historia medyczna pacjenta {SelectedPatient.Name} {SelectedPatient.Surname}:\n");
-
-                    // Dodaj każdą chorobę pacjenta do historii medycznej
                     foreach (var disease in patientDiseases)
                     {
                         string dateFrom = disease.DateFrom?.ToShortDateString() ?? "Unknown";
                         string dateTo = disease.DateTo?.ToShortDateString() ?? "Unknown";
                         medicalHistoryBuilder.AppendLine($"- {disease.Name}, rozpoczęta dnia {dateFrom}, zakończona dnia {dateTo}");
                     }
-
-                    // Wyświetl historię medyczną w MessageBox
                     MessageBox.Show(medicalHistoryBuilder.ToString(), "Historia medyczna", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 else
@@ -81,7 +74,12 @@ namespace bazy1.ViewModels.Receptionist.Pages
                     MessageBox.Show("Brak dostępnej historii medycznej dla tego pacjenta.", "Historia medyczna", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
+            else
+            {
+                Console.WriteLine("Nie wybrano pacjenta.");
+            }
         }
+
 
         private void ExecuteShowAddDiseaseCommand(object obj)
         {

@@ -6,8 +6,7 @@
              xmlns:local="clr-namespace:bazy1.Views.Receptionist.Pages"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
-             xmlns:viewModels="clr-namespace:bazy1.ViewModels.Receptionist"
-             >
+             xmlns:viewModels="clr-namespace:bazy1.ViewModels.Receptionist.Pages">
 
     <Grid>
         <Grid.ColumnDefinitions>
@@ -18,9 +17,19 @@
             <RowDefinition Height="13*"/>
         </Grid.RowDefinitions>
 
-
-        <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" ColumnWidth="*" Style="{StaticResource DataGrid}" SelectionMode="Single" HeadersVisibility="Column" IsReadOnly="True" ItemsSource="{Binding Patients}" SelectedItem="{Binding SelectedPatient}" Margin="0,5,0,0" Grid.Row="1">
-
+        <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" ColumnWidth="*" Style="{StaticResource DataGrid}" SelectionMode="Single" HeadersVisibility="Column" IsReadOnly="True" ItemsSource="{Binding PatientsList}" SelectedItem="{Binding SelectedPatient}" Margin="0,5,0,0" Grid.Row="1">
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="ContextMenu">
+                        <Setter.Value>
+                            <ContextMenu DataContext="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext}">
+                                <MenuItem Header="Historia medyczna" Command="{Binding ShowMedicalHistoryCommand}" />
+                                <MenuItem Header="Usuń" Command="{Binding ShowDeletePatientCommand}" />
+                            </ContextMenu>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DataGrid.RowStyle>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Imię" Binding="{Binding Name}" />
                 <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}"  />
@@ -29,31 +38,21 @@
                 <DataGridTextColumn Header="Email" Binding="{Binding Email}"  />
                 <DataGridTextColumn Header="Ostatnia wizyta" Binding="{Binding LastVisit}"/>
                 <DataGridTextColumn Header="Najbliższa wizyta" Binding="{Binding NextVisit}"/>
-
-                <!-- Kolumna z menu kontekstowym -->
                 <DataGridTemplateColumn Header="Opcje">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <!-- Przycisk otwierający menu kontekstowe -->
-                            <Button Content="Opcje" Click="ContextMenuButton_Click" Command="{Binding DataContext.ShowContextMenuCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}"/>
+                            <Button Content="Opcje" Click="ContextMenuButton_Click" CommandParameter="{Binding}" />
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
-            <DataGrid.ContextMenu>
-                <ContextMenu>
-                    <MenuItem Header="Historia medyczna" Command="{Binding ShowMedicalHistoryCommand}" />
-                    <MenuItem Header="Usuń" Command="{Binding ShowDeletePatientCommand}" />
-                </ContextMenu>
-            </DataGrid.ContextMenu>
         </DataGrid>
         <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center">
             <Button Content="Lista pacjentów" FontSize="10" Height="25" Width="150" HorizontalAlignment="Center" IsEnabled="False"/>
             <Button Content="Nowy" FontSize="10" Height="25" Width="150" HorizontalAlignment="Center" Command="{Binding AddPatientCommand}"/>
             <TextBox Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="10" Height="25" Width="150" Margin="10,0,0,0" HorizontalAlignment="Right"/>
-
         </StackPanel>
     </Grid>
-
 </UserControl>
+
 

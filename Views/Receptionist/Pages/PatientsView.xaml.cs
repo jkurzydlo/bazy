@@ -1,9 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using bazy1.ViewModels.Receptionist;
-using bazy1.Repositories;
-using System.Diagnostics;
+using bazy1.ViewModels.Receptionist.Pages; // Zmienione
 
 namespace bazy1.Views.Receptionist.Pages
 {
@@ -12,31 +10,15 @@ namespace bazy1.Views.Receptionist.Pages
         public PatientsView()
         {
             InitializeComponent();
-            DataContext = new ReceptionistViewModel();
+            DataContext = new PatientListViewModel(); // Zmienione
         }
-        // Metoda do aktualizacji danych pacjentów
-        //
-        //
-        public ReceptionistViewModel DataContext { get; }
 
         private void ContextMenuButton_Click(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("laczy");
             var button = sender as Button;
             if (button != null)
             {
                 var dataGridRow = FindVisualParent<DataGridRow>(button);
-                if (dataGridRow == null)
-                {
-                    // Jeśli nie znaleziono bezpośredniego wiersza, szukaj go w rodzicach przycisku
-                    DependencyObject parent = VisualTreeHelper.GetParent(button);
-                    while (parent != null && dataGridRow == null)
-                    {
-                        dataGridRow = parent as DataGridRow;
-                        parent = VisualTreeHelper.GetParent(parent);
-                    }
-                }
-
                 if (dataGridRow != null)
                 {
                     dataGridRow.IsSelected = true;
@@ -63,14 +45,6 @@ namespace bazy1.Views.Receptionist.Pages
             }
             return null;
         }
-        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-
-        }
     }
 }
-
-
-
-
 
