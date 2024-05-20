@@ -46,12 +46,12 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical">
-            <Button x:Name="appointmentButton" Width="150" Height="20" Content="Umów wizytę" Command="{Binding AddAppointmentCommand}">
+            <Button x:Name="appointmentButton" Width="150" Height="40" Content="Umów wizytę" Command="{Binding AddAppointmentCommand}">
             </Button>
-            <Button Width="150" Height="20" Content="Lista pacjentów" Command="{Binding ShowPatientListViewCommand}"/>
-            <Button Width="150" Height="20" Content="Kalendarz wizyt" Command="{Binding ShowAppointmentsCommand}"/>
-            <Button Width="150" Height="20" Content="Harmonogramy" Command="{Binding ShowDocScheduleViewCommand}"></Button>
-            <Button Width="150" Height="20" Content="Wizyty pacjentów" Command="{Binding ShowPatientAppointmentsViewCommand}"/>
+            <Button Width="150" Height="40" Content="Lista pacjentów" Command="{Binding ShowPatientListViewCommand}"/>
+            <Button Width="150" Height="40" Content="Kalendarz wizyt" Command="{Binding ShowAppointmentsCommand}"/>
+            <Button Width="150" Height="40" Content="Harmonogramy" Command="{Binding ShowDocScheduleViewCommand}"></Button>
+            <Button Width="150" Height="40" Content="Wizyty pacjentów" Command="{Binding ShowPatientAppointmentsViewCommand}"/>
 
 
         </StackPanel>

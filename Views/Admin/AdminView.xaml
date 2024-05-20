@@ -51,12 +51,12 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical">
-            <Button x:Name="addUserButton" Width="150" Height="20" Content="Dodaj użytkownika" Command="{Binding ShowAddUserViewCommand}"/>
-            <Button x:Name="listUserButton" Width="150" Height="20" Content="Lista użytkowników" Command="{Binding ShowUserListViewCommand}">
+            <Button x:Name="addUserButton" Width="150" Height="40" Content="Dodaj użytkownika" Command="{Binding ShowAddUserViewCommand}"/>
+            <Button x:Name="listUserButton" Width="150" Height="40" Content="Lista użytkowników" Command="{Binding ShowUserListViewCommand}">
             </Button>
-            <Button x:Name="Nowyharmonogram" Width="150" Height="20" Content="Nowy Harmonogramm" Command="{Binding ShowAddWorkhoursCommand}">
+            <Button x:Name="Nowyharmonogram" Width="150" Height="40" Content="Nowy Harmonogramm" Command="{Binding ShowAddWorkhoursCommand}">
             </Button>
-            <Button x:Name="Zmienharmonogram" Width="150" Height="20" Content="Zmień harmonogram" Command="{Binding ShowUpdateScheduleCommand}"/>
+            <Button x:Name="Zmienharmonogram" Width="150" Height="40" Content="Zmień harmonogram" Command="{Binding ShowUpdateScheduleCommand}"/>
 
 
         </StackPanel>

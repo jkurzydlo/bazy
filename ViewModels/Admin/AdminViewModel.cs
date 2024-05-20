@@ -32,6 +32,7 @@ namespace bazy1.ViewModels.Admin
         public ICommand RefreshCommand{ get; set; }
 
 
+
         public List<UserPart> Users {
             get => _users;
             set {
@@ -105,10 +106,6 @@ namespace bazy1.ViewModels.Admin
                 OnPropertyChanged(nameof(CurrentViewModel));
             }
         }
-
-
-
-
 
     }
 }
