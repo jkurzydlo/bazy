@@ -1,13 +1,13 @@
--- MySQL dump 10.13  Distrib 8.3.0, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 8.0.36, for Win64 (x86_64)
 --
 -- Host: localhost    Database: przychodnia9
 -- ------------------------------------------------------
--- Server version	8.3.0
+-- Server version	8.0.36
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8mb4 */;
+/*!50503 SET NAMES utf8 */;
 /*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
 /*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
@@ -57,7 +57,8 @@ CREATE TABLE `administrator` (
   `User_id` int NOT NULL,
   PRIMARY KEY (`id`,`User_id`),
   KEY `fk_Administrator_User1_idx` (`User_id`),
-  CONSTRAINT `fk_Administrator_User1` FOREIGN KEY (`User_id`) REFERENCES `user` (`id`)
+  CONSTRAINT `fk_Administrator_User1` FOREIGN KEY (`User_id`) REFERENCES `user` (`id`),
+  CONSTRAINT `email_format_check` CHECK (((locate(_utf8mb4'@',`email`) > 0) and (locate(_utf8mb4'.',substring_index(`email`,_utf8mb4'@',-(1))) > 0)))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -69,6 +70,23 @@ LOCK TABLES `administrator` WRITE;
 /*!40000 ALTER TABLE `administrator` DISABLE KEYS */;
 /*!40000 ALTER TABLE `administrator` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `CheckPhoneNumberLengthBeforeInsertOnTable1` BEFORE INSERT ON `administrator` FOR EACH ROW BEGIN
+    CALL CheckPhoneNumberLength(NEW.phoneNumber);
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `appointment`
@@ -97,6 +115,25 @@ LOCK TABLES `appointment` WRITE;
 /*!40000 ALTER TABLE `appointment` DISABLE KEYS */;
 /*!40000 ALTER TABLE `appointment` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `before_appointment_insert_update` BEFORE INSERT ON `appointment` FOR EACH ROW BEGIN
+    IF NEW.date < CURDATE() THEN
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Data wizyty nie może być w przeszłości.';
+    END IF;
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `appointment_has_receptionist`
@@ -345,7 +382,6 @@ CREATE TABLE `medicine` (
 
 LOCK TABLES `medicine` WRITE;
 /*!40000 ALTER TABLE `medicine` DISABLE KEYS */;
-INSERT INTO `medicine` VALUES ('dfdfd','ds',143,2,'sdfsd',NULL),('er','gfre',144,3,'grbgfr',NULL),('noway','fds',145,3,'gd',NULL),('dsf','gfsd',146,3,'gsgfd',NULL),('fsd','dsf',147,3,'dsf',NULL),('dsf','fds',148,3,'df',NULL),('dsf','dsf',149,3,NULL,NULL),('s','s',150,2,'d',NULL),('d','f',151,3,'d',NULL),('anbs','sadf',152,3,'d',NULL),('fdg','gdf',153,4,'dfgdf',NULL),('gfd','gd',154,4,NULL,NULL),('sdf','dsf',155,2,'sdffsd',NULL),('sdf','fsd',156,2,NULL,NULL),('Naproxem','25mg po posiłku',157,2,NULL,0.5),('Magnez','2 tabletki dziennie',158,5,NULL,1),('Lek#3','2 tabletki',159,3,'Kurację kontynuować 2 miesiące',0.5),('Lek #4','40 ml',160,1,NULL,0),('lek#2','fds',161,3,NULL,0.3),('dsf','fds',162,2,'fsd',0.43),('ds','fds',163,4,'df',0.56),('Lek#1','25mg',164,2,NULL,1),('50ml','1 tabletka po posiłku',165,1,'sdf',0.2),('sad','dsa',166,2,'das',0.33),('sdf','fsd',167,2,'csd',0.23),('sad','fds',168,2,'2',0.02),('23','2323',169,3,'23',0.23),('e','e',170,2,'3',0.03),('d','d',171,5,'5',0.05),('2','2',172,2,'2',0.02),('3','3',173,3,'3',0.03),('d','s',174,2,'2',0.02),('3','4',175,4,'d',0.04),('s','d',176,2,'2',0.02),('s','s',177,4,'4',0.04),('5','5',178,5,'5',0.05),('2','2',179,2,'3',0.02),('f','f',180,3,'d',0.34),('2','2',181,2,'2',0.02),('2','2',182,2,'2',0.02),('2','2',183,2,NULL,0.02),('ert','er',184,4,'5',0.05),('dgr','df',185,5,'f',0.04),('t','t',186,7,'fh',0.6),('2','2',187,2,'2',0.02),('3','33',188,3,'3',0.03),('2','2',189,2,'2',0.53),('3','3',190,3,NULL,0.12),('2','2',191,2,'2',0.02),('12','12',192,12,'12',0.12),('2','2',193,2,'2',0.02),('1','2',194,3,'3',0.03),('mndf','fds',195,2,NULL,1),('dsf','fsdfds',196,3,NULL,0.5),('z','2',197,2,'2',0.02),('lek#1','25mg',198,1,NULL,0.5),('lek #2','40mg',199,5,'dsfsd',1),('Lek#1','25mg',200,2,'sdf',0.5),('Lek#2','50mg',201,3,'sdf',0.5),('34','34',202,34,'34',0.34),('Lek#1','25mg',203,1,NULL,0.5),('Lek#3','23mg',204,3,NULL,0.26),('Lek#1','5ml',205,1,'sdf',0.5),('Lek #4','25ml',206,5,'dg',1),('Lek #47','1 tabletka rano',207,1,'df',1),('Lek#33','2 tabletki',208,2,NULL,1),('Lek #1','25mg',209,2,NULL,0.5),('Lek #2','50mg',210,5,NULL,1),('Lek #12','50mg',211,2,'sad',0.5),('Lek #3','40mg',212,5,NULL,1),('Lek#45','2 tabletki',213,5,'sdfsf',1),('Lek #1','25mg',214,2,NULL,1),('Lek #2','1 tabletka',215,4,NULL,0.5),('Lek #65','23mg',216,4,NULL,0.5),('Lek #33','25mg',217,2,NULL,0.2),('sdf','342',218,43,'df',0.34),('Lek#1','25mg',219,5,NULL,0.2),('2','2',220,2,'2',0.02),('3','3',221,3,'3',0.03),('4','4',222,4,'4',0.04),('5','5',223,5,'5',0.05),('6','66',224,6,'6',0.06),('Lek#1','25mg',200,5,NULL,0.5),('Lek#2','40mg',226,2,'dsf',1),('Lek #33','35mg',227,4,NULL,0.4),('Lek#1','25mg',228,2,'sdfsd',1),('Lek#2','50mg',229,5,'dfggfd',0.5),('Lek#4','50mg',230,5,NULL,0.5),('Lek #45','25ml',231,5,NULL,0.5),('fds','fds',232,23,'sdf',0.5),('df','dfg',233,45,'dfg',0.45),('ewrer','ger',234,3,'3',0.03),('4','4',235,4,NULL,0.04),('wer','ewr',236,25,'25',0.25),('3','3',237,3,'3',0.03),('Lek #5','50mg',238,2,'sdf',1),('5','5',239,5,'5',0.5),('Lek #6','50mg',240,5,NULL,1),('5','5',241,5,'5',0.05),('6','6',243,6,'6',0.06),('6','6',244,6,'6',0.06),('12','12',245,12,'12',0.12),('Nalgesin','12',246,12,'0',0.5),('Amlozek','23',247,10,NULL,1),('Amlozek','50',248,5,NULL,0.5),('Rulid','50mg',249,5,'12',0.5),('Nalgesin Forte','25mg',250,2,NULL,0.5),('Amlozek','1',251,1,NULL,0.01),('Sotahexal 80','25mg',252,5,'24',0.25),('Rulid','50ml',253,5,NULL,0.5),('Carboplatin Pfizer','25mg',254,2,NULL,0.5),('Loratadyna Galena','2ml',255,2,NULL,0.5),('Zoledronic acid Fresenius Kabi','50',256,5,NULL,0.2),('Nalgesin Forte','25mg',257,2,'30',1),('Amlozek','2',258,2,'2',0.02),('Ursopol','4',259,4,'4',0.04),('Coffepirine Tabletki od bólu głowy','25',260,25,'25',0.25),('Xyrem','4',261,4,'4',0.04),('Twinrix Adult','25',262,25,'25',0.25),('Aprovel','4',263,4,NULL,0.04),('Indapen SR','2',264,22,'2',0.02),('Xanax SR','23',265,1,'zd',0.1),('Ascorvita','2',266,2,'2',0.02),('Szczepionka tężcowa adsorbowana (T)','24mg',267,2,'2',0.25),('Aprovel','2',268,2,'2',0.02),('Zoledronic acid Fresenius Kabi','1',269,1,'1',0.01),('Amlozek','11',270,1,'1',0.01),('Rulid','2222',271,2,'2',0.02),('Twinrix Adult','1',272,1,'1',0.01),('Nalgesin Forte','3',273,3,'3',0.33);
 /*!40000 ALTER TABLE `medicine` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -389,7 +425,8 @@ DROP TABLE IF EXISTS `office`;
 CREATE TABLE `office` (
   `id` int NOT NULL AUTO_INCREMENT,
   `Number` int NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  CONSTRAINT `office_number_range_check` CHECK ((`Number` between 1 and 100))
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -422,6 +459,7 @@ CREATE TABLE `patient` (
   `sex` enum('K','M') NOT NULL,
   `birthDate` date DEFAULT NULL,
   `secondName` varchar(45) DEFAULT NULL,
+  `NotificationsEnabled` bit(1) NOT NULL DEFAULT b'1',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=120 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -432,9 +470,26 @@ CREATE TABLE `patient` (
 
 LOCK TABLES `patient` WRITE;
 /*!40000 ALTER TABLE `patient` DISABLE KEYS */;
-INSERT INTO `patient` VALUES (NULL,NULL,NULL,105,'Adam','Nowak',NULL,NULL,'M','2024-04-22',NULL),(NULL,NULL,'a@a.pl',106,'Roman','Zieliński',NULL,NULL,'M','2024-04-22',NULL),('56387678903','534908765',NULL,107,'Jan','Kowalski',NULL,NULL,'M','1991-12-10',NULL),('87673567801','667887546','a@a.pl',108,'Adam','Nowak',NULL,NULL,'M','1987-01-11',NULL),('12345675694','223456864',NULL,109,'Roman','Zieliński',NULL,NULL,'M','2024-01-02',NULL),('23434567893',NULL,'a@a.pl',110,'Adam','Kowalski',NULL,NULL,'M','2010-01-11',NULL),('32676756724',NULL,NULL,111,'Adam','Zieliński',NULL,NULL,'M','2024-04-23',NULL),('76765645687',NULL,'g@j.pl',112,'Jan','Nowak',NULL,NULL,'M','2024-04-23',NULL),('01312906516','223786545','a@a.pl',113,'Adam','Nowacki',NULL,NULL,'M','2024-04-24',NULL),('11767865456',NULL,NULL,114,'Joanna','Kowalska',NULL,NULL,'K','1980-01-01','Maria'),('36745676381','332346785','a.kowalczyk@gmail.com',115,'Adam','Kowalczyk',NULL,NULL,'M','2024-04-28',NULL),('01312906516',NULL,NULL,116,'grzegorz','Rumak',NULL,NULL,'M','2024-04-29',NULL),('01312906516',NULL,NULL,117,'Roman','Zieliński',NULL,NULL,'M','2024-04-29',NULL),('70051251144',NULL,NULL,118,'Grzegorz','Nowak',NULL,NULL,'M','2024-04-29',NULL),('51012056651',NULL,NULL,119,'Adam','Kowalczyk',NULL,NULL,'M','2024-04-29',NULL);
+INSERT INTO `patient` VALUES (NULL,NULL,NULL,105,'Adam','Nowak',NULL,NULL,'M','2024-04-22',NULL,_binary ''),(NULL,NULL,'a@a.pl',106,'Roman','Zieliński',NULL,NULL,'M','2024-04-22',NULL,_binary ''),('56387678903','534908765',NULL,107,'Jan','Kowalski',NULL,NULL,'M','1991-12-10',NULL,_binary ''),('87673567801','667887546','a@a.pl',108,'Adam','Nowak',NULL,NULL,'M','1987-01-11',NULL,_binary ''),('12345675694','223456864',NULL,109,'Roman','Zieliński',NULL,NULL,'M','2024-01-02',NULL,_binary ''),('23434567893',NULL,'a@a.pl',110,'Adam','Kowalski',NULL,NULL,'M','2010-01-11',NULL,_binary ''),('32676756724',NULL,NULL,111,'Adam','Zieliński',NULL,NULL,'M','2024-04-23',NULL,_binary ''),('76765645687',NULL,'g@j.pl',112,'Jan','Nowak',NULL,NULL,'M','2024-04-23',NULL,_binary ''),('01312906516','223786545','a@a.pl',113,'Adam','Nowacki',NULL,NULL,'M','2024-04-24',NULL,_binary ''),('11767865456',NULL,NULL,114,'Joanna','Kowalska',NULL,NULL,'K','1980-01-01','Maria',_binary ''),('36745676381','332346785','a.kowalczyk@gmail.com',115,'Adam','Kowalczyk',NULL,NULL,'M','2024-04-28',NULL,_binary ''),('01312906516',NULL,NULL,116,'grzegorz','Rumak',NULL,NULL,'M','2024-04-29',NULL,_binary ''),('01312906516',NULL,NULL,117,'Roman','Zieliński',NULL,NULL,'M','2024-04-29',NULL,_binary ''),('70051251144',NULL,NULL,118,'Grzegorz','Nowak',NULL,NULL,'M','2024-04-29',NULL,_binary ''),('51012056651',NULL,NULL,119,'Adam','Kowalczyk',NULL,NULL,'M','2024-04-29',NULL,_binary '');
 /*!40000 ALTER TABLE `patient` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER `CheckPhoneNumberLengthBeforeInsertOnTable2` BEFORE INSERT ON `patient` FOR EACH ROW BEGIN
+    CALL CheckPhoneNumberLength(NEW.phoneNumber);
+END */;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 
 --
 -- Table structure for table `patient_address`
@@ -493,6 +548,33 @@ INSERT INTO `patient_diesease` VALUES (99,108),(114,117),(115,118),(116,119),(11
 UNLOCK TABLES;
 
 --
+-- Table structure for table `patient_medicine`
+--
+
+DROP TABLE IF EXISTS `patient_medicine`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `patient_medicine` (
+  `Medicine_id` int NOT NULL,
+  `Patient_id` int NOT NULL,
+  PRIMARY KEY (`Medicine_id`,`Patient_id`),
+  KEY `fk_Medicine_has_Patient_Patient1_idx` (`Patient_id`),
+  KEY `fk_Medicine_has_Patient_Medicine1_idx` (`Medicine_id`),
+  CONSTRAINT `fk_Medicine_has_Patient_Medicine1` FOREIGN KEY (`Medicine_id`) REFERENCES `medicine` (`id`),
+  CONSTRAINT `fk_Medicine_has_Patient_Patient1` FOREIGN KEY (`Patient_id`) REFERENCES `patient` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `patient_medicine`
+--
+
+LOCK TABLES `patient_medicine` WRITE;
+/*!40000 ALTER TABLE `patient_medicine` DISABLE KEYS */;
+/*!40000 ALTER TABLE `patient_medicine` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `prescription`
 --
 
@@ -523,7 +605,7 @@ CREATE TABLE `prescription` (
 
 LOCK TABLES `prescription` WRITE;
 /*!40000 ALTER TABLE `prescription` DISABLE KEYS */;
-INSERT INTO `prescription` VALUES (108,'2024-05-02','2024-05-02','09cb1041e744418684a01e',118,'C:\\Users\\Jacek\\source\\repos\\bazy2\\bin\\Release\\net8.0-windows\\108252024.pdf',22,232),(109,'2024-05-02','2024-05-02','3f39237eb81b4893bf17b5',118,'C:\\Users\\Jacek\\source\\repos\\bazy2\\bin\\Release\\net8.0-windows\\109252024.pdf',22,232),(110,'2024-05-02','2024-05-02','6445c2c5e512475995b04b',119,'C:\\Users\\Jacek\\source\\repos\\bazy2\\bin\\Release\\net8.0-windows\\110252024.pdf',22,232),(111,'2024-05-02','2024-05-02','2cf2bffdde4a423aafa8a0',118,NULL,22,232),(112,'2024-05-02','2024-05-02','9ee5be17eb2047a6ab3628',118,'112002024.pdf',22,232),(113,'2024-05-02','2024-05-02','9188938fddb04958ae4cf5',117,'C:\\Users\\Jacek\\source\\repos\\bazy2\\bin\\Debug\\net8.0-windows\\113252024.pdf',22,232),(114,'2024-05-02','2024-05-02','afb2382163464c4991b113',118,'C:\\Users\\Jacek\\source\\repos\\bazy2\\bin\\Debug\\net8.0-windows\\114252024.pdf',22,232),(115,'2024-05-02','2024-05-02','5cd32dc4489c41719a14a1',119,'115252024.pdf',22,232),(116,'2024-05-02','2024-05-02','1089399d13fd4bf5845b3b',118,'C:\\Users\\Jacek\\source\\repos\\bazy2\\bin\\Debug\\net8.0-windows\\116252024.pdf',22,232),(117,'2024-05-03','2024-05-03','a07364fa2ba149dcad1e72',119,'C:\\Users\\Jacek\\source\\repos\\bazy2\\bin\\Release\\net8.0-windows\\117352024.pdf',22,232),(118,'2024-05-03','2024-05-03','5e4a74b732a34c9e839523',119,'C:\\Users\\Jacek\\source\\repos\\bazy2\\bin\\Release\\net8.0-windows\\118352024.pdf',22,232);
+INSERT INTO `prescription` VALUES (108,'2024-05-02','2024-05-02','09cb1041e744418684a01e',118,'C:\\Users\\Jacek\\source\\repos\\bazy2\\bin\\Release\\net8.0-windows\\108252024.pdf',22,232),(109,'2024-05-02','2024-05-02','3f39237eb81b4893bf17b5',118,'C:\\Users\\Jacek\\source\\repos\\bazy2\\bin\\Release\\net8.0-windows\\109252024.pdf',22,232),(110,'2024-05-02','2024-05-02','6445c2c5e512475995b04b',119,'C:\\Users\\Jacek\\source\\repos\\bazy2\\bin\\Release\\net8.0-windows\\110252024.pdf',22,232),(111,'2024-05-02','2024-05-02','2cf2bffdde4a423aafa8a0',118,NULL,22,232),(112,'2024-05-02','2024-05-02','9ee5be17eb2047a6ab3628',118,'112252024.pdf',22,232),(113,'2024-05-02','2024-05-02','9188938fddb04958ae4cf5',117,'C:\\Users\\Jacek\\source\\repos\\bazy2\\bin\\Debug\\net8.0-windows\\113252024.pdf',22,232),(114,'2024-05-02','2024-05-02','afb2382163464c4991b113',118,'C:\\Users\\Jacek\\source\\repos\\bazy2\\bin\\Debug\\net8.0-windows\\114252024.pdf',22,232),(115,'2024-05-02','2024-05-02','5cd32dc4489c41719a14a1',119,'115252024.pdf',22,232),(116,'2024-05-02','2024-05-02','1089399d13fd4bf5845b3b',118,'C:\\Users\\Jacek\\source\\repos\\bazy2\\bin\\Debug\\net8.0-windows\\116252024.pdf',22,232),(117,'2024-05-03','2024-05-03','a07364fa2ba149dcad1e72',119,'C:\\Users\\Jacek\\source\\repos\\bazy2\\bin\\Release\\net8.0-windows\\117352024.pdf',22,232),(118,'2024-05-03','2024-05-03','5e4a74b732a34c9e839523',119,'C:\\Users\\Jacek\\source\\repos\\bazy2\\bin\\Release\\net8.0-windows\\118352024.pdf',22,232);
 /*!40000 ALTER TABLE `prescription` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -660,9 +742,10 @@ CREATE TABLE `user` (
   `hash` varchar(512) DEFAULT NULL,
   `firstLogin` tinyint(1) NOT NULL DEFAULT '0',
   `lastLogin` datetime DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `login` (`login`)
-) ENGINE=InnoDB AUTO_INCREMENT=2536 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=2656 DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -671,7 +754,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (5,'lekarz','fdfd','123','dsfdq','dsg','doctor',0,NULL),(6,'lekarz','adasd','0000\0\0','abc','cds',NULL,1,NULL),(7,'recepcjonista','fe','176112147214O','cx','gr',NULL,1,NULL),(8,'lekarz','fa','7847U91','ab','sa',NULL,1,NULL),(9,'lekarz','b','a','b','b',NULL,0,NULL),(10,'lekarz','AK02615','123','Adam','Kowalski','1',0,NULL),(11,'lekarz','ak04103','anna123','anna','kowalska','0',0,NULL),(12,'lekarz','an00227','6622LVe','Adam','Nowak','$2a$11$SKxMUhxTaZaP23QPkkSS8.wriA1TYM5nDjK8jWy6FdJ0ibsmuE13C',1,NULL),(13,'lekarz','zz05353','lmao','zx','zx','$2a$11$2ureyDLn/FEzCJ74NhAG0.BNXagUAeFxG7DcoZF3O.ohfAr08uqS2',0,NULL),(14,'lekarz','as04865','1382!.4','asd','sad','$2a$11$MmditWc.JWH.N6TYJVAr/.Q6K4l2UtYFSz/pLjFdoDH9ZSX6GZen.',0,NULL),(17,'admin','admin','admin','admin','admin','$2a$11$hk7hpRiflna5nQQx.ZqDhONisX2c4.nl5594UFVJNpnkBg2dhgJgG',1,'2024-04-11 15:31:44'),(28,'lekarz','fds','8634Vp}','fsdfsdfs','fsd','$2a$11$ZJky9t05HUAW5HpteIa/se85i6WwbEHwgtQnqGJcX0gtSeHY6DPQ2',1,NULL),(31,'lekarz','zz38482','382325Y','zxc','zxc','$2a$11$/ODjx1pj1p3fRl3QWo58zuKua/8BuHP14Si/ycjyRnzHY/O59zOpe',1,NULL),(34,'lekarz','am12345','12345','Adam','Nowak','$2a$11$V0sXND/GlTSmgvlBJw06H.lENoP13DlrdZhAtYC6ebEj5v.nEAi2e',0,'2024-04-08 19:34:53'),(52,'lekarz','zz64830','123','zxc','zxc','$2a$11$pG9CinSzogaaiwz/qwtH3uckIzpE5vF9ibEchf/ieaV39EjTFFOnG',0,'2024-04-09 09:27:18'),(60,'lekarz','gd','123','fdfgd','fdgd','$2a$11$A3wNExDiSCPts36DU4GlvOIb4cNULjQcq.JomKLo7TGdSLO49/9CK',0,'2024-04-11 15:46:47'),(77,'lekarz','qq27265','123','qw','qw','$2a$11$xK2Ujkg1WOyBOxoC3KUZF.80fbB9jTC1fevd9ia8VFpZANyLp2biK',0,'2024-04-11 15:27:16'),(232,'lekarz','q','q','q','q','$2a$11$tcPnkTwEyXL2LM0vuCLfEu1OPfUhTTQl2QPwL8cvzJCGqWpdYnO5i',0,'2024-05-03 18:41:40');
+INSERT INTO `user` VALUES (5,'lekarz','fdfd','123','Bulanda','nikodem','doctor',0,NULL,NULL),(6,'lekarz','adasd','0000\0\0','abc','cds',NULL,1,NULL,NULL),(7,'recepcjonista','fe','176112147214O','cx','gr',NULL,1,NULL,NULL),(8,'lekarz','fa','7847U91','ab','sa',NULL,1,NULL,NULL),(9,'lekarz','b','a','b','b',NULL,0,NULL,NULL),(10,'lekarz','AK02615','123','Adam','Kowalski','1',0,NULL,NULL),(11,'lekarz','ak04103','anna123','anna','kowalska','0',0,NULL,NULL),(12,'lekarz','an00227','6622LVe','Adam','Nowak','$2a$11$SKxMUhxTaZaP23QPkkSS8.wriA1TYM5nDjK8jWy6FdJ0ibsmuE13C',1,NULL,NULL),(13,'lekarz','zz05353','lmao','zx','zx','$2a$11$2ureyDLn/FEzCJ74NhAG0.BNXagUAeFxG7DcoZF3O.ohfAr08uqS2',0,NULL,NULL),(14,'lekarz','as04865','1382!.4','asd','sad','$2a$11$MmditWc.JWH.N6TYJVAr/.Q6K4l2UtYFSz/pLjFdoDH9ZSX6GZen.',0,NULL,NULL),(17,'admin','admin','admin','admin','admin','$2a$11$hk7hpRiflna5nQQx.ZqDhONisX2c4.nl5594UFVJNpnkBg2dhgJgG',1,'2024-05-21 02:08:57',NULL),(28,'lekarz','fds','8634Vp}','fsdfsdfs','fsd','$2a$11$ZJky9t05HUAW5HpteIa/se85i6WwbEHwgtQnqGJcX0gtSeHY6DPQ2',1,NULL,NULL),(31,'lekarz','zz38482','382325Y','zxc','zxc','$2a$11$/ODjx1pj1p3fRl3QWo58zuKua/8BuHP14Si/ycjyRnzHY/O59zOpe',1,NULL,NULL),(34,'lekarz','am12345','12345','Adam','Nowak','$2a$11$V0sXND/GlTSmgvlBJw06H.lENoP13DlrdZhAtYC6ebEj5v.nEAi2e',0,'2024-04-08 19:34:53',NULL),(52,'lekarz','zz64830','123','zxc','zxc','$2a$11$pG9CinSzogaaiwz/qwtH3uckIzpE5vF9ibEchf/ieaV39EjTFFOnG',0,'2024-04-09 09:27:18',NULL),(60,'lekarz','gd','123','fdfgd','fdgd','$2a$11$A3wNExDiSCPts36DU4GlvOIb4cNULjQcq.JomKLo7TGdSLO49/9CK',0,'2024-04-11 15:46:47',NULL),(77,'lekarz','qq27265','123','qw','qw','$2a$11$xK2Ujkg1WOyBOxoC3KUZF.80fbB9jTC1fevd9ia8VFpZANyLp2biK',0,'2024-04-11 15:27:16',NULL),(232,'lekarz','q','q','q','q','$2a$11$tcPnkTwEyXL2LM0vuCLfEu1OPfUhTTQl2QPwL8cvzJCGqWpdYnO5i',0,'2024-05-12 13:05:28',NULL),(2548,'recepcjonista','receptionist','receptionist','receptionist','receptionist','$2a$11$6lykVe9GQMeuLbQOS1zIc.MFzp2PvmS8zoCUSJVa6Cfyns7xjSxpq',0,'2024-05-20 06:37:26',NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -706,6 +789,41 @@ LOCK TABLES `workhours` WRITE;
 /*!40000 ALTER TABLE `workhours` DISABLE KEYS */;
 /*!40000 ALTER TABLE `workhours` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping events for database 'przychodnia9'
+--
+
+--
+-- Dumping routines for database 'przychodnia9'
+--
+/*!50003 DROP FUNCTION IF EXISTS `CheckPhoneNumberLength` */;
+/*!50003 SET @saved_cs_client      = @@character_set_client */ ;
+/*!50003 SET @saved_cs_results     = @@character_set_results */ ;
+/*!50003 SET @saved_col_connection = @@collation_connection */ ;
+/*!50003 SET character_set_client  = utf8mb4 */ ;
+/*!50003 SET character_set_results = utf8mb4 */ ;
+/*!50003 SET collation_connection  = utf8mb4_0900_ai_ci */ ;
+/*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
+/*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
+DELIMITER ;;
+CREATE DEFINER=`root`@`localhost` FUNCTION `CheckPhoneNumberLength`(phone VARCHAR(45)) RETURNS tinyint
+    DETERMINISTIC
+BEGIN
+    DECLARE result TINYINT;
+    SET result = 0;
+    
+    IF CHAR_LENGTH(phone) = 9 THEN
+        SET result = 1;
+    END IF;
+    
+    RETURN result;
+END ;;
+DELIMITER ;
+/*!50003 SET sql_mode              = @saved_sql_mode */ ;
+/*!50003 SET character_set_client  = @saved_cs_client */ ;
+/*!50003 SET character_set_results = @saved_cs_results */ ;
+/*!50003 SET collation_connection  = @saved_col_connection */ ;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -716,4 +834,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-05-03 18:45:36
+-- Dump completed on 2024-05-21  8:01:56
