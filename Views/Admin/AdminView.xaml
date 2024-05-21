@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:bazy1.Views.Admin"
         xmlns:viewModels="clr-namespace:bazy1.ViewModels.Admin"
         xmlns:pagesViewModels="clr-namespace:bazy1.ViewModels.Admin.Pages"
+        xmlns:pagesViewModelsDoctor="clr-namespace:bazy1.ViewModels.Doctor.Pages"
         xmlns:pagesViews="clr-namespace:bazy1.Views.Admin.Pages"
+        xmlns:pagesViewsDoctor="clr-namespace:bazy1.Views.Doctor.Pages"
         mc:Ignorable="d"
             xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
 
@@ -39,6 +41,9 @@
         <DataTemplate DataType="{x:Type pagesViewModels:WorkhoursViewModel}">
             <pagesViews:WorkhoursView/>
         </DataTemplate>
+        <DataTemplate DataType="{x:Type pagesViewModelsDoctor:PatientListViewModel}">
+            <pagesViewsDoctor:PatientListControl/>
+        </DataTemplate>
         
 
     </Window.Resources>
@@ -57,6 +62,8 @@
             <Button x:Name="Nowyharmonogram" Width="150" Height="40" Content="Nowy Harmonogramm" Command="{Binding ShowAddWorkhoursCommand}">
             </Button>
             <Button x:Name="Zmienharmonogram" Width="150" Height="40" Content="Zmień harmonogram" Command="{Binding ShowUpdateScheduleCommand}"/>
+
+            <Button x:Name="patientList" Width="150" Height="40" Content="Lista pacjentów" Command="{Binding ShowPatientListViewCommand}"/>
 
 
         </StackPanel>

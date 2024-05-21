@@ -12,6 +12,8 @@ using System.Windows.Navigation;
 using bazy1.Models;
 using bazy1.Models.Part;
 using bazy1.ViewModels.Admin.Pages;
+using bazy1.ViewModels.Doctor;
+using bazy1.ViewModels.Doctor.Pages;
 using bazy1.Views.Admin.Pages;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
@@ -21,7 +23,7 @@ namespace bazy1.ViewModels.Admin
 {
     public class AdminViewModel : ViewModelBase
     {
-
+        public DoctorViewModel DoctorViewModel { get; set; }
 
         public ICommand ShowUpdateScheduleCommand { get; set; }
 		private ViewModelBase _currentViewModel;
@@ -54,6 +56,14 @@ namespace bazy1.ViewModels.Admin
 
         public ICommand ShowUserListViewCommand { get; }
         public ICommand ShowAddWorkhoursCommand { get; set; }
+        public ICommand ShowPatientListViewCommand { get; }
+
+        private void ExecuteShowPatientListViewCommand(object obj)
+        {
+            // Ustawiamy viewmodel dla widoku listy pacjentów
+            CurrentViewModel = new PatientListViewModel();
+            Caption2 = "Lista pacjentów";
+        }
 
         private void ExecuteShowUserListViewCommand(object obj)
         {
@@ -79,11 +89,13 @@ namespace bazy1.ViewModels.Admin
             ShowAddUserViewCommand = new BasicCommand(ExecuteShowAddUserViewCommand);
             ShowUserListViewCommand = new BasicCommand(ExecuteShowUserListViewCommand);
             ShowAddWorkhoursCommand = new BasicCommand((object obj) => { CurrentViewModel = new WorkhoursViewModel(); });
+            ShowPatientListViewCommand = new BasicCommand(ExecuteShowPatientListViewCommand); 
 
-            Models.Doctor doc = DbContext.Doctors.Where(d => d.Id == 22).First(); //do zmiany
+            Models.Doctor doc = DbContext.Doctors.Where(d => d.Id == 22).First(); //do zmiany // ale co to wgl jest xd
             ShowUpdateScheduleCommand = new BasicCommand((object obj) => { CurrentViewModel = new  UpdateScheduleViewModel(); });
             ExecuteShowUserListViewCommand(null);
-
+            // Inicjalizacja DoctorViewModel w AdminViewModel
+            DoctorViewModel = new DoctorViewModel();
         }
 
         public ViewModelBase CurrentViewModel
