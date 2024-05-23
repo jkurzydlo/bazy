@@ -47,7 +47,7 @@ namespace bazy1.ViewModels.Receptionist.Pages
             {
                 if (SelectedPatient != null)
                 {
-                    viewModel.CurrentViewModel = new EditPatientViewModel(SelectedPatient);
+                    viewModel.CurrentViewModel = new EditPatientViewModel(viewModel, SelectedPatient);
                 }
             });
 

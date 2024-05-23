@@ -7,9 +7,11 @@ namespace bazy1.ViewModels.Receptionist.Pages
     {
         private Patient _selectedPatient;
         private readonly Przychodnia9Context DbContext;
+        private readonly ReceptionistViewModel _receptionistViewModel;
 
-        public EditPatientViewModel(Patient patient)
+        public EditPatientViewModel(ReceptionistViewModel receptionistViewModel, Patient patient)
         {
+            _receptionistViewModel = receptionistViewModel;
             DbContext = new Przychodnia9Context();
             SelectedPatient = patient;
             SavePatientCommand = new BasicCommand(SavePatient);
@@ -38,8 +40,12 @@ namespace bazy1.ViewModels.Receptionist.Pages
                 existingPatient.PhoneNumber = SelectedPatient.PhoneNumber;
                 existingPatient.Email = SelectedPatient.Email;
                 DbContext.SaveChanges();
+
+                // Powrót do listy pacjentów po zapisaniu
+                _receptionistViewModel.CurrentViewModel = new PatientListViewModel(_receptionistViewModel);
             }
         }
     }
 }
+
 
