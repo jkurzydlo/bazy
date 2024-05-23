@@ -33,7 +33,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 		public ICommand ShowAddReferralCommand { get; set; }
 		public ICommand ShowAddAppointmentCommand { get; set; }
 
-		public string PatientDetails{
+        public string PatientDetails{
 			get {
 				string adressess = "", info = "";
 				if (SelectedPatient != null)
@@ -100,11 +100,11 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 		public PatientListViewModel(User user, DoctorViewModel viewModel) {
 
 
-			ShowAddAppointmentCommand = new BasicCommand((object obj) =>
-			{
+            ShowAddAppointmentCommand = new BasicCommand((object obj) =>
+            {
 				viewModel.CurrentViewModel = new AddAppointmentViewModel(this,SelectedPatient);
-			});
-			ShowAddMedicationCommand = new BasicCommand(obj => {
+            });
+            ShowAddMedicationCommand = new BasicCommand(obj => {
 				viewModel.CurrentViewModel = new AddMedicationViewModel(SelectedPatient,null,viewModel);
 			});
 			//PrescriptionGenerator p = new();

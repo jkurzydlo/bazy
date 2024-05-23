@@ -6,9 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:bazy1.Views.Receptionist.Pages"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
-             
-             >
+             d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -18,38 +16,30 @@
             <RowDefinition Height="13*"/>
         </Grid.RowDefinitions>
 
-
         <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" ColumnWidth="*" Style="{StaticResource DataGrid}" SelectionMode="Single" HeadersVisibility="Column" IsReadOnly="True" ItemsSource="{Binding PatientView, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedPatient, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,0" Grid.Row="1">
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Imię" Binding="{Binding Name}" />
-                <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}"  />
-                <DataGridTextColumn Header="PESEL" Binding="{Binding Pesel}"  />
-                <DataGridTextColumn Header="Telefon" Binding="{Binding PhoneNumber}"  />
-                <DataGridTextColumn Header="Ostatnia wizyta" Binding="{Binding LastVisit}"/>
-                <DataGridTextColumn Header="Najbliższa wizyta" Binding="{Binding NextVisit}"/>
-
+                <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}" />
+                <DataGridTextColumn Header="PESEL" Binding="{Binding Pesel}" />
+                <DataGridTextColumn Header="Telefon" Binding="{Binding PhoneNumber}" />
+                <DataGridTextColumn Header="Ostatnia wizyta" Binding="{Binding LastVisit}" />
+                <DataGridTextColumn Header="Najbliższa wizyta" Binding="{Binding NextVisit}" />
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
-                    <TextBlock Text="{
-                          Binding RelativeSource={
-                            RelativeSource FindAncestor, 
-                            AncestorType={x:Type UserControl}},
-                          Path=DataContext.PatientDetails}" Margin="10" />
+                    <TextBlock Text="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}, Path=DataContext.PatientDetails}" Margin="10" />
                 </DataTemplate>
             </DataGrid.RowDetailsTemplate>
 
             <DataGrid.ContextMenu>
-
                 <ContextMenu>
                     <MenuItem Header="Historia przebytych chorób" Command="{Binding ShowMedicalHistoryCommand}" />
                     <MenuItem Header="Lista wizyt" Command="{Binding ShowAppointmentsListCommand}"/>
                     <MenuItem Header="Umów wizytę" Command="{Binding ShowAddAppointmentViewCommand}" />
+                    <MenuItem Header="Edytuj pacjenta" Command="{Binding EditPatientCommand}" />
                     <MenuItem Header="Usuń pacjenta" Command="{Binding Source={x:Reference deletePatientBox}, Path=Show}" CommandParameter="Usunąć?"/>
-
                 </ContextMenu>
-
             </DataGrid.ContextMenu>
 
         </DataGrid>
@@ -57,10 +47,7 @@
             <Button Content="Lista pacjentów" FontSize="10" Height="25" Width="150" HorizontalAlignment="Center" IsEnabled="False"/>
             <Button Content="Nowy" FontSize="10" Height="25" Width="150" HorizontalAlignment="Center" Command="{Binding AddPatientCommand}"/>
             <TextBox Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="10" Height="25" Width="150" Margin="10,0,0,0" HorizontalAlignment="Right"/>
-
         </StackPanel>
         <jm:MessageDialogBox x:Name="deletePatientBox" Caption="Usunąć pacjenta?" Icon="Question" Buttons="YesNo" CommandYes="{Binding PatientDeleteCommand, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
-
     </Grid>
-
 </UserControl>

@@ -39,8 +39,9 @@ namespace bazy1.ViewModels.Receptionist {
 		public ICommand ShowPatientAppointmentsViewCommand { get; }
 
 
-		//komendy dla wszystkich widoków w oknie
-		public ICommand ShowDashboardViewCommand { get; }
+
+        //komendy dla wszystkich widoków w oknie
+        public ICommand ShowDashboardViewCommand { get; }
 
 		private void ExecuteShowDashboardViewCommand(object obj) {
 			//Jeżeli użytkownik loguje się po raz pierwszy wyświetl widok zmiany hasła, jeśli nie - ekran główny

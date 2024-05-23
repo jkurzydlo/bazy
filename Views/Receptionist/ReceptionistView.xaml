@@ -22,7 +22,11 @@
         <DataTemplate DataType="{x:Type pagesViewModels:AddAppointmentViewModel}">
             <pagesViews:AddAppointmentView/>
         </DataTemplate>
-
+        
+        <DataTemplate DataType="{x:Type pagesViewModels:EditPatientViewModel}">
+            <pagesViews:EditPatientView/>
+        </DataTemplate>
+        
         <DataTemplate DataType="{x:Type pagesViewModels:DocScheduleViewModel}">
             <pagesViews:DocScheduleView/>
         </DataTemplate>
@@ -35,8 +39,8 @@
         </DataTemplate>
 
         <!-- inne widoki.. -->
-        
-        
+
+
     </Window.Resources>
 
 
