@@ -1,44 +1,45 @@
 ﻿using bazy1.Models;
 using System.Windows.Input;
-using System.Linq;
 
 namespace bazy1.ViewModels.Receptionist.Pages
 {
     public class EditPatientViewModel : ViewModelBase
     {
-        private Patient _patient;
-        private Przychodnia9Context DbContext;
+        private Patient _selectedPatient;
+        private readonly Przychodnia9Context DbContext;
 
         public EditPatientViewModel(Patient patient)
         {
-            _patient = patient;
             DbContext = new Przychodnia9Context();
-            SaveCommand = new BasicCommand(Save);
+            SelectedPatient = patient;
+            SavePatientCommand = new BasicCommand(SavePatient);
         }
 
-        public Patient Patient
+        public Patient SelectedPatient
         {
-            get => _patient;
+            get => _selectedPatient;
             set
             {
-                _patient = value;
-                OnPropertyChanged(nameof(Patient));
+                _selectedPatient = value;
+                OnPropertyChanged(nameof(SelectedPatient));
             }
         }
 
-        public ICommand SaveCommand { get; }
+        public ICommand SavePatientCommand { get; }
 
-        private void Save(object obj)
+        private void SavePatient(object obj)
         {
-            var patientInDb = DbContext.Patients.First(p => p.Id == Patient.Id);
-            patientInDb.Name = Patient.Name;
-            patientInDb.Surname = Patient.Surname;
-            patientInDb.Pesel = Patient.Pesel;
-            patientInDb.PhoneNumber = Patient.PhoneNumber;
-            patientInDb.Email = Patient.Email;
-            // Dodaj inne pola do edycji tutaj
-
-            DbContext.SaveChanges();
+            var existingPatient = DbContext.Patients.FirstOrDefault(p => p.Id == SelectedPatient.Id);
+            if (existingPatient != null)
+            {
+                existingPatient.Name = SelectedPatient.Name;
+                existingPatient.Surname = SelectedPatient.Surname;
+                existingPatient.Pesel = SelectedPatient.Pesel;
+                existingPatient.PhoneNumber = SelectedPatient.PhoneNumber;
+                existingPatient.Email = SelectedPatient.Email;
+                DbContext.SaveChanges();
+            }
         }
     }
 }
+
