@@ -18,7 +18,7 @@ namespace bazy1.Views.Receptionist.Pages
     /// <summary>
     /// Logika interakcji dla klasy AddAppointmentView.xaml
     /// </summary>
-    public partial class AddAppointmentView : UserControl
+    public partial class AddAppointmentView : System.Windows.Controls.UserControl
     {
         public AddAppointmentView()
         {

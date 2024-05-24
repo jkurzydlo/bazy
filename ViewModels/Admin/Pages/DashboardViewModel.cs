@@ -5,6 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace bazy1.ViewModels.Admin.Pages {
-	internal class DashboardViewModel {
-	}
+	//internal class DashboardViewModel : ViewModelBase {
+	//}
 }

@@ -17,7 +17,7 @@ namespace bazy1.Views.Doctor.Pages {
 	/// <summary>
 	/// Logika interakcji dla klasy MedicalHistoryControl.xaml
 	/// </summary>
-	public partial class MedicalHistoryControl : UserControl {
+	public partial class MedicalHistoryControl : System.Windows.Controls.UserControl {
 		public MedicalHistoryControl() {
 			InitializeComponent();
 		}

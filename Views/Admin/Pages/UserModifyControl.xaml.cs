@@ -18,7 +18,7 @@ namespace bazy1.Views.Admin.Pages
     /// <summary>
     /// Logika interakcji dla klasy UserModifyControl.xaml
     /// </summary>
-    public partial class UserModifyControl : UserControl
+    public partial class UserModifyControl : System.Windows.Controls.UserControl
     {
         public UserModifyControl()
         {

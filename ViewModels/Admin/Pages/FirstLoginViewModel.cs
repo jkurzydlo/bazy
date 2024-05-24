@@ -1,4 +1,5 @@
 ﻿using bazy1.Models;
+using bazy1.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,17 +9,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace bazy1.ViewModels.Receptionist.Pages {
+namespace bazy1.ViewModels.Admin.Pages {
 
 	public class FirstLoginViewModel : ViewModelBase {
 		private string _password;
 		private string _passwordRepeat;
-		private User _currentUser;
+		private User _currentUser = new User();
+		public User CurrentUser { get;set; }
 		private string _errorMessage;
 		private string temp;
-		public ViewModelBase ParentModel { get; set; }
+		private AdminViewModel parentModel;
+		private UserRepository userRepository = new();
 
-		public ICommand PasswordChangeCommand{ get; }
+		public ICommand PasswordChangeCommand { get; }
 
 		public FirstLoginViewModel() {
 			PasswordChangeCommand = new BasicCommand(ExecutePasswordChangeCommand);
@@ -26,47 +29,42 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 
 		private void ExecutePasswordChangeCommand(object obj) {
 
-			
-			var watch = new Stopwatch();
-			watch.Start();
-			var db = new Przychodnia9Context();
-			watch.Stop();
-			Console.WriteLine("czas"+ watch.ElapsedMilliseconds);
-			_currentUser.Surname = "sds";
-			Console.WriteLine($"id2: {_currentUser.Name}");
-			Console.WriteLine("hasło: "+Password + PasswordRepeat);
-			//Console.WriteLine($"Rozmiar: {db.Users.Where(e => e.Id == _currentUser.Id).Count()}");
-			//Console.WriteLine(db.Users.Count());
 			if (!string.IsNullOrEmpty(Password) && !string.IsNullOrEmpty(PasswordRepeat))
 			{
 				if (Password.Equals(PasswordRepeat))
 				{
 					if (Password.Length >= 8 && Password.Any(char.IsUpper) && Password.Any(char.IsLower) && Password.Any(char.IsDigit) && Password.Any(ch => !char.IsLetterOrDigit(ch)))
 					{
+						int id = userRepository.findById(_currentUser.Id).Id;
 						var hash = BCrypt.Net.BCrypt.HashPassword(Password);
+						userRepository.findById(_currentUser.Id);
 						DbContext.Database.ExecuteSqlRaw($"update user set hash='{hash}' where id={_currentUser.Id}");
-						DbContext.Database.ExecuteSqlRaw($"update user set password='{Password}' where id={_currentUser.Id}");
+						//DbContext.Database.ExecuteSqlRaw($"update user set password='{Password}' where id={_currentUser.Id}");
 						DbContext.Database.ExecuteSqlRaw($"update user set firstLogin=0 where id={_currentUser.Id}");
+
+						//DbContext.Update(_currentUser);
+						//DbContext.SaveChanges();
+
+                        Console.WriteLine("sds:"+_currentUser.FirstLogin,_currentUser.Id, "asjd: "+DbContext.Users.Where(u => u.Id == _currentUser.Id).First().Id);
+						parentModel.CurrentUser.FirstLogin = false;
+						parentModel.CurrentViewModel = new AdminViewModel(false);
+
 						
-						DbContext.Update(_currentUser);
-						DbContext.SaveChanges();
-
-						Console.WriteLine("odpala sie:" + _currentUser.FirstLogin, _currentUser.Id, "asjd: " + DbContext.Users.Where(u => u.Id == _currentUser.Id).First().Id);
-
 					}
 					else ErrorMessage = "Hasło nie spełnia wymagań";
 				}
 				else ErrorMessage = "Hasła nie są identyczne";
-
+				
 			}
 			else ErrorMessage = "Hasło nie może być puste";
 
 		}
-		public FirstLoginViewModel(User user) {
-			PasswordChangeCommand = new BasicCommand(ExecutePasswordChangeCommand);
+		public FirstLoginViewModel(User user, AdminViewModel viewModel) {
 			_currentUser = user;
-            Console.WriteLine("fl!");
-        }
+            Console.WriteLine("cj?:"+_currentUser.Id);
+            parentModel = viewModel;
+			PasswordChangeCommand = new BasicCommand(ExecutePasswordChangeCommand);
+		}
 
 		public string Password {
 			get => _password;

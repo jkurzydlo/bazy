@@ -17,9 +17,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using dbm = bazy1.Models;
 
-namespace bazy1.ViewModels.Doctor.Pages {
+namespace bazy1.ViewModels.Receptionist.Pages {
 	public class AddPatientViewModel : ViewModelBase, IDataErrorInfo {
-		private DoctorViewModel parentViewModel;
+		private ReceptionistViewModel parentViewModel;
 		private string _name, _surname, _pesel, _secondName, _email, _phone;
 		private string? _sex = "M";
 		private string _city, _postalCode, _street, _buildingNumber;
@@ -33,7 +33,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 
 		//Używane żeby pola nie były walidowane od razu po uruchomieniu widoku
 		public Dictionary<string, bool> needToValidate = [];
-			
+
 
 		public ICommand ShowPatientListCommand { get; set; }
 		public ICommand AddNewPatientCommand { get; set; }
@@ -51,7 +51,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			set {
 				needToValidate["Surname"] = true;
 				_surname = value;
-				OnPropertyChanged(nameof(Surname)); 
+				OnPropertyChanged(nameof(Surname));
 			}
 		}
 		public string Pesel {
@@ -70,7 +70,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 				OnPropertyChanged(nameof(SecondName));
 			}
 		}
-		
+
 		public string Sex {
 			get => _sex;
 			set {
@@ -79,10 +79,11 @@ namespace bazy1.ViewModels.Doctor.Pages {
 				OnPropertyChanged(nameof(Sex));
 			}
 		}
-		public List<string> Sexes { get => _sexes;
+		public List<string> Sexes {
+			get => _sexes;
 			set {
 				_sexes = value;
-				OnPropertyChanged(nameof(Sexes)); 
+				OnPropertyChanged(nameof(Sexes));
 			}
 		}
 		public DateTime BirthDate {
@@ -101,7 +102,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 				OnPropertyChanged(nameof(Email));
 			}
 		}
-		public string PhoneNumber{
+		public string PhoneNumber {
 			get => _phone;
 			set {
 				needToValidate["PhoneNumber"] = true;
@@ -178,9 +179,9 @@ namespace bazy1.ViewModels.Doctor.Pages {
 		public bool SameAddress {
 			get => _sameAddress;
 			set {
-				_sameAddress= value;
-                Console.WriteLine(SameAddress);
-                if (_sameAddress) SecondAddressVisible = Visibility.Hidden;
+				_sameAddress = value;
+				Console.WriteLine(SameAddress);
+				if (_sameAddress) SecondAddressVisible = Visibility.Hidden;
 				else SecondAddressVisible = Visibility.Visible;
 				OnPropertyChanged(nameof(SameAddress));
 			}
@@ -209,39 +210,39 @@ namespace bazy1.ViewModels.Doctor.Pages {
 					else if (ErrorCollection.ContainsKey(fieldName))
 						ErrorCollection.Remove(fieldName);
 				}
-				if(fieldName == "Surname" && needToValidate[fieldName])
+				if (fieldName == "Surname" && needToValidate[fieldName])
 				{
 					if (!validate(Surname)) result = emptyFieldMsg;
 					else if (ErrorCollection.ContainsKey(fieldName))
 						ErrorCollection.Remove(fieldName);
 				}
-				if(fieldName == "BirthDate" && needToValidate[fieldName])
+				if (fieldName == "BirthDate" && needToValidate[fieldName])
 				{
-                    if (BirthDate == null || BirthDate.Year < 1800 || BirthDate.Date.Year > DateTime.Now.Year || BirthDate.DayOfYear > DateTime.Now.DayOfYear)
-                    result = "Niepoprawna data";
+					if (BirthDate == null || BirthDate.Year < 1800 || BirthDate.Date.Year > DateTime.Now.Year || BirthDate.DayOfYear > DateTime.Now.DayOfYear)
+						result = "Niepoprawna data";
 					else if (ErrorCollection.ContainsKey(fieldName))
 						ErrorCollection.Remove(fieldName);
 				}
-				if(fieldName == "Pesel" && needToValidate[fieldName])
+				if (fieldName == "Pesel" && needToValidate[fieldName])
 				{
 					if (!PeselValidator.isValid(Pesel)) result = "Niepoprawny PESEL";
 					else if (ErrorCollection.ContainsKey(fieldName))
 						ErrorCollection.Remove(fieldName);
 				}
 				if (fieldName == "Sex" && needToValidate[fieldName])
-                {
+				{
 					if (!validateList(Sex, Sexes)) result = "Nie wybrano płci";
 					else if (ErrorCollection.ContainsKey(fieldName))
 						ErrorCollection.Remove(fieldName);
 				}
-				if(fieldName == "Email" && needToValidate[fieldName])
+				if (fieldName == "Email" && needToValidate[fieldName])
 				{
-					if(!string.IsNullOrEmpty(Email) && !string.IsNullOrWhiteSpace(Email))
+					if (!string.IsNullOrEmpty(Email) && !string.IsNullOrWhiteSpace(Email))
 					{
 						MailAddress mail;
 						if (!MailAddress.TryCreate(Email, out mail)) result = "Niepoprawny format";
-						else if (ErrorCollection.ContainsKey(fieldName)) 
-						ErrorCollection.Remove(fieldName); ;
+						else if (ErrorCollection.ContainsKey(fieldName))
+							ErrorCollection.Remove(fieldName); ;
 					}
 
 
@@ -253,7 +254,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 						if (!Regex.Match(PhoneNumber, "^[0-9\\-\\+]{9,15}$").Success)
 							result = "Niepoprawny format";
 						else if (ErrorCollection.ContainsKey(fieldName))
-						ErrorCollection.Remove(fieldName);
+							ErrorCollection.Remove(fieldName);
 					}
 
 				}
@@ -265,10 +266,10 @@ namespace bazy1.ViewModels.Doctor.Pages {
 				}
 				if (fieldName == "City2" && needToValidate[fieldName])
 				{
-						if (!validate(City2) && !SameAddress) result = emptyFieldMsg;
-						else if (ErrorCollection.ContainsKey(fieldName))
+					if (!validate(City2) && !SameAddress) result = emptyFieldMsg;
+					else if (ErrorCollection.ContainsKey(fieldName))
 						ErrorCollection.Remove(fieldName);
-					
+
 
 				}
 				if (fieldName == "Street" && needToValidate[fieldName])
@@ -279,10 +280,10 @@ namespace bazy1.ViewModels.Doctor.Pages {
 				}
 				if (fieldName == "Street2" && needToValidate[fieldName])
 				{
-						if (!validate(Street2) && !SameAddress) result = emptyFieldMsg;
-						else if (ErrorCollection.ContainsKey(fieldName))
+					if (!validate(Street2) && !SameAddress) result = emptyFieldMsg;
+					else if (ErrorCollection.ContainsKey(fieldName))
 						ErrorCollection.Remove(fieldName);
-					
+
 				}
 				if (fieldName == "BuildingNumber" && needToValidate[fieldName])
 				{
@@ -293,14 +294,14 @@ namespace bazy1.ViewModels.Doctor.Pages {
 				if (fieldName == "BuildingNumber2" && needToValidate[fieldName])
 				{
 					if (string.IsNullOrEmpty(BuildingNumber) || string.IsNullOrWhiteSpace(BuildingNumber) && !SameAddress) result = emptyFieldMsg;
-						else if (ErrorCollection.ContainsKey(fieldName))
+					else if (ErrorCollection.ContainsKey(fieldName))
 						ErrorCollection.Remove(fieldName);
-					
+
 
 				}
 				if (fieldName == "PostalCode" && needToValidate[fieldName])
 				{
-					
+
 					if (string.IsNullOrEmpty(PostalCode) || string.IsNullOrWhiteSpace(PostalCode) || !Regex.Match(PostalCode, "^[0-9]{2}-[0-9]{3}$").Success)
 						result = "Niepoprawny format";
 					else if (ErrorCollection.ContainsKey(fieldName))
@@ -308,14 +309,14 @@ namespace bazy1.ViewModels.Doctor.Pages {
 				}
 				if (fieldName == "PostalCode2" && needToValidate[fieldName])
 				{
-						if ( (string.IsNullOrEmpty(PostalCode2) || string.IsNullOrWhiteSpace(PostalCode2) || (!Regex.Match(PostalCode2, "^[0-9]{2}-[0-9]{3}$").Success)) && !SameAddress) result = "Niepoprawny format";
+					if ((string.IsNullOrEmpty(PostalCode2) || string.IsNullOrWhiteSpace(PostalCode2) || (!Regex.Match(PostalCode2, "^[0-9]{2}-[0-9]{3}$").Success)) && !SameAddress) result = "Niepoprawny format";
 					else if (ErrorCollection.ContainsKey(fieldName))
 						ErrorCollection.Remove(fieldName);
-					
-					
+
+
 				}
 
-				if (ErrorCollection.ContainsKey(fieldName))ErrorCollection[fieldName] = result;
+				if (ErrorCollection.ContainsKey(fieldName)) ErrorCollection[fieldName] = result;
 				else if (result != null) ErrorCollection.Add(fieldName, result);
 				OnPropertyChanged(nameof(ErrorCollection));
 
@@ -327,11 +328,11 @@ namespace bazy1.ViewModels.Doctor.Pages {
 		private bool validate(string data) {
 			return !string.IsNullOrEmpty(data) && !string.IsNullOrWhiteSpace(data) && !data.Any(char.IsDigit);
 		}
-		private bool validateList(string data,List<string> list) {
+		private bool validateList(string data, List<string> list) {
 			return !string.IsNullOrEmpty(data) && !string.IsNullOrWhiteSpace(data)
 				&& list.Contains(data);
 		}
-		public AddPatientViewModel(dbm.Doctor doctor, DoctorViewModel parentViewModel) {
+		public AddPatientViewModel(ReceptionistViewModel parentViewModel) {
 
 			//Walidacja wyłączona po załadowaniu widoku
 			foreach (var field in GetType().GetProperties().
@@ -339,15 +340,15 @@ namespace bazy1.ViewModels.Doctor.Pages {
 				needToValidate.Add(field.Name, false);
 
 
-			
+
 			this.doctor = doctor;
 			ShowPatientListCommand = new BasicCommand(obj => parentViewModel.ShowPatientListViewCommand.Execute(obj)); ;
 			AddNewPatientCommand = new BasicCommand((object obj) =>
 			{
-                foreach (var err in ErrorCollection)
-                {
-					Console.WriteLine("słownik: "+err.Key + err.Value);
-                }
+				foreach (var err in ErrorCollection)
+				{
+					Console.WriteLine("słownik: " + err.Key + err.Value);
+				}
 
 				//Zrobione po to żeby odświeżyć wartości i tym samym uruchomić walidację po kliknięciu przycisku
 				Name = Name;
@@ -365,14 +366,12 @@ namespace bazy1.ViewModels.Doctor.Pages {
 				BuildingNumber = BuildingNumber;
 				BuildingNumber2 = BuildingNumber2;
 
-                foreach (var prop in needToValidate)
-                {
+				foreach (var prop in needToValidate)
+				{
 					needToValidate[prop.Key] = true;
-                }
-				
-                var doc = DbContext.Doctors.Where(doc => this.doctor.Id == doc.Id).First();
-                Console.WriteLine(ErrorCollection.Count);
-                if (ErrorCollection.Count == 0)
+				}
+
+				if (ErrorCollection.Count == 0)
 				{
 					Console.WriteLine("heh ok");
 					Patient patient = new Patient();
@@ -393,7 +392,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 					if (SecondAddressVisible == Visibility.Visible) patient.Addresses.Add(new Address() { City = this.City2, PostalCode = this.PostalCode2, Street = this.Street2, BuildingNumber = this.BuildingNumber2, Type="Zameldowania" });
 					patient.Pesel = Pesel;*/
 					//doctor.Patients.Add(patient);
-					
+
 					DbContext.Database.ExecuteSqlRaw($"insert into patient(pesel,phoneNumber,email,name,surname,sex,birthdate,secondName) values('{Pesel}','{PhoneNumber}','{Email}','{Name}','{Surname}','{Sex}','{BirthDate.ToString("yyyy-MM-dd HH:mm:ss")}', '{SecondName}')");
 
 					DbContext.Database.ExecuteSqlRaw($"insert into address(street,city,postalCode,buildingnumber,type) values('{Street}','{City}','{PostalCode}','{BuildingNumber}','Zamieszkania')");
@@ -408,14 +407,10 @@ namespace bazy1.ViewModels.Doctor.Pages {
 					patient = DbContext.Patients.FromSqlRaw($"select * from patient where pesel={Pesel}").First();
 					DbContext.SaveChanges();
 
-
-					DbContext.Database.ExecuteSqlRaw($"insert into doctor_has_patient values({doctor.Id},{doctor.UserId},(select id from patient where pesel='{Pesel}'))");
-					DbContext.Update(doctor);
-
 				}
-				
 
-				
+
+
 				//doc.Patients.Add(patient);
 			});
 		}

@@ -17,7 +17,7 @@ namespace bazy1.Views.Doctor.Pages {
 	/// <summary>
 	/// Logika interakcji dla klasy ReferralsView.xaml
 	/// </summary>
-	public partial class ReferralsView : UserControl {
+	public partial class ReferralsView : System.Windows.Controls.UserControl {
 		public ReferralsView() {
 			InitializeComponent();
 		}

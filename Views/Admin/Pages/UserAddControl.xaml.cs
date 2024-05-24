@@ -17,7 +17,7 @@ namespace bazy1.Views.Admin.Pages {
 	/// <summary>
 	/// Logika interakcji dla klasy UserAddControl.xaml
 	/// </summary>
-	public partial class UserAddControl : UserControl {
+	public partial class UserAddControl : System.Windows.Controls.UserControl {
 		public UserAddControl() {
 			InitializeComponent();
 		}

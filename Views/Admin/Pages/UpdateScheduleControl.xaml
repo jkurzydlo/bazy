@@ -48,7 +48,7 @@
             </Border>
         </StackPanel>
         </StackPanel>
-        <jm:SimpleMessageDialogBox x:Name="msgBoxError2" />
+        <jm:SimpleMessageDialogBox x:Name="msgBoxError2"/>
 
     </Grid>
 </UserControl>

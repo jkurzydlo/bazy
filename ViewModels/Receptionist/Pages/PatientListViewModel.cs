@@ -116,7 +116,7 @@ namespace bazy1.ViewModels.Receptionist.Pages
 				});
 
 
-				//AddPatientCommand = new BasicCommand(obj => viewModel.CurrentViewModel = new AddPatientViewModel(doctor, viewModel));
+				AddPatientCommand = new BasicCommand(obj => viewModel.CurrentViewModel = new AddPatientViewModel(viewModel));
 				PatientDeleteCommand = new BasicCommand(obj =>
 				{
 					DbContext.Database.ExecuteSql($"Delete from patient_diesease where patient_id = {SelectedPatient.Id}");
@@ -130,7 +130,7 @@ namespace bazy1.ViewModels.Receptionist.Pages
 				PatientView = CollectionViewSource.GetDefaultView(_patientsList);
 
 				ShowMedicalHistoryCommand = new BasicCommand((object obj) => {
-					//if (SelectedPatient != null) viewModel.CurrentViewModel = new MedicalHistoryViewModel(DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First(), null, viewModel);
+					if (SelectedPatient != null) viewModel.CurrentViewModel = new MedicalHistoryViewModel(DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First(), null, viewModel);
 				});
 
 

@@ -38,10 +38,8 @@ namespace bazy1.ViewModels.Doctor.Pages {
 				string adressess = "", info = "";
 				if (SelectedPatient != null)
 				{
-					Console.WriteLine(DbContext.Addresses.Count());
 					var tempPatient = DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First();
 					if (tempPatient.SecondName != null) info += "Drugie imię: " + tempPatient.SecondName + "\n";
-					Console.WriteLine("ile: " + DbContext.Addresses.Where(adr => adr.Patients.Contains(tempPatient)).Count());
 					DbContext.Addresses.Where(adr => adr.Patients.Contains(tempPatient)).ToList().
 						ForEach(adr => adressess += adr.City + " " + adr.PostalCode + " ul." + adr.Street + " " + adr.BuildingNumber + "\n");
 					info = $"Data urodzenia: {tempPatient.BirthDate.Value.ToShortDateString()}\n";

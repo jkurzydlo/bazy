@@ -39,6 +39,10 @@
         <DataTemplate DataType="{x:Type pagesViewModels:WorkhoursViewModel}">
             <pagesViews:WorkhoursView/>
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type pagesViewModels:FirstLoginViewModel}">
+            <pagesViews:FirstLogin/>
+        </DataTemplate>
         
 
     </Window.Resources>
@@ -50,14 +54,14 @@
             <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Vertical" Visibility="{Binding LeftPaneVisible}">
             <Button x:Name="addUserButton" Width="150" Height="20" Content="Dodaj użytkownika" Command="{Binding ShowAddUserViewCommand}"/>
             <Button x:Name="listUserButton" Width="150" Height="20" Content="Lista użytkowników" Command="{Binding ShowUserListViewCommand}">
             </Button>
             <Button x:Name="Nowyharmonogram" Width="150" Height="20" Content="Nowy Harmonogramm" Command="{Binding ShowAddWorkhoursCommand}">
             </Button>
             <Button x:Name="Zmienharmonogram" Width="150" Height="20" Content="Zmień harmonogram" Command="{Binding ShowUpdateScheduleCommand}"/>
-
+            <Button Content="Wyloguj" Command="{Binding Logout}"/>
 
         </StackPanel>
 

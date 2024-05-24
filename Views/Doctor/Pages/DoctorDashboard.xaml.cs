@@ -17,7 +17,7 @@ namespace bazy1.Views.Doctor.Pages {
 	/// <summary>
 	/// Logika interakcji dla klasy DoctorDashboard.xaml
 	/// </summary>
-	public partial class DoctorDashboard : UserControl {
+	public partial class DoctorDashboard : System.Windows.Controls.UserControl {
 		public DoctorDashboard() {
 			InitializeComponent();
 		}

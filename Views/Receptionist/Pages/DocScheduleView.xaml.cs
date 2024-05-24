@@ -17,7 +17,7 @@ namespace bazy1.Views.Receptionist.Pages {
 	/// <summary>
 	/// Logika interakcji dla klasy DocScheduleView.xaml
 	/// </summary>
-	public partial class DocScheduleView : UserControl {
+	public partial class DocScheduleView : System.Windows.Controls.UserControl {
 		public DocScheduleView() {
 			InitializeComponent();
 		}

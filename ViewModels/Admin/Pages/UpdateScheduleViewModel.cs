@@ -3,6 +3,7 @@ using bazy1.Repositories;
 using Google.Protobuf.WellKnownTypes;
 using Itenso.TimePeriod;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Xaml.Behaviors.Media;
 using Org.BouncyCastle.Asn1.Cmp;
 using System;
 using System.Collections.Generic;
@@ -84,8 +85,8 @@ namespace bazy1.ViewModels.Admin.Pages
         public DateTime SelectedDate {
             get => _selectedDate;
             set {
-                if (value.Date <= DbContext.Workhours.Where(w => w.DoctorId == SelectedDoctor.Id).OrderBy(w => w.BlockEnd).Last().End &&
-                    value.Date >= DbContext.Workhours.Where(w=>w.DoctorId == SelectedDoctor.Id).OrderBy(w => w.BlockStart).First().Start && SelectedDoctor != null)
+                if (SelectedDoctor != null && value.Date <= DbContext.Workhours.Where(w => w.DoctorId == SelectedDoctor.Id).OrderBy(w => w.BlockEnd).Last().End &&
+                    value.Date >= DbContext.Workhours.Where(w=>w.DoctorId == SelectedDoctor.Id).OrderBy(w => w.BlockStart).First().Start )
                 {
                     _selectedDate = value;
                     OnPropertyChanged(nameof(SelectedDate));
@@ -96,8 +97,11 @@ namespace bazy1.ViewModels.Admin.Pages
 			}
 		}
 
-        public UpdateScheduleViewModel() {
+        public ICommand RestartView { get; }
 
+        public UpdateScheduleViewModel(AdminViewModel viewModel, string msgBoxText) {
+            //RestartView = new BasicCommand((object obj) => viewModel.CurrentViewModel = new UpdateScheduleViewModel(viewModel));
+            MsgBoxMessage = msgBoxText;
             Save = new BasicCommand((object obj) =>
             {
                 bool error = false;
@@ -154,7 +158,8 @@ namespace bazy1.ViewModels.Admin.Pages
                         MsgBoxMessage = "Zmieniono harmonogram";
 
 
-					}
+                    }
+                    else viewModel.CurrentViewModel = new UpdateScheduleViewModel(viewModel,MsgBoxMessage);
 				}
 
 			});

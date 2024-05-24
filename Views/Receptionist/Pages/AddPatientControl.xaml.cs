@@ -13,12 +13,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace bazy1.Views.Admin.Pages {
+namespace bazy1.Views.Receptionist.Pages {
 	/// <summary>
-	/// Logika interakcji dla klasy AddWorkhoursView.xaml
+	/// Logika interakcji dla klasy AddPatientControl.xaml
 	/// </summary>
-	public partial class AddWorkhoursView : System.Windows.Controls.UserControl {
-		public AddWorkhoursView() {
+	public partial class AddPatientControl : System.Windows.Controls.UserControl {
+		public AddPatientControl() {
 			InitializeComponent();
 		}
 	}

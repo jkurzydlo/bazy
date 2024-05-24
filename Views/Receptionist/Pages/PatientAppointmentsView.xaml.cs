@@ -17,7 +17,7 @@ namespace bazy1.Views.Receptionist.Pages {
 	/// <summary>
 	/// Logika interakcji dla klasy PatientAppointmentsView.xaml
 	/// </summary>
-	public partial class PatientAppointmentsView : UserControl {
+	public partial class PatientAppointmentsView : System.Windows.Controls.UserControl {
 		public PatientAppointmentsView() {
 			InitializeComponent();
 		}

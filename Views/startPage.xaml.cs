@@ -18,7 +18,7 @@ namespace bazy1.Views
     /// <summary>
     /// Logika interakcji dla klasy UserControl1.xaml
     /// </summary>
-    public partial class StartPage : UserControl
+    public partial class StartPage : System.Windows.Controls.UserControl
     {
         public StartPage()
         {
@@ -26,12 +26,12 @@ namespace bazy1.Views
         }
 		private void BtnMinimizeClick(object sender, RoutedEventArgs e)
 		{
-			Application.Current.MainWindow.WindowState = WindowState.Minimized;
+			System.Windows.Application.Current.MainWindow.WindowState = WindowState.Minimized;
 		}
 
 		private void BtnCloseClick(object sender, RoutedEventArgs e)
 		{
-			Application.Current.Shutdown();
+			System.Windows.Application.Current.Shutdown();
 		}
 
 	}

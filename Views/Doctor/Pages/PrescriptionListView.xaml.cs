@@ -17,7 +17,7 @@ namespace bazy1.Views.Doctor.Pages {
 	/// <summary>
 	/// Logika interakcji dla klasy PrescriptionListView.xaml
 	/// </summary>
-	public partial class PrescriptionListView : UserControl {
+	public partial class PrescriptionListView : System.Windows.Controls.UserControl {
 		public PrescriptionListView() {
 			InitializeComponent();
 		}

@@ -7,29 +7,41 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid Background="AliceBlue">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Horizontal" Margin="10" VerticalAlignment="Center" Grid.Column="0">
-            <TextBlock Text="Lekarz" VerticalAlignment="Center" Margin="0,0,10,0"></TextBlock>
-            <ComboBox VerticalAlignment="Top" Width="120" Height="30" ItemsSource="{Binding DoctorsList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedItem="{Binding SelectedDoctor}"/>
-        <DatePicker Margin="10,0,0,0" VerticalAlignment="Top" Height="30" SelectedDate="{Binding SelectedDate}"></DatePicker>
-</StackPanel>
-        
-        <StackPanel Orientation="Horizontal" Grid.Column="1">
-        <ItemsControl ItemsSource="{Binding Hours}" HorizontalAlignment="Center" VerticalAlignment="Center" x:Name="hoursL9">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal" Margin="0">
-                            <TextBlock Text="{Binding start1, StringFormat='{}{0:HH:mm}'}"/>
-                        </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
-    </StackPanel>
+   <Grid Background="AliceBlue">
 
-        <Button Command="{Binding Test}" Content="fsd" Width="20" Height="20"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="8*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="5">
+            <DataGrid HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" Width="795" HeadersVisibility="Column" CanUserAddRows="False" IsReadOnly="true" CanUserDeleteRows="False" RowHeight="50" HorizontalAlignment="Stretch" SelectedItem="{Binding SelectedWorkhour}" ItemsSource="{Binding WorkhoursList, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AutoGenerateColumns="False" Style="{StaticResource DataGrid}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Width="800" Header="Godziny pracy" FontSize="12"  Binding="{Binding}"/>
+                </DataGrid.Columns>
+
+                <DataGrid.RowDetailsTemplate>
+                    <DataTemplate>
+                        <TextBlock VerticalAlignment="Center" Text="{
+              Binding RelativeSource={
+                RelativeSource FindAncestor, 
+                AncestorType={x:Type UserControl}},
+              Path=DataContext.SelectedAppointments}" Margin="10" />
+                    </DataTemplate>
+                </DataGrid.RowDetailsTemplate>
+
+
+            </DataGrid>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0" VerticalAlignment="Center" Margin="5">
+            <TextBlock Text="Lekarz" VerticalAlignment="Center" Margin="0,0,10,0"></TextBlock>
+            <ComboBox VerticalAlignment="Top" Width="120" Height="30" ItemsSource="{Binding Doctors, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedItem="{Binding SelectedDoctor}"/>
+            <TextBlock VerticalAlignment="Center" Text="Od "/>
+            <DatePicker SelectedDate="{Binding SelectedDateStart, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></DatePicker>
+            <TextBlock Text=" Do " VerticalAlignment="Center"/>
+            <DatePicker SelectedDate="{Binding SelectedDateEnd, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+        </StackPanel>
+
     </Grid>
 </UserControl>

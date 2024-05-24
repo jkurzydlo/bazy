@@ -23,9 +23,8 @@ public partial class Workhour
     public DateTime? BlockEnd { get; set; }
 
     public virtual Doctor Doctor { get; set; } = null!;
-
 	public override string ToString() {
-        var cultureInfo = new CultureInfo("pl-PL");
+		var cultureInfo = new CultureInfo("pl-PL");
 		return cultureInfo.DateTimeFormat.GetDayName(BlockStart.Value.DayOfWeek) + ", " + BlockStart.Value + "-" + BlockEnd.Value.ToString("HH:mm");
 
 	}

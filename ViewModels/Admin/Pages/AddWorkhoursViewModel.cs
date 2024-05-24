@@ -20,8 +20,8 @@ namespace bazy1.ViewModels.Admin.Pages {
 		public List<Models.Patient> Patients { get; set; }
 		private Models.Doctor _selectedDoctor = DbContext.Doctors.First();
 		private Models.Patient _selectedPatient = DbContext.Patients.First();
-		public Dictionary<Workhour, Brush> RowColor { get; set; }
-		public Brush RowColors { get; set; } = new SolidColorBrush(Colors.Green);
+		public Dictionary<Workhour, System.Drawing.Brush> RowColor { get; set; }
+		public System.Windows.Media.Brush RowColors { get; set; } = new SolidColorBrush(Colors.Green);
 		private string _appointmentGoal;
 
 		public Workhour SelectedWorkhour {
