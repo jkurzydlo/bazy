@@ -1,125 +1,135 @@
-﻿using bazy1.Models.Part;
-using bazy1.Models;
-using System.Collections.ObjectModel;
-using System.Xml.Linq;
-using System.Windows.Input;
-using System.Windows.Navigation;
-using MvvmDialogs;
-using System.Windows;
-using Microsoft.AspNetCore.Components.Forms;
+﻿using bazy1.Models;
+using bazy1.Models.Part;
 using Microsoft.EntityFrameworkCore;
-using System.Windows.Controls;
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows;
+using System.Windows.Input;
 
 namespace bazy1.ViewModels.Admin.Pages {
-	public class ListUserViewModel : ViewModelBase {
+    public class ListUserViewModel : ViewModelBase {
+        private readonly AdminViewModel _adminViewModel;
+        private ObservableCollection<User> _users;
+        private User _selectedUser;
+        private Visibility _editFormVisible = Visibility.Hidden;
 
-		private AdminViewModel _adminViewModel;
-		private ObservableCollection<User> _users = new(DbContext.Users);
-		private User _selectedUser;
-		private string _name, _surname, _login, _lastLogin;
-		private Visibility _editFormVisible = Visibility.Hidden;
-		public ICommand ShowModifyPanel { get; set; }
-		private DateTime _selectedDate;
+        public ICommand ShowModifyPanel { get; set; }
+        public ICommand ModifyUserCommand { get; set; }
+        public ICommand DeleteUserCommand { get; }
 
-		public ICommand ModifyUserCommand { get; set; }
-		public ICommand DeleteUserCommand { get; }
-		public ObservableCollection<User> Users {
-			get => _users;
-			set {
-				_users = value;
-				OnPropertyChanged(nameof(Users));
-			}
-		}
+        public ObservableCollection<User> Users {
+            get => _users;
+            set {
+                _users = value;
+                OnPropertyChanged(nameof(Users));
+            }
+        }
 
-		public DateTime SelectedDate{
-			get => _selectedDate;
-			set {
-				_selectedDate = value;
-				OnPropertyChanged(nameof(SelectedDate));
-				Console.WriteLine("Możliwe daty: ");
-			}
-		}
-		public User SelectedUser {
-			get => _selectedUser;
-			set {
-				_selectedUser = value;
-				OnPropertyChanged(nameof(SelectedUser));
-			}
-		}
+        public User SelectedUser {
+            get => _selectedUser;
+            set {
+                _selectedUser = value;
+                OnPropertyChanged(nameof(SelectedUser));
+                if (_selectedUser != null)
+                {
+                    Name = _selectedUser.Name;
+                    Surname = _selectedUser.Surname;
+                    Login = _selectedUser.Login;
+                }
+            }
+        }
 
-		public string Name {
-			get => _name;
-			set{
-				_name = value;
-				OnPropertyChanged(nameof(Name));
-			}
-		}
-		public string Surname {
-			get => _surname;
-			set {
-				_surname = value;
-				OnPropertyChanged(nameof(Surname));
-			}
-		}
-		public string Login {
-			get => _login;
-			set {
-				_login = value;
-				OnPropertyChanged(nameof(Login));
-			}
-		}
+        private string _name;
+        public string Name {
+            get => _name;
+            set {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+            }
+        }
 
-		public AdminViewModel AdminViewModel { get => _adminViewModel; set => _adminViewModel = value; }
-		public Visibility EditFormVisible {
-			get => _editFormVisible; set {
-				_editFormVisible = value;
-				OnPropertyChanged(nameof(EditFormVisible));
-			}
-		}
+        private string _surname;
+        public string Surname {
+            get => _surname;
+            set {
+                _surname = value;
+                OnPropertyChanged(nameof(Surname));
+            }
+        }
 
-		public string LastLogin { get => _lastLogin;
-			set {
-				_lastLogin = value;
-				OnPropertyChanged(nameof(LastLogin));
-			}
-		}
+        private string _login;
+        public string Login {
+            get => _login;
+            set {
+                _login = value;
+                OnPropertyChanged(nameof(Login));
+            }
+        }
 
-		public ListUserViewModel(AdminViewModel adminViewModel) {
+        public Visibility EditFormVisible {
+            get => _editFormVisible;
+            set {
+                _editFormVisible = value;
+                OnPropertyChanged(nameof(EditFormVisible));
+            }
+        }
 
-			_adminViewModel = adminViewModel;
-			ShowModifyPanel = new BasicCommand((object obj) => EditFormVisible = Visibility.Visible);
-			ModifyUserCommand = new BasicCommand((object obj) =>
-			{
-				var selected = DbContext.Users.Where(user => SelectedUser.Id == user.Id).First();
-				var doctors = DbContext.Doctors.Where(doctor => doctor.UserId == selected.Id).First();
+        public ListUserViewModel(AdminViewModel adminViewModel) {
+            _adminViewModel = adminViewModel;
+            _users = new ObservableCollection<User>(DbContext.Users);
 
-				if (!string.IsNullOrEmpty(Name)) selected.Name = Name;
-				if (!string.IsNullOrEmpty(Surname)) selected.Surname = Surname;
-				if (!string.IsNullOrEmpty(Login)) selected.Login = Login;
+            ShowModifyPanel = new BasicCommand((object obj) => EditFormVisible = Visibility.Visible);
 
-				DbContext.SaveChanges();
-				_adminViewModel.CurrentViewModel = new ListUserViewModel(adminViewModel);
+            ModifyUserCommand = new BasicCommand((object obj) =>
+            {
+                if (SelectedUser != null)
+                {
+                    var userToUpdate = DbContext.Users.FirstOrDefault(u => u.Id == SelectedUser.Id);
+                    if (userToUpdate != null)
+                    {
+                        userToUpdate.Name = Name;
+                        userToUpdate.Surname = Surname;
+                        userToUpdate.Login = Login;
+                        try
+                        {
+                            // Zapisujemy zmiany do bazy danych
+                            DbContext.SaveChanges();
+                            System.Windows.MessageBox.Show("Zmiany zostały zapisane pomyślnie.");
+                        }
+                        catch (Exception ex)
+                        {
+                            System.Windows.MessageBox.Show($"Wystąpił błąd podczas zapisywania zmian: {ex.Message}");
+                        }
+                        // Refresh 
+                        _adminViewModel.CurrentViewModel = new ListUserViewModel(adminViewModel);
+                    }
+                }
+            });
 
 
-			});
-			DeleteUserCommand = new BasicCommand((object obj) =>
-			{
-				var selected = DbContext.Users.Where(user => SelectedUser.Id == user.Id).First();
+            DeleteUserCommand = new BasicCommand((object obj) =>
+            {
+                var selected = DbContext.Users.Where(user => SelectedUser.Id == user.Id).First();
                 var doctors = DbContext.Doctors.Where(doctor => doctor.UserId == selected.Id).First();
-				doctors.User = null;
-				DbContext.Doctors.Remove(doctors);
-				doctors.Specializations = null;
-				doctors.Offices = null;
-				doctors.Workhours = null;
-				doctors.Patients = null;
+                doctors.User = null;
+                DbContext.Doctors.Remove(doctors);
+                doctors.Specializations = null;
+                doctors.Offices = null;
+                doctors.Workhours = null;
+                doctors.Patients = null;
 
                 DbContext.Users.Remove(selected);
 
-				DbContext.SaveChanges();
-				_adminViewModel.CurrentViewModel = new ListUserViewModel(adminViewModel);
+                DbContext.SaveChanges();
+                _adminViewModel.CurrentViewModel = new ListUserViewModel(adminViewModel);
 
-			});
-
-		}
-	}
+                // Refresh 
+                Users.Remove(SelectedUser);
+            }
+            );
+        }
+    }
 }
+    
+

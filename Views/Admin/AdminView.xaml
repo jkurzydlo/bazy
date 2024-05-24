@@ -6,7 +6,9 @@
         xmlns:local="clr-namespace:bazy1.Views.Admin"
         xmlns:viewModels="clr-namespace:bazy1.ViewModels.Admin"
         xmlns:pagesViewModels="clr-namespace:bazy1.ViewModels.Admin.Pages"
+        xmlns:pagesViewModelsDoctor="clr-namespace:bazy1.ViewModels.Doctor.Pages"
         xmlns:pagesViews="clr-namespace:bazy1.Views.Admin.Pages"
+        xmlns:pagesViewsDoctor="clr-namespace:bazy1.Views.Doctor.Pages"
         mc:Ignorable="d"
             xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
 
@@ -43,7 +45,11 @@
         <DataTemplate DataType="{x:Type pagesViewModels:FirstLoginViewModel}">
             <pagesViews:FirstLogin/>
         </DataTemplate>
-        
+
+        <DataTemplate DataType="{x:Type pagesViewModelsDoctor:PatientListViewModel}">
+            <pagesViewsDoctor:PatientListControl/>
+        </DataTemplate>
+
 
     </Window.Resources>
     
@@ -54,14 +60,16 @@
             <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Vertical" Visibility="{Binding LeftPaneVisible}">
-            <Button x:Name="addUserButton" Width="150" Height="20" Content="Dodaj użytkownika" Command="{Binding ShowAddUserViewCommand}"/>
-            <Button x:Name="listUserButton" Width="150" Height="20" Content="Lista użytkowników" Command="{Binding ShowUserListViewCommand}">
+        <StackPanel Orientation="Vertical">
+            <Button x:Name="addUserButton" Width="150" Height="40" Content="Dodaj użytkownika" Command="{Binding ShowAddUserViewCommand}"/>
+            <Button x:Name="listUserButton" Width="150" Height="40" Content="Lista użytkowników" Command="{Binding ShowUserListViewCommand}">
             </Button>
-            <Button x:Name="Nowyharmonogram" Width="150" Height="20" Content="Nowy Harmonogramm" Command="{Binding ShowAddWorkhoursCommand}">
+            <Button x:Name="Nowyharmonogram" Width="150" Height="40" Content="Nowy Harmonogramm" Command="{Binding ShowAddWorkhoursCommand}">
             </Button>
-            <Button x:Name="Zmienharmonogram" Width="150" Height="20" Content="Zmień harmonogram" Command="{Binding ShowUpdateScheduleCommand}"/>
-            <Button Content="Wyloguj" Command="{Binding Logout}"/>
+            <Button x:Name="Zmienharmonogram" Width="150" Height="40" Content="Zmień harmonogram" Command="{Binding ShowUpdateScheduleCommand}"/>
+
+            <Button x:Name="patientList" Width="150" Height="40" Content="Lista pacjentów" Command="{Binding ShowPatientListViewCommand}"/>
+
 
         </StackPanel>
 

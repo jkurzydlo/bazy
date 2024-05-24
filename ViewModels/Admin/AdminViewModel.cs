@@ -14,6 +14,8 @@ using bazy1.Models;
 using bazy1.Models.Part;
 using bazy1.Repositories;
 using bazy1.ViewModels.Admin.Pages;
+using bazy1.ViewModels.Doctor;
+using bazy1.ViewModels.Doctor.Pages;
 using bazy1.Views.Admin.Pages;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
@@ -23,7 +25,7 @@ namespace bazy1.ViewModels.Admin
 {
     public class AdminViewModel : ViewModelBase
     {
-
+        public DoctorViewModel DoctorViewModel { get; set; }
 
         public ICommand ShowUpdateScheduleCommand { get; set; }
 		private ViewModelBase _currentViewModel;
@@ -51,6 +53,7 @@ namespace bazy1.ViewModels.Admin
             }
         }
 
+
         public List<UserPart> Users {
             get => _users;
             set {
@@ -75,13 +78,19 @@ namespace bazy1.ViewModels.Admin
 
         public ICommand ShowUserListViewCommand { get; }
         public ICommand ShowAddWorkhoursCommand { get; set; }
-        public ICommand Logout { get; set;}
-        public ICommand ShowDashboardLoggedInCommand { get; set; }
+        public ICommand ShowPatientListViewCommand { get; }
+
+        private void ExecuteShowPatientListViewCommand(object obj)
+        {
+            // Ustawiamy viewmodel dla widoku listy pacjentów
+            CurrentViewModel = new PatientListViewModel();
+            Caption2 = "Lista pacjentów";
+        }
 
         private void ExecuteShowUserListViewCommand(object obj)
         {
             //Ustawiamy viewmodel dla widoku listy użytkowników
-            if (_currentUser.FirstLogin && firstLogin) { CurrentViewModel = new FirstLoginViewModel(CurrentUser, this); }
+            if (_currentUser.FirstLogin && firstLogin) { CurrentViewModel = new Pages.FirstLoginViewModel(CurrentUser, this); }
             else CurrentViewModel = new ListUserViewModel(this);
             Caption2 = "Lista użytkowników";
             Console.WriteLine("dasdas");
@@ -102,7 +111,6 @@ namespace bazy1.ViewModels.Admin
 
 		public AdminViewModel()
         {
-            Logout = new BasicCommand((object obj) => { System.Windows.Forms.Application.Restart(); });
             // RefreshCommand = new BasicCommand((object obj) => CurrentViewModel);
             loadCurrentUser();
             Console.WriteLine("ab: "+CurrentUser.Name+CurrentUser.Id+ CurrentUser.FirstLogin);
@@ -120,17 +128,12 @@ namespace bazy1.ViewModels.Admin
 
             ShowUpdateScheduleCommand = new BasicCommand((object obj) => {if(!CurrentUser.FirstLogin || !firstLogin)  CurrentViewModel = new  UpdateScheduleViewModel(this,""); });
             ExecuteShowUserListViewCommand(null);
-
+            // Inicjalizacja DoctorViewModel w AdminViewModel
+            DoctorViewModel = new DoctorViewModel();
         }
 
 
 		public AdminViewModel(bool firstLogin) {
-
-            Logout = new BasicCommand((object obj) => {
-                System.Windows.Application.Current.MainWindow.Close();
-                Process.GetCurrentProcess().Kill();
-
-                });
 
 
 			this.firstLogin = firstLogin;
@@ -175,10 +178,6 @@ namespace bazy1.ViewModels.Admin
                 OnPropertyChanged(nameof(CurrentViewModel));
             }
         }
-
-
-
-
 
     }
 }

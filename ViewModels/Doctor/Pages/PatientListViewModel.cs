@@ -33,7 +33,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 		public ICommand ShowAddReferralCommand { get; set; }
 		public ICommand ShowAddAppointmentCommand { get; set; }
 
-		public string PatientDetails{
+        public string PatientDetails{
 			get {
 				string adressess = "", info = "";
 				if (SelectedPatient != null)
@@ -98,11 +98,11 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 		public PatientListViewModel(User user, DoctorViewModel viewModel) {
 
 
-			ShowAddAppointmentCommand = new BasicCommand((object obj) =>
-			{
+            ShowAddAppointmentCommand = new BasicCommand((object obj) =>
+            {
 				viewModel.CurrentViewModel = new AddAppointmentViewModel(this,SelectedPatient);
-			});
-			ShowAddMedicationCommand = new BasicCommand(obj => {
+            });
+            ShowAddMedicationCommand = new BasicCommand(obj => {
 				viewModel.CurrentViewModel = new AddMedicationViewModel(SelectedPatient,null,viewModel);
 			});
 			//PrescriptionGenerator p = new();
@@ -146,7 +146,68 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 			Console.WriteLine(_patientsList.Count());
 		}
 
-		public ObservableCollection<Patient> PatientsList {
+        public PatientListViewModel()
+        {
+            // Inicjalizacja pacjentów
+            using (var DbContext = new Przychodnia9Context())
+            {
+                _patientsList = new ObservableCollection<Patient>(DbContext.Patients.ToList());
+            }
+            PatientView = CollectionViewSource.GetDefaultView(_patientsList);
+
+            // Inicjalizacja poleceń
+            ShowAddAppointmentCommand = new BasicCommand((object obj) =>
+            {
+                // Implementacja bez zależności od viewModel i user
+            });
+            ShowAddMedicationCommand = new BasicCommand(obj =>
+            {
+                // Implementacja bez zależności od viewModel i user
+            });
+            ShowAddReferralCommand = new BasicCommand(obj =>
+            {
+                // Implementacja bez zależności od viewModel i user
+            });
+            AddPatientCommand = new BasicCommand(obj =>
+            {
+                // Implementacja bez zależności od viewModel i user
+            });
+            PatientDeleteCommand = new BasicCommand(obj =>
+            {
+                if (SelectedPatient != null)
+                {
+                    using (var DbContext = new Przychodnia9Context())
+                    {
+                        DbContext.Patients.Remove(SelectedPatient);
+                        DbContext.SaveChanges();
+                    }
+                    _patientsList.Remove(SelectedPatient);
+                    PatientView.Refresh();
+                }
+            });
+
+            ShowMedicalHistoryCommand = new BasicCommand((object obj) =>
+            {
+                // Implementacja bez zależności od viewModel i user
+                // if (SelectedPatient != null) 
+                // {
+                //     var medicalHistoryViewModel = new MedicalHistoryViewModel(SelectedPatient, null, this);
+                //     // zmiana widoku
+                // }
+            });
+
+            ShowAddDiseaseCommand = new BasicCommand((object obj) =>
+            {
+                // Implementacja bez zależności od viewModel i user
+                // if (SelectedPatient != null) 
+                // {
+                //     var addDiseaseViewModel = new AddDiseaseViewModel(SelectedPatient);
+                //     // zmiana widoku
+                // }
+            });
+        }
+
+        public ObservableCollection<Patient> PatientsList {
 			get => _patientsList; 
 			set{
 				_patientsList = value;
