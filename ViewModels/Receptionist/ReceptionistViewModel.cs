@@ -37,6 +37,7 @@ namespace bazy1.ViewModels.Receptionist {
 		public ICommand ShowDocScheduleViewCommand { get; }
 		public ICommand ShowAppointmentsCommand { get; }
 		public ICommand ShowPatientAppointmentsViewCommand { get; }
+		public ICommand ShowEditPatientViewCommand { get; set; }
 
 
 
@@ -142,6 +143,8 @@ namespace bazy1.ViewModels.Receptionist {
 		}
 
 		public ReceptionistViewModel() {
+
+//			ShowEditPatientViewCommand = new BasicCommand((object obj)=> { if (!_currentUser.FirstLogin || !_firstLogin) CurrentViewModel = new EditPatientViewModel(); })
 			//AddAppointmentCommand = new BasicCommand((object obj) => { CurrentViewModel = new AddAppointmentViewModel(this); });
 			ShowReferralViewCommand = new BasicCommand(ExecuteShowReferralViewCommand);
 			ShowPrescriptionViewCommand = new BasicCommand(ExecuteShowPrescriptionViewCommand);

@@ -58,8 +58,11 @@ namespace bazy1.ViewModels.Doctor.Pages
                 if (!string.IsNullOrEmpty(Name) && !string.IsNullOrWhiteSpace(Name))
                 {
                     disease.Name = Name;
+                    DbContext.Database.ExecuteSqlRaw("start transaction");
+                    DbContext.Database.ExecuteSqlRaw("savepoint addDisease");
                     DbContext.Database.ExecuteSqlRaw($"insert into disease (comments,datefrom,name) values('{Description}','{DateFrom.ToString("yyyy-MM-dd HH:mm:ss")}','{Name}')");
                     DbContext.Database.ExecuteSqlRaw($"insert into patient_diesease values((select last_insert_id()), (select id from patient where id = '{patient.Id}'))");
+                    DbContext.Database.ExecuteSqlRaw("commit");
 
                     DbContext.Update(patient);
 

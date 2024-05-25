@@ -36,6 +36,8 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 		public ICommand ShowReferralListCommand { get; set; }
 		public ICommand ShowPrescriptionListCommand { get; set; }
 		public ICommand ShowAppointmentsListCommand { get; set; }
+		public ICommand EditPatientCommand { get; set; }
+
 
 
 		public string PatientDetails {
@@ -104,6 +106,11 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 
 
 		public PatientListViewModel(ReceptionistViewModel viewModel) {
+
+			EditPatientCommand = new BasicCommand((object obj) =>
+			{
+				viewModel.CurrentViewModel = new EditPatientViewModel(SelectedPatient);
+			});
 
 			ShowAppointmentsListCommand = new BasicCommand((object obj) =>
 			{

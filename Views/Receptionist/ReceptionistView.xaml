@@ -64,7 +64,7 @@
             <Button Width="150" Height="40" Content="Kalendarz wizyt" Command="{Binding ShowAppointmentsCommand}"/>
             <Button Width="150" Height="40" Content="Harmonogramy" Command="{Binding ShowDocScheduleViewCommand}"></Button>
             <Button Width="150" Height="40" Content="Wizyty pacjentów" Command="{Binding ShowPatientAppointmentsViewCommand}"/>
-
+            <Button Width="150" Height="40" Content="Wizyty pacjentów" Command="{Binding ShowEditPatientViewCommand}"/>
 
         </StackPanel>
 
