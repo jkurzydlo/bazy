@@ -52,7 +52,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			get => _selectedReferral;
 			set {
 				_selectedReferral = value;
-				PdfPath = SelectedReferral.Pdf;
+				//PdfPath = SelectedReferral.Pdf;
 				//_pdfPath = _selectedPrescription != null ? SelectedPrescription.Pdf : "";
 				Console.WriteLine("wymm:" + PdfPath);
 				OnPropertyChanged(nameof(SelectedReferral));

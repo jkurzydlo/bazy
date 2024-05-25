@@ -17,9 +17,7 @@
             <RowDefinition Height="10*"/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <TextBlock Text="Przeszukaj recepty"></TextBlock>
-        <TextBox HorizontalAlignment="Right" Margin="10,0,0,0" Grid.Column="0" Grid.Row="0" Width="120" Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"></TextBox>
-        </StackPanel>
+ </StackPanel>
                 <DataGrid Grid.Column="0" Grid.Row="1" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" ColumnWidth="*" Style="{StaticResource DataGrid}" SelectionMode="Single" HeadersVisibility="Column" IsReadOnly="True" ItemsSource="{Binding PrescriptionsView, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedPrescription, UpdateSourceTrigger=PropertyChanged}" SelectionChanged="DataGrid_SelectionChanged">
 
             <DataGrid.Columns>
