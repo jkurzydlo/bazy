@@ -48,10 +48,7 @@ namespace bazy1.ViewModels.Doctor {
 			}
 			else
 			{
-				if (CurrentViewModel is PrescriptionsViewModel viewModel)
-				{
-				}
-				CurrentViewModel = new Pages.DashboardViewModel(_currentUser);
+				CurrentViewModel = new Pages.PatientListViewModel(_currentUser,this);
 			}	
 			Caption2 = "Ekran główny";
 		}
@@ -139,10 +136,7 @@ namespace bazy1.ViewModels.Doctor {
 
 		public DoctorViewModel() {
 			ShowReferralViewCommand = new BasicCommand(ExecuteShowReferralViewCommand);
-			ShowPrescriptionViewCommand = new BasicCommand(ExecuteShowPrescriptionViewCommand);
-			Klik = new BasicCommand((object obj) => CurrentUser.Surname = "lmao");
-			Console.WriteLine("nowy model");
-			
+			ShowPrescriptionViewCommand = new BasicCommand(ExecuteShowPrescriptionViewCommand);			
 			_userRepository = new UserRepository();
 			CurrentUser = new User();
 			loadCurrentUser();
@@ -154,14 +148,32 @@ namespace bazy1.ViewModels.Doctor {
 
 				
 				FirstLoginViewModel = (FirstLoginViewModel)CurrentViewModel;
+
 				if (!string.IsNullOrEmpty(FirstLoginViewModel.Password) && !string.IsNullOrEmpty(FirstLoginViewModel.PasswordRepeat))
 				{
 					if (FirstLoginViewModel.Password.Equals(FirstLoginViewModel.PasswordRepeat))
 					{
-						CurrentViewModel = new Pages.DashboardViewModel(_currentUser);
-						_firstLogin = false;
+						if (FirstLoginViewModel.Password.Length >= 8 && FirstLoginViewModel.Password.Any(char.IsUpper) && FirstLoginViewModel.Password.Any(char.IsLower) && FirstLoginViewModel.Password.Any(char.IsDigit) && FirstLoginViewModel.Password.Any(ch => !char.IsLetterOrDigit(ch)))
+						{
+							var hash = BCrypt.Net.BCrypt.HashPassword(FirstLoginViewModel.Password);
+							DbContext.Database.ExecuteSqlRaw($"update user set hash='{hash}' where id={_currentUser.Id}");
+							DbContext.Database.ExecuteSqlRaw($"update user set password='{FirstLoginViewModel.Password}' where id={_currentUser.Id}");
+							DbContext.Database.ExecuteSqlRaw($"update user set firstLogin=0 where id={_currentUser.Id}");
+
+							//DbContext.Update(_currentUser);
+							//DbContext.SaveChanges();
+							CurrentViewModel = new Pages.PatientListViewModel(DbContext.Users.Where(u => u.Id == _currentUser.Id).First(), this);
+							_firstLogin = false;
+
+							Console.WriteLine("odpala sie:" + _currentUser.FirstLogin, _currentUser.Id, "asjd: " + DbContext.Users.Where(u => u.Id == _currentUser.Id).First().Id);
+
+						}
+						else ErrorMessage = "Hasło nie spełnia wymagań";
 					}
+					else ErrorMessage = "Hasła nie są identyczne";
+
 				}
+				else ErrorMessage = "Hasło nie może być puste";
 			} );
 		}
 
@@ -177,7 +189,6 @@ namespace bazy1.ViewModels.Doctor {
 				CurrentUser.Type = user.Type;
 				CurrentUser.Password = user.Password;
 				CurrentUser.FirstLogin = user.FirstLogin;
-				Console.Write("da: "+CurrentUser.Name + CurrentUser.Surname);
 			}
 		}
 

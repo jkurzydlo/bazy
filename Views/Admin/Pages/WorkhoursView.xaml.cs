@@ -17,7 +17,7 @@ namespace bazy1.Views.Admin.Pages {
 	/// <summary>
 	/// Logika interakcji dla klasy WorkhoursView.xaml
 	/// </summary>
-	public partial class WorkhoursView : UserControl {
+	public partial class WorkhoursView : System.Windows.Controls.UserControl {
 		public WorkhoursView() {
 			InitializeComponent();
 		}

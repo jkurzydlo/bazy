@@ -31,7 +31,7 @@ namespace bazy1.Views.Receptionist.Pages
         private void ContextMenuButton_Click(object sender, RoutedEventArgs e)
         {
             // Pobierz przycisk, który został kliknięty
-            var button = sender as Button;
+            var button = sender as System.Windows.Controls.Button;
             if (button != null)
             {
                 // Pobierz wiersz, do którego należy ten przycisk

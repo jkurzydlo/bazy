@@ -72,7 +72,10 @@ namespace bazy1.ViewModels.Admin.Pages
 							HideErrorBox = false;
 						}
 					}
-					else Console.WriteLine("to samo");
+					else if(item2.end1 <= item2.start1 && !WorkhoursErrors.Contains("Niepoprawne godziny pracy w dniu: " + whs[0].weekday)){
+						WorkhoursErrors.Add("Niepoprawne godziny pracy w dniu: " + whs[0].weekday);
+						HideErrorBox = false;
+					}
 				}
 			}
 		}

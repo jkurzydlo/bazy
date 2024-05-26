@@ -17,7 +17,7 @@ namespace bazy1.Views.Doctor.Pages {
 	/// <summary>
 	/// Logika interakcji dla klasy ScheduleControl.xaml
 	/// </summary>
-	public partial class ScheduleControl : UserControl {
+	public partial class ScheduleControl : System.Windows.Controls.UserControl {
 		public ScheduleControl() {
 			InitializeComponent();
 		}

@@ -18,7 +18,7 @@ namespace bazy1.Views.Receptionist.Pages
     /// <summary>
     /// Logika interakcji dla klasy FirstLoginControl.xaml
     /// </summary>
-    public partial class FirstLoginControl : UserControl
+    public partial class FirstLoginControl : System.Windows.Controls.UserControl
     {
         public FirstLoginControl()
         {

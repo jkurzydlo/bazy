@@ -117,16 +117,18 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 			
 			SaveChangesCommand = new BasicCommand((object obj) =>
 			{
-
-				DbContext.Database.ExecuteSqlRaw($"update workhours set open = true where doctor_id={SelectedAppointment.DoctorId} && start='{SelectedAppointment.Date.Value.ToString("yyyy-MM-dd HH:mm:ss")}'");
-				DbContext.Database.ExecuteSqlRaw($"update appointment set date='{SelectedNewDate.Start.Value.ToString("yyyy-MM-dd HH:mm:ss")}' where id={SelectedAppointment.Id}");
-				DbContext.Database.ExecuteSqlRaw($"update workhours set open = false where doctor_id={SelectedAppointment.DoctorId} && start='{SelectedNewDate.Start.Value.ToString("yyyy-MM-dd HH:mm:ss")}'");
-                
+				if (SelectedNewDate != null)
+				{
+					DbContext.Database.ExecuteSqlRaw($"update workhours set open = true where doctor_id={SelectedAppointment.DoctorId} && start='{SelectedAppointment.Date.Value.ToString("yyyy-MM-dd HH:mm:ss")}'");
+					DbContext.Database.ExecuteSqlRaw($"update appointment set date='{SelectedNewDate.Start.Value.ToString("yyyy-MM-dd HH:mm:ss")}' where id={SelectedAppointment.Id}");
+					DbContext.Database.ExecuteSqlRaw($"update workhours set open = false where doctor_id={SelectedAppointment.DoctorId} && start='{SelectedNewDate.Start.Value.ToString("yyyy-MM-dd HH:mm:ss")}'");
+				
 				foreach (var item in AppointmentsSchedule)
                 {
 					DbContext.Entry(item).Reload();
                 }
                 viewModel.CurrentViewModel = new PatientAppointmentsViewModel(viewModel,patient);
+				}
 			});
 			PatientList = new(patientRepository.GetAll());
 			AppointmentsList = new(appointmentRepository.GetAppointmentsByPatientId(patient.Id));

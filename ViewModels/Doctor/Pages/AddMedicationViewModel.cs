@@ -261,7 +261,7 @@ namespace bazy1.ViewModels.Doctor.Pages
 				
                 //Zrobione po to żeby odświeżyć wartości i tym samym uruchomić walidację po kliknięciu przycisku
 
-				if (ErrorCollection.Count == 0 && !string.IsNullOrEmpty(Fraction))
+				if (ErrorCollection.Count == 0 && !string.IsNullOrEmpty(Fraction) && FetchedMedicine != null)
 				{
 					medicines.Add(new Medicine { Dose = Dose, Amount = int.Parse(Amount), Name = FetchedMedicine.Name, Comments = Comments, Fraction = float.Parse(Fraction)/100F });
 					Prescription prescription = new() { Medicines = medicines, DateOfPrescription = DateTime.Now, RealisationDate = Date, Patient = SelectedPatient, Doctor = DbContext.Doctors.Where(doc => doc.UserId == parentViewModel.CurrentUser.Id).First() };

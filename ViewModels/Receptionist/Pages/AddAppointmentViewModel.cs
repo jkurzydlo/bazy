@@ -21,8 +21,8 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 		public List<Models.Patient> Patients { get; set; }
 		private Models.Doctor _selectedDoctor = DbContext.Doctors.First();
 		private Models.Patient _selectedPatient = DbContext.Patients.First();
-		public Dictionary<Workhour, Brush> RowColor { get; set; }
-		public Brush RowColors { get; set; } = new SolidColorBrush(Colors.Green);
+		public Dictionary<Workhour, System.Windows.Media.Brush> RowColor { get; set; }
+		public System.Windows.Media.Brush RowColors { get; set; } = new SolidColorBrush(Colors.Green);
 		private string _appointmentGoal;
 
 		public string AppointmentGoal {
@@ -101,6 +101,7 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 			{
 			if (Workhours.Count != 0 && SelectedDoctor != null && SelectedDoctor != null)
 				{
+					if(!SelectedDoctor.Patients.Contains(patient))SelectedDoctor.Patients.Add(patient);
 					DbContext.Database.ExecuteSqlRaw($"update workhours set open = false where doctor_id={SelectedDoctor.Id} && id={SelectedWorkhour.Id}");
 					SelectedDoctor.Appointments.Add(new Appointment { Date = SelectedWorkhour.Start, Patient = patient , Goal = AppointmentGoal });
 					DbContext.SaveChanges();

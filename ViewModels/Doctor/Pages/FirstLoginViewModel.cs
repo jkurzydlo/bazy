@@ -1,4 +1,6 @@
 ﻿using bazy1.Models;
+using bazy1.Views.Admin.Pages;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -40,22 +42,20 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			{
 				if (Password.Equals(PasswordRepeat))
 				{
-					var hash = BCrypt.Net.BCrypt.HashPassword(Password);
+					if (Password.Length >= 8 && Password.Any(char.IsUpper) && Password.Any(char.IsLower) && Password.Any(char.IsDigit) && Password.Any(ch => !char.IsLetterOrDigit(ch)))
+					{
+						var hash = BCrypt.Net.BCrypt.HashPassword(Password);
+						DbContext.Database.ExecuteSqlRaw($"update user set hash='{hash}' where id={_currentUser.Id}");
+						DbContext.Database.ExecuteSqlRaw($"update user set password='{Password}' where id={_currentUser.Id}");
+						DbContext.Database.ExecuteSqlRaw($"update user set firstLogin=0 where id={_currentUser.Id}");
 
-					watch.Start();
-					Console.WriteLine("ok");
-					db.Users.Where(e => e.Id == _currentUser.Id).First().Hash = hash;
-					db.Users.Where(e => e.Id == _currentUser.Id).First().Password = Password;
-					db.Users.Where(e => e.Id == _currentUser.Id).First().FirstLogin = false;
-					watch.Stop();
-					Console.WriteLine("czas oper: " + watch.ElapsedMilliseconds);
-					db.SaveChanges();
+					}
+					else ErrorMessage = "Hasło nie spełnia wymagań";
 				}
-				else
-				{
-					ErrorMessage = "Hasła nie są zgodne";
-				}
+				else ErrorMessage = "Hasła nie są identyczne";
+
 			}
+			else ErrorMessage = "Hasło nie może być puste";
 			Console.WriteLine(ErrorMessage);
 			
 		}
@@ -83,7 +83,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			get => _errorMessage;
 			set {
 				_errorMessage = value;
-				OnPropertyChanged(ErrorMessage);
+				OnPropertyChanged(nameof(ErrorMessage));
 			}
 		}
 

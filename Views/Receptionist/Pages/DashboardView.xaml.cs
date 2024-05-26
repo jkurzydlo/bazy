@@ -18,7 +18,7 @@ namespace bazy1.Views.Receptionist.Pages
     /// <summary>
     /// Logika interakcji dla klasy DashboardView.xaml
     /// </summary>
-    public partial class DashboardView : UserControl
+    public partial class DashboardView : System.Windows.Controls.UserControl
     {
         public DashboardView()
         {

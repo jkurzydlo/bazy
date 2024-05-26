@@ -35,12 +35,12 @@ namespace bazy1.Views.Receptionist.Pages
             bool success = appointmentRepository.AddAppointment(newAppointment);
             if (success)
             {
-                MessageBox.Show("Wizyta została dodana pomyślnie.");
+                //MessageBox.Show("Wizyta została dodana pomyślnie.");
                 Close(); // Zamknij okno po dodaniu wizyty
             }
             else
             {
-                MessageBox.Show("Wystąpił błąd podczas dodawania wizyty.");
+                //MessageBox.Show("Wystąpił błąd podczas dodawania wizyty.");
             }
         }
 

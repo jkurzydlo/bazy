@@ -7,11 +7,15 @@ using System.Windows.Controls;
 
 namespace bazy1.Views.Receptionist.Pages
 {
-    public partial class EditPatientView : UserControl
+    public partial class EditPatientView : System.Windows.Controls.UserControl
     {
         public EditPatientView()
         {
             InitializeComponent();
         }
-    }
+
+		private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e) {
+
+		}
+	}
 }

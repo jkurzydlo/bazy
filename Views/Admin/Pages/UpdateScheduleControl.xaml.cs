@@ -18,7 +18,7 @@ namespace bazy1.Views.Admin.Pages
     /// <summary>
     /// Logika interakcji dla klasy UpdateScheduleControl.xaml
     /// </summary>
-    public partial class UpdateScheduleControl : UserControl
+    public partial class UpdateScheduleControl : System.Windows.Controls.UserControl
     {
         public UpdateScheduleControl()
         {

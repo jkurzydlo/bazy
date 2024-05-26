@@ -41,6 +41,11 @@
         <DataTemplate DataType="{x:Type pagesViewModels:WorkhoursViewModel}">
             <pagesViews:WorkhoursView/>
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type pagesViewModels:FirstLoginViewModel}">
+            <pagesViews:FirstLogin/>
+        </DataTemplate>
+
         <DataTemplate DataType="{x:Type pagesViewModelsDoctor:PatientListViewModel}">
             <pagesViewsDoctor:PatientListControl/>
         </DataTemplate>

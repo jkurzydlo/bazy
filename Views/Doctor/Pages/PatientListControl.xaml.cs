@@ -17,7 +17,7 @@ namespace bazy1.Views.Doctor.Pages {
 	/// <summary>
 	/// Logika interakcji dla klasy PatientListControl.xaml
 	/// </summary>
-	public partial class PatientListControl : UserControl {
+	public partial class PatientListControl : System.Windows.Controls.UserControl {
 		public PatientListControl() {
 			InitializeComponent();
 		}

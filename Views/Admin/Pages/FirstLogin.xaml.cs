@@ -15,10 +15,10 @@ using System.Windows.Shapes;
 
 namespace bazy1.Views.Admin.Pages {
 	/// <summary>
-	/// Logika interakcji dla klasy AddWorkhoursView.xaml
+	/// Logika interakcji dla klasy FirstLogin.xaml
 	/// </summary>
-	public partial class AddWorkhoursView : System.Windows.Controls.UserControl {
-		public AddWorkhoursView() {
+	public partial class FirstLogin : System.Windows.Controls.UserControl {
+		public FirstLogin() {
 			InitializeComponent();
 		}
 	}

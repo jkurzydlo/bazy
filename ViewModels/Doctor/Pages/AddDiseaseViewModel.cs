@@ -1,4 +1,5 @@
 ﻿using bazy1.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,12 +57,20 @@ namespace bazy1.ViewModels.Doctor.Pages
                 disease.DateFrom = DateTime.Parse(DateFrom.ToString());
                 if (!string.IsNullOrEmpty(Name) && !string.IsNullOrWhiteSpace(Name))
                 {
-                    Patient tempPatient;  
                     disease.Name = Name;
-                    DbContext.Patients.Where(pat => pat.Id == patient.Id).First().Diseases.Add(disease);
-                    Console.WriteLine("imie: " + DbContext.Patients.Where(pat => pat.Id == patient.Id).First());
+                    DbContext.Database.ExecuteSqlRaw("start transaction");
+                    DbContext.Database.ExecuteSqlRaw("savepoint addDisease");
+                    DbContext.Database.ExecuteSqlRaw($"insert into disease (comments,datefrom,name) values('{Description}','{DateFrom.ToString("yyyy-MM-dd HH:mm:ss")}','{Name}')");
+                    DbContext.Database.ExecuteSqlRaw($"insert into patient_diesease values((select last_insert_id()), (select id from patient where id = '{patient.Id}'))");
+                    DbContext.Database.ExecuteSqlRaw("commit");
+
+                    DbContext.Update(patient);
+
                     DbContext.SaveChanges();
-                    Console.WriteLine("choroby:" + patient.Diseases.Count());
+                    Name = "";
+                    DateFrom = DateTime.Now;
+                    Description = "";
+
 				}
 
 			});

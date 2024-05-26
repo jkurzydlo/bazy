@@ -51,8 +51,6 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			var whEnds = DbContext.Workhours.Where(ws => ws.DoctorId == doctor.Id && ws.BlockStart.Value.Date >= SelectedDateStart.Date && ws.BlockEnd.Value.Date <= SelectedDateEnd).GroupBy(ws => ws.BlockEnd).Select(g => g.First());
 			
 
-
-
 			for (int i = 0; i < whStarts.Count(); i++)
 			{
                 //Console.WriteLine(whStarts.ElementAt(i));
@@ -84,7 +82,6 @@ namespace bazy1.ViewModels.Doctor.Pages {
 
 		private void LoadAppointments() {
 			AppointmentsList = new(DbContext.Appointments.FromSqlRaw($"select a.id, a.doctor_id,a.doctor_user_id, a.dateTo, a.goal, a.date, a.patient_id, p.name, p.surname from appointment a join patient p on a.patient_id=p.id where a.doctor_id ={doctor.Id} && a.date between '{SelectedDateStart.ToString("yyyy-MM-dd HH:mm:ss")}' and '{SelectedDateEnd.ToString("yyyy-MM-dd HH:mm:ss")}'").Include("Patient"));
-            Console.WriteLine("Appointments: "+AppointmentsList.Count);
         }
 
 		public ObservableCollection<Appointment> AppointmentsList {

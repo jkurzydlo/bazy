@@ -37,6 +37,7 @@ namespace bazy1.ViewModels.Receptionist {
 		public ICommand ShowDocScheduleViewCommand { get; }
 		public ICommand ShowAppointmentsCommand { get; }
 		public ICommand ShowPatientAppointmentsViewCommand { get; }
+		public ICommand ShowEditPatientViewCommand { get; set; }
 
 
 
@@ -54,7 +55,7 @@ namespace bazy1.ViewModels.Receptionist {
 			else
 			{
 
-				CurrentViewModel = new Pages.DashboardViewModel();
+				CurrentViewModel = new Pages.PatientListViewModel(this);
 			}
 			Caption2 = "Ekran główny";
 		}
@@ -142,6 +143,8 @@ namespace bazy1.ViewModels.Receptionist {
 		}
 
 		public ReceptionistViewModel() {
+
+//			ShowEditPatientViewCommand = new BasicCommand((object obj)=> { if (!_currentUser.FirstLogin || !_firstLogin) CurrentViewModel = new EditPatientViewModel(); })
 			//AddAppointmentCommand = new BasicCommand((object obj) => { CurrentViewModel = new AddAppointmentViewModel(this); });
 			ShowReferralViewCommand = new BasicCommand(ExecuteShowReferralViewCommand);
 			ShowPrescriptionViewCommand = new BasicCommand(ExecuteShowPrescriptionViewCommand);
@@ -167,16 +170,36 @@ namespace bazy1.ViewModels.Receptionist {
 
 			ShowDashboardLoggedInCommand = new BasicCommand((object obj) => {
 
+                FirstLoginViewModel = (Pages.FirstLoginViewModel)CurrentViewModel;
+				Console.WriteLine(FirstLoginViewModel.Password + FirstLoginViewModel.PasswordRepeat);
 
-				FirstLoginViewModel = (Pages.FirstLoginViewModel)CurrentViewModel;
+
 				if (!string.IsNullOrEmpty(FirstLoginViewModel.Password) && !string.IsNullOrEmpty(FirstLoginViewModel.PasswordRepeat))
 				{
 					if (FirstLoginViewModel.Password.Equals(FirstLoginViewModel.PasswordRepeat))
 					{
-						CurrentViewModel = new Pages.DashboardViewModel();
-						_firstLogin = false;
+						if (FirstLoginViewModel.Password.Length >= 8 && FirstLoginViewModel.Password.Any(char.IsUpper) && FirstLoginViewModel.Password.Any(char.IsLower) && FirstLoginViewModel.Password.Any(char.IsDigit) && FirstLoginViewModel.Password.Any(ch => !char.IsLetterOrDigit(ch)))
+						{
+							var hash = BCrypt.Net.BCrypt.HashPassword(FirstLoginViewModel.Password);
+							DbContext.Database.ExecuteSqlRaw($"update user set hash='{hash}' where id={_currentUser.Id}");
+							DbContext.Database.ExecuteSqlRaw($"update user set password='{FirstLoginViewModel.Password}' where id={_currentUser.Id}");
+							DbContext.Database.ExecuteSqlRaw($"update user set firstLogin=0 where id={_currentUser.Id}");
+
+							//DbContext.Update(_currentUser);
+							//DbContext.SaveChanges();
+							CurrentViewModel = new Pages.PatientListViewModel(this);
+							_firstLogin = false;
+
+							Console.WriteLine("odpala sie:" + _currentUser.FirstLogin, _currentUser.Id, "asjd: " + DbContext.Users.Where(u => u.Id == _currentUser.Id).First().Id);
+
+						}
+						else ErrorMessage = "Hasło nie spełnia wymagań";
 					}
+					else ErrorMessage = "Hasła nie są identyczne";
+
 				}
+				else ErrorMessage = "Hasło nie może być puste";
+
 			});
 		}
 

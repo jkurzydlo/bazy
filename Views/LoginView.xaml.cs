@@ -30,7 +30,7 @@ namespace bazy1.Views
 
 		private void BtnCloseClick(object sender, RoutedEventArgs e)
 		{
-			Application.Current.Shutdown();
+			System.Windows.Application.Current.Shutdown();
 		}
 
     }

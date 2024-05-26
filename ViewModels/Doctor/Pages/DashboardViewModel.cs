@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace bazy1.ViewModels.Doctor.Pages {
+
 	public class DashboardViewModel : ViewModelBase {
 		private User _currentUser;
 		private string _t1 = "xd";

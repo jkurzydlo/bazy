@@ -17,7 +17,7 @@ namespace bazy1.Views.Doctor.Pages {
 	/// <summary>
 	/// Logika interakcji dla klasy AddMedicationControl.xaml
 	/// </summary>
-	public partial class AddMedicationControl : UserControl {
+	public partial class AddMedicationControl : System.Windows.Controls.UserControl {
 		public AddMedicationControl() {
 			InitializeComponent();
 		}

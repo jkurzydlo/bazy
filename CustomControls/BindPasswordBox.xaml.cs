@@ -18,7 +18,7 @@ namespace bazy1.CustomControls
     /// <summary>
     /// Logika interakcji dla klasy BindBindPasswordBox.xaml
     /// </summary>
-    public partial class BindPasswordBox : UserControl
+    public partial class BindPasswordBox : System.Windows.Controls.UserControl
     {
         public static readonly DependencyProperty PasswordProperty = DependencyProperty.Register("Password", typeof(string), typeof(BindPasswordBox));
         public String Password {
