@@ -17,6 +17,11 @@ namespace bazy1.ViewModels.Receptionist.Pages
             SavePatientCommand = new BasicCommand(SavePatient);
         }
 
+        public EditPatientViewModel(Patient selectedPatient)
+        {
+            SelectedPatient = selectedPatient;
+        }
+
         public Patient SelectedPatient
         {
             get => _selectedPatient;

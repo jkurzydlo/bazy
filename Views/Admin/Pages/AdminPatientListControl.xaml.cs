@@ -7,7 +7,7 @@ using System.Windows.Controls;
 
 namespace bazy1.Views.Admin.Pages
 {
-    public partial class AdminPatientListControl : UserControl
+    public partial class AdminPatientListControl : System.Windows.Controls.UserControl
     {
         public AdminPatientListControl()
         {
