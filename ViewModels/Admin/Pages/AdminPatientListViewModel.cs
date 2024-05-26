@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows.Data;
 using System.Windows.Input;
 using bazy1.Models;
-using bazy1.ViewModels.Receptionist.Pages;
 using CommunityToolkit.Mvvm.Input;
 
 namespace bazy1.ViewModels.Admin.Pages
@@ -15,42 +14,22 @@ namespace bazy1.ViewModels.Admin.Pages
     {
         private Patient _selectedPatient;
         private ObservableCollection<Patient> _patientsList;
-        public ICommand ShowMedicalHistoryCommand { get; }
-        public ICommand ShowAddDiseaseCommand { get; }
-        public ICommand AddPatientCommand { get; set; }
-        public ICommand PatientDeleteCommand { get; set; }
-        public ICommand ShowAddMedicationCommand { get; set; }
-        public ICommand ShowAddReferralCommand { get; set; }
-        public ICommand ShowAddAppointmentCommand { get; set; }
-
         private ICollectionView patientsView;
         private string _filterText;
+        private readonly AdminViewModel _adminViewModel;
 
-        public string FilterText
-        {
-            get => _filterText;
-            set
-            {
-                _filterText = value;
-                PatientView.Filter = (object patient) =>
-                {
-                    var tempPatient = patient as Patient;
-                    return tempPatient.Name.ToLower().Contains(FilterText.ToLower().Trim()) ||
-                           tempPatient.Surname.ToLower().Contains(FilterText.ToLower().Trim()) ||
-                           tempPatient.Pesel.ToString().ToLower().Contains(FilterText.ToLower().Trim());
-                };
-                OnPropertyChanged(nameof(FilterText));
-            }
-        }
-
-        public ICollectionView PatientView
-        {
-            get => patientsView;
-            set => patientsView = value;
-        }
+        public ICommand ShowMedicalHistoryCommand { get; }
+        public ICommand ShowAddDiseaseCommand { get; }
+        public ICommand AddPatientCommand { get; }
+        public ICommand PatientDeleteCommand { get; }
+        public ICommand ShowAddMedicationCommand { get; }
+        public ICommand ShowAddReferralCommand { get; }
+        public ICommand ShowEditPatientCommand { get; }
+        public ICommand ShowAddAppointmentCommand { get; }
 
         public AdminPatientListViewModel()
         {
+
             using (var DbContext = new Przychodnia9Context())
             {
                 _patientsList = new ObservableCollection<Patient>(DbContext.Patients.ToList());
@@ -77,6 +56,7 @@ namespace bazy1.ViewModels.Admin.Pages
 
             ShowMedicalHistoryCommand = new BasicCommand((object obj) => { /* Implementacja */ });
             ShowAddDiseaseCommand = new BasicCommand((object obj) => { /* Implementacja */ });
+            ShowEditPatientCommand = new BasicCommand(ShowEditPatient);
         }
 
         public ObservableCollection<Patient> PatientsList
@@ -98,5 +78,42 @@ namespace bazy1.ViewModels.Admin.Pages
                 OnPropertyChanged(nameof(SelectedPatient));
             }
         }
+
+        public ICollectionView PatientView
+        {
+            get => patientsView;
+            set => patientsView = value;
+        }
+
+        public string FilterText
+        {
+            get => _filterText;
+            set
+            {
+                _filterText = value;
+                PatientView.Filter = (object patient) =>
+                {
+                    var tempPatient = patient as Patient;
+                    return tempPatient.Name.ToLower().Contains(FilterText.ToLower().Trim()) ||
+                           tempPatient.Surname.ToLower().Contains(FilterText.ToLower().Trim()) ||
+                           tempPatient.Pesel.ToString().ToLower().Contains(FilterText.ToLower().Trim());
+                };
+                OnPropertyChanged(nameof(FilterText));
+            }
+        }
+
+        private void ShowEditPatient(object obj)
+        {
+            var selectedPatient = obj as Patient;
+            if (selectedPatient != null)
+            {
+                // Utwórz widok modelu edycji pacjenta i przekaż wybranego pacjenta
+                var editPatientViewModel = new AdminEditPatientViewModel(_adminViewModel, selectedPatient);
+                
+                // Ustaw widok modelu edycji pacjenta jako aktualny widok
+                _adminViewModel.CurrentViewModel = editPatientViewModel;
+            }
+        }
     }
 }
+

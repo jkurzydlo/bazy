@@ -71,7 +71,7 @@
             </Button>
             <Button x:Name="Zmienharmonogram" Width="150" Height="40" Content="Zmień harmonogram" Command="{Binding ShowUpdateScheduleCommand}"/>
 
-            <Button x:Name="patientList" Width="150" Height="40" Content="Lista pacjentów" Command="{Binding ShowAdminPatientListViewCommand}"/>
+            <Button x:Name="patientList" Width="150" Height="40" Content="Lista pacjentów" Command="{Binding ShowAdminPatientListViewCommand}"/> 
 
 
         </StackPanel>
