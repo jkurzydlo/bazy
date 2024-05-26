@@ -57,6 +57,12 @@ namespace bazy1.ViewModels.Admin
         public ICommand ShowUserListViewCommand { get; }
         public ICommand ShowAddWorkhoursCommand { get; set; }
         public ICommand ShowPatientListViewCommand { get; }
+        public ICommand ShowAdminPatientListViewCommand { get; }
+        private void ExecuteShowAdminPatientListViewCommand(object obj)
+        {
+            CurrentViewModel = new AdminPatientListViewModel();
+            Caption2 = "Lista pacjentów";
+        }
 
         private void ExecuteShowPatientListViewCommand(object obj)
         {
@@ -96,6 +102,7 @@ namespace bazy1.ViewModels.Admin
             ExecuteShowUserListViewCommand(null);
             // Inicjalizacja DoctorViewModel w AdminViewModel
             DoctorViewModel = new DoctorViewModel();
+            ShowAdminPatientListViewCommand = new BasicCommand(ExecuteShowAdminPatientListViewCommand);
         }
 
         public ViewModelBase CurrentViewModel
