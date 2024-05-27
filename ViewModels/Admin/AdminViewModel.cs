@@ -83,7 +83,7 @@ namespace bazy1.ViewModels.Admin
         private void ExecuteShowPatientListViewCommand(object obj)
         {
             // Ustawiamy viewmodel dla widoku listy pacjentów
-            CurrentViewModel = new PatientListViewModel();
+           // CurrentViewModel = new PatientListViewModel();
             Caption2 = "Lista pacjentów";
         }
 

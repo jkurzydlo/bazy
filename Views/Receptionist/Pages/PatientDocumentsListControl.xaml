@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="bazy1.Views.Receptionist.Pages.PatientDocumentsListControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:bazy1.Views.Receptionist.Pages"
+             mc:Ignorable="d" 
+             xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.5*"/>
+                    <RowDefinition Height="10*"/>
+                </Grid.RowDefinitions>
+                <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Wyszukaj" Margin="0,0,10,0" HorizontalAlignment="Right"></TextBlock>
+                        <TextBox Margin="0,0,10,0" Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" Width="75" HorizontalAlignment="Right"></TextBox>
+                    </StackPanel>
+                </StackPanel>
+        <StackPanel Margin="10" Orientation="Vertical" Grid.Column="0" Grid.Row="1">
+            <TextBlock Text="Recepty"/>
+            <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" ColumnWidth="*" Style="{StaticResource DataGrid}" SelectionMode="Single" HeadersVisibility="Column" IsReadOnly="True" ItemsSource="{Binding PrescriptionsView, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedPrescription, UpdateSourceTrigger=PropertyChanged}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Data wystawienia" Binding="{Binding DateOfPrescription, StringFormat='{}{0:dd/MM/yyyy}'}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+            <TextBlock Text="Skierowania"/>
+            <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" ColumnWidth="*" Style="{StaticResource DataGrid}" SelectionMode="Single" HeadersVisibility="Column" IsReadOnly="True" ItemsSource="{Binding ReferralsView, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedReferral, UpdateSourceTrigger=PropertyChanged}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Data wystawienia" Binding="{Binding Date, StringFormat='{}{0:dd/MM/yyyy}'}"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </StackPanel>
+        <wv2:WebView2 Grid.Column="1" Grid.RowSpan="2" Name="webView" x:FieldModifier="public" Source= "{Binding RelativeSource={
+  RelativeSource FindAncestor, 
+  AncestorType={x:Type UserControl}},
+Path=DataContext.PdfPath, UpdateSourceTrigger=PropertyChanged,TargetNullValue=about:blank, FallbackValue=about:blank}"/>
+    </Grid>
+</UserControl>

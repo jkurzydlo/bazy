@@ -37,6 +37,7 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 		public ICommand ShowPrescriptionListCommand { get; set; }
 		public ICommand ShowAppointmentsListCommand { get; set; }
 		public ICommand EditPatientCommand { get; set; }
+		public ICommand ShowPatientDocumentsList { get; set; }
 
 
 
@@ -57,18 +58,15 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 					info += "Adresy:" + adressess;
 					info += "Przyjmowane leki:\n";
 					string tempDoses = "";
-					var names = DbContext.Database.SqlQueryRaw<string>("select med.name from patient_diesease pd join prescription pr on pr.patient_id=pd.patient_id" +
-				" join prescription_medicine pm on pm.prescription_id = pr.id" +
-				$" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPatient.Id}").ToList();
+					var names = DbContext.Database.SqlQueryRaw<string>($"select m.name from (prescription p join prescription_medicine ps on p.id=ps.prescription_id) join medicine m on m.id=ps.medicine_id join patient pat on pat.id =p.patient_id where pat.id ={SelectedPatient.Id};").ToList();
 
-					var dosages = DbContext.Database.SqlQueryRaw<string>("select med.dose from patient_diesease pd join prescription pr on pr.patient_id=pd.patient_id" +
-" join prescription_medicine pm on pm.prescription_id = pr.id" +
-$" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPatient.Id} ").ToList();
+					Console.WriteLine("namws: " + names.Count());
+					var dosages = DbContext.Database.SqlQueryRaw<string>($"select m.dose from (prescription p join prescription_medicine ps on p.id=ps.prescription_id) join medicine m on m.id=ps.medicine_id join patient pat on pat.id =p.patient_id where pat.id ={SelectedPatient.Id};").ToList();
 					string tempMedicines = "";
 
 					for (int i = 0; i < names.Count; i++)
 					{
-						tempMedicines += $"{names[i]}: {dosages[i]}\n";
+						tempMedicines += $"{names[i]}: {(i<dosages.Count ? dosages[i] : "")}\n";
 					}
 					info += tempMedicines;
 
@@ -121,6 +119,11 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 				viewModel.CurrentViewModel = new AddAppointmentViewModel(viewModel, SelectedPatient);
 			});
 
+			ShowPatientDocumentsList = new BasicCommand(obj =>
+			{
+                Console.WriteLine(SelectedPatient.Prescriptions.Count());
+                viewModel.CurrentViewModel = new PatientDocumentsListViewModel(DbContext.Prescriptions.Where(pr => pr.PatientId == SelectedPatient.Id).ToList(), DbContext.Referrals.Where(pr => pr.PatientId == SelectedPatient.Id).ToList());
+			});
 
 			AddPatientCommand = new BasicCommand(obj => viewModel.CurrentViewModel = new AddPatientViewModel(viewModel));
 			PatientDeleteCommand = new BasicCommand(obj =>
@@ -128,8 +131,14 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 				DbContext.Database.ExecuteSql($"Delete from patient_diesease where patient_id = {SelectedPatient.Id}");
 				DbContext.Database.ExecuteSql($"Delete from patient_address where patient_id = {SelectedPatient.Id}");
 				DbContext.Database.ExecuteSql($"Delete from doctor_has_patient where patient_id = {SelectedPatient.Id}");
+				DbContext.Database.ExecuteSql($"Delete from prescription_medicine where prescription_patient_id = {SelectedPatient.Id}");
+				DbContext.Database.ExecuteSql($"Delete from prescription where patient_id = {SelectedPatient.Id}");
+				DbContext.Database.ExecuteSql($"Delete from referral where patient_id = {SelectedPatient.Id}");
+				DbContext.Database.ExecuteSql($"Delete from appointment where patient_id = {SelectedPatient.Id}");
+				DbContext.Database.ExecuteSql($"Delete from patient where id = {SelectedPatient.Id}");
+
 				DbContext.SaveChanges();
-				//viewModel.CurrentViewModel = new PatientListViewModel(user, viewModel);
+				viewModel.CurrentViewModel = new PatientListViewModel(viewModel);
 			});
 
 			_patientsList = new(DbContext.Patients.ToList());
