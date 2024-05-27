@@ -52,7 +52,11 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			get => _selectedPrescription;
 			set {
 				_selectedPrescription = value;
-				PdfPath = SelectedPrescription.Pdf;
+
+				if (SelectedPrescription != null)
+				{
+					PdfPath = SelectedPrescription.Pdf;
+				}
 
 				//_pdfPath = _selectedPrescription != null ? SelectedPrescription.Pdf : "";
 				Console.WriteLine("wymm:"+PdfPath);

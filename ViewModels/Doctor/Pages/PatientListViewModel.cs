@@ -61,9 +61,9 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 					string tempMedicines = "";
 					Console.WriteLine("ct2: " + dosages.Count());
 
-					for (int i = 0; i < Math.Min(names.Count(),dosages.Count()); i++)
+					for (int i = 0; i < names.Count(); i++)
 					{
-						tempMedicines += $"{names[i]}: {dosages[i]}\n";
+						tempMedicines += $"{names[i]}: { (i< dosages.Count() ? dosages[i] : "")}\n";
 					}
 					info += tempMedicines;
 
@@ -97,6 +97,7 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 		}
 
 		public ICollectionView PatientView { get => patientsView; set => patientsView = value; }
+		public ICommand ShowPatientDocumentsList { get; set; }
 
 
 		public PatientListViewModel(User user, DoctorViewModel viewModel) {
@@ -114,7 +115,7 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 			});
 			//PrescriptionGenerator p = new();
 			//p.generate();
-			ShowAddReferralCommand = new BasicCommand(obj => { viewModel.CurrentViewModel = new AddReferralViewModel(doctor, SelectedPatient); });
+			ShowAddReferralCommand = new BasicCommand(obj => { viewModel.CurrentViewModel = new AddReferralViewModel(doctor, SelectedPatient,viewModel); });
 			AddPatientCommand = new BasicCommand(obj => viewModel.CurrentViewModel = new AddPatientViewModel(doctor, viewModel));
 			PatientDeleteCommand = new BasicCommand(obj =>
 			{

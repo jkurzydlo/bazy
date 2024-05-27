@@ -119,7 +119,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 		}
 
 
-		public AddReferralViewModel(Models.Doctor doctor, Patient patient) {
+		public AddReferralViewModel(Models.Doctor doctor, Patient patient, DoctorViewModel viewModel) {
 
 			loadCSV(false);
 
@@ -145,6 +145,8 @@ namespace bazy1.ViewModels.Doctor.Pages {
 					DbContext.SaveChanges();
 					Console.WriteLine(DbContext.Referrals.ToList().Last().Code);
 					ReferralGenerator.generate(DbContext.Referrals.ToList().Last());
+					viewModel.CurrentViewModel = new PatientListViewModel(DbContext.Users.Where(u => u.Id == doctor.UserId).First(),viewModel);
+					
 				}
 			});
 			
