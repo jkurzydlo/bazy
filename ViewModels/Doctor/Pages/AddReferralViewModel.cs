@@ -142,7 +142,6 @@ namespace bazy1.ViewModels.Doctor.Pages {
 				{
 					DbContext.Database.ExecuteSql(
 						$"insert into referral(code,date,disease, information, medical_entity, patient_id,doctor_id, doctor_user_id) values( (select left(replace(uuid(),'-',''),20)),date(now()),{Disease},{Information},{MedicalEntity},{Patient.Id},{doctor.Id},{doctor.UserId})");
-					DbContext.SaveChanges();
 					Console.WriteLine(DbContext.Referrals.ToList().Last().Code);
 					ReferralGenerator.generate(DbContext.Referrals.ToList().Last());
 					viewModel.CurrentViewModel = new PatientListViewModel(DbContext.Users.Where(u => u.Id == doctor.UserId).First(),viewModel);

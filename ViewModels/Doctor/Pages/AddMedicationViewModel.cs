@@ -235,12 +235,11 @@ namespace bazy1.ViewModels.Doctor.Pages
 				{
                     Console.WriteLine(
 						DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First().Name);
-                    Prescription pr = new Prescription { Medicines = this.Medicines, DateOfPrescription = DateTime.Now, RealisationDate = Date, Doctor = DbContext.Doctors.Where(doc => doc.UserId == parentViewModel.CurrentUser.Id).First(), Patient = DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First(), Code = string.Concat(Guid.NewGuid().ToString().Replace("-","").Take(22))};
-					
+                    Prescription pr = new Prescription { Medicines = this.Medicines, DateOfPrescription = DateTime.Now, RealisationDate = Date, Patient = DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First(), Code = string.Concat(Guid.NewGuid().ToString().Replace("-","").Take(22))};
+					DbContext.Doctors.Where(doc => doc.UserId == parentViewModel.CurrentUser.Id).First().Prescriptions.Add(pr);
 					
 					//SelectedPatient.Diseases.Where(d => d.Id == disease.Id).First().Medicines.Add(Medicines.tol);
-					Console.WriteLine("mesd:" + Medicines.Count());
-					DbContext.Update(pr);
+					//DbContext.Update(pr);
 					DbContext.SaveChanges();
 					PrescriptionGenerator generator = new();
 					generator.generate(
