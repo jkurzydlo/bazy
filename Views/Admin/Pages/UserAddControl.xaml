@@ -5,11 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:bazy1.Views.Admin"
              xmlns:viewModels="clr-namespace:bazy1.ViewModels" xmlns:pages="clr-namespace:bazy1.ViewModels.Admin.Pages" d:DataContext="{d:DesignInstance Type=pages:AddUserViewModel}"
+             xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              
              >
     <Grid Background="AliceBlue">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical" Margin="10">
             <StackPanel Orientation="Horizontal">
             <TextBlock Text="Imię" VerticalAlignment="Center"/>
@@ -40,5 +45,9 @@
 
         </StackPanel>
 
+        <wv2:WebView2 Grid.Column="2" Grid.RowSpan="2" Name="webView2" x:FieldModifier="public" Source= "{Binding RelativeSource={
+  RelativeSource FindAncestor, 
+  AncestorType={x:Type UserControl}},
+Path=DataContext.PdfPath, UpdateSourceTrigger=PropertyChanged,TargetNullValue=about:blank, FallbackValue=about:blank}"/>
     </Grid>
 </UserControl>

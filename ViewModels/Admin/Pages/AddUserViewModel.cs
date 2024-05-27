@@ -3,9 +3,12 @@ using bazy1.Utils;
 using Google.Protobuf.Compiler;
 using Microsoft.AspNetCore.CookiePolicy;
 using Org.BouncyCastle.Crypto.Generators;
+using QuestPDF.Fluent;
+using QuestPDF.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Net.Mail;
 using System.Text;
@@ -86,6 +89,15 @@ namespace bazy1.ViewModels.Admin.Pages
         private string _userName;
         private string _userEmail;
         private string _userPhoneNumber;
+        private string _pdfPath;
+
+        public string PdfPath {
+			get => _pdfPath;
+			set {
+				_pdfPath = value;
+				OnPropertyChanged(nameof(PdfPath));
+			}
+		}
 
 		public string UserName
         {
@@ -150,12 +162,12 @@ namespace bazy1.ViewModels.Admin.Pages
                     return;
                 }
 
-				MailAddress mail;
+                MailAddress mail;
 
-				if (!string.IsNullOrEmpty(Email) && (!MailAddress.TryCreate(Email, out mail)))
+                if (!string.IsNullOrEmpty(Email) && (!MailAddress.TryCreate(Email, out mail)))
                 {
                     System.Windows.MessageBox.Show("Niepoprawny adres email!", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
-					return;
+                    return;
 
                 }
 
@@ -213,10 +225,38 @@ namespace bazy1.ViewModels.Admin.Pages
                 // Wyświetlenie loginu i hasła w MessageBoxie
                 System.Windows.MessageBox.Show($"Login: {tempUser.Login}\nHasło: {Password}", "Nowy użytkownik utworzony", MessageBoxButton.OK, MessageBoxImage.Information);
 
+                QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+
+                Document.Create(doc => {
+                    doc.Page(page => {
+                        page.Size(PageSizes.A5);
+                        page.Margin(5F);
+                        page.Content().Table(tab =>
+                        {
+                            tab.ColumnsDefinition(cl => cl.RelativeColumn(1));
+							tab.Cell().Text("Dane do pierwszego logowania").AlignCenter().Bold();
+							tab.Cell().Text("Dane użytkownika").AlignCenter().Bold();
+                            tab.Cell().Text("Użytkownik: " + tempUser.Name + " " + tempUser.Surname);
+                            tab.Cell().Text("Login: " + tempUser.Login);
+                            tab.Cell().Text("Hasło: " + Password);
+							tab.Cell().Text("Wiadomość wygenerowana przez system Medikat" + Password).FontSize(8);
+
+
+						});
+                    });
+
+                    }).GeneratePdf(Directory.GetCurrentDirectory()+"\\"+ "haslologin"+tempUser.Login);
+                PdfPath = Directory.GetCurrentDirectory() + "\\" + "haslologin" + tempUser.Login;
+
             });
 
             Console.WriteLine(DbContext.Specializations.Count());
-            Specializations = new ObservableCollection<Specialization>(DbContext.Specializations);
+			Specializations = new ObservableCollection<Specialization>();
+
+			foreach (var sp in DbContext.Specializations)
+            {
+                if (!Specializations.ToList().Exists(s => s.Name == sp.Name)) Specializations.Add(sp);
+            }
         }
     }
 }
