@@ -27,7 +27,7 @@
                 <DataGridTextColumn Header="PESEL" Binding="{Binding Pesel}"  />
                 <DataGridTextColumn Header="Telefon" Binding="{Binding PhoneNumber}"  />
                 <DataGridTextColumn Header="Ostatnia wizyta" Binding="{Binding LastVisit}"/>
-                <DataGridTextColumn Header="Najbliższa wizyta" Binding="{Binding NextVisit}"/>
+                <DataGridTextColumn Header="Najbliższa wizyta" Binding="{Binding nextVisit}"/>
 
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>

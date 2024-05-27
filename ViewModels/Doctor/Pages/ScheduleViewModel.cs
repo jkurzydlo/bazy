@@ -81,7 +81,9 @@ namespace bazy1.ViewModels.Doctor.Pages {
         }
 
 		private void LoadAppointments() {
-			AppointmentsList = new(DbContext.Appointments.FromSqlRaw($"select a.id, a.doctor_id,a.doctor_user_id, a.dateTo, a.goal, a.date, a.patient_id, p.name, p.surname from appointment a join patient p on a.patient_id=p.id where a.doctor_id ={doctor.Id} && a.date between '{SelectedDateStart.ToString("yyyy-MM-dd HH:mm:ss")}' and '{SelectedDateEnd.ToString("yyyy-MM-dd HH:mm:ss")}'").Include("Patient"));
+			Console.WriteLine(SelectedDateEnd + "" + SelectedDateStart);
+			AppointmentsList = new(DbContext.Appointments.FromSqlRaw($"select a.id, a.doctor_id,a.doctor_user_id, a.dateTo, a.goal, a.date, a.patient_id, p.name, p.surname from appointment a join patient p on a.patient_id=p.id where a.doctor_id ={doctor.Id} && a.date between '{SelectedDateStart.ToString("yyyy-MM-dd HH:mm:ss")}' and '{SelectedDateEnd.ToString("yyyy-MM-dd HH:mm:ss")}'").Include("Patient").Include("Doctor"));
+			Console.WriteLine("apl: " + AppointmentsList.Count());
         }
 
 		public ObservableCollection<Appointment> AppointmentsList {
@@ -99,9 +101,9 @@ namespace bazy1.ViewModels.Doctor.Pages {
 				OnPropertyChanged(nameof(HoursList));
 			}
 		}
-		private DateTime _selectedDateStart = DateTime.Now;
-		private DateTime _selectedDateEnd = DateTime.Now;
-		
+		private DateTime _selectedDateStart = new DateTime( DateTime.Now.Year,DateTime.Now.Month,DateTime.Now.Day,0,0,0);
+		private DateTime _selectedDateEnd = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
+
 		public DateTime SelectedDateEnd {
 			get => _selectedDateEnd;
 			set {

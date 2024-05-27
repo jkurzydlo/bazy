@@ -382,7 +382,7 @@ public partial class Przychodnia9Context : DbContext
                 .HasMaxLength(45)
                 .HasColumnName("name");
             entity.Property(e => e.NextVisit)
-                .HasColumnType("date")
+                .HasColumnType("datetime")
                 .HasColumnName("nextVisit");
             entity.Property(e => e.Pesel)
                 .HasMaxLength(11)

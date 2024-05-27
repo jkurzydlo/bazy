@@ -239,7 +239,7 @@ namespace bazy1.ViewModels.Admin.Pages
                             tab.Cell().Text("Użytkownik: " + tempUser.Name + " " + tempUser.Surname);
                             tab.Cell().Text("Login: " + tempUser.Login);
                             tab.Cell().Text("Hasło: " + Password);
-							tab.Cell().Text("Wiadomość wygenerowana przez system Medikat" + Password).FontSize(8);
+							tab.Cell().Text("Wiadomość wygenerowana przez system Medikat").FontSize(8);
 
 
 						});

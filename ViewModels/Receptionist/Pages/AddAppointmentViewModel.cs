@@ -99,12 +99,12 @@ namespace bazy1.ViewModels.Receptionist.Pages {
             Console.WriteLine("ldsgsd");
             AddAppointmentCommand = new BasicCommand((object obj) =>
 			{
-			if (Workhours.Count != 0 && SelectedDoctor != null && SelectedDoctor != null)
+			if (Workhours.Count != 0 && SelectedPatient != null && SelectedDoctor != null)
 				{
-					if(!SelectedDoctor.Patients.Contains(patient))SelectedDoctor.Patients.Add(patient);
+					//if(!DbContext.Doctors.Where(d => d.Id == SelectedDoctor.Id).Include("Patients").First().Patients.Contains(SelectedPatient))
+                   // SelectedDoctor.Patients.Add(patient);
 					DbContext.Database.ExecuteSqlRaw($"update workhours set open = false where doctor_id={SelectedDoctor.Id} && id={SelectedWorkhour.Id}");
 					SelectedDoctor.Appointments.Add(new Appointment { Date = SelectedWorkhour.Start, Patient = patient , Goal = AppointmentGoal });
-					DbContext.SaveChanges();
 					//SelectedPatient.Appointments.Where(a => a.Date == SelectedWorkhour.Start).First().Notifications.Add(new Notification() { });
 					DbContext.Workhours.Where(w => w.DoctorId == SelectedDoctor.Id && w.Id == SelectedWorkhour.Id).First().Open = false;
 					DbContext.SaveChanges();
