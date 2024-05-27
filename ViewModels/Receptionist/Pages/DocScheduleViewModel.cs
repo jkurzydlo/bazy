@@ -117,8 +117,8 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 				OnPropertyChanged(nameof(HoursList));
 			}
 		}
-		private DateTime _selectedDateStart = DateTime.Now;
-		private DateTime _selectedDateEnd = DateTime.Now;
+		private DateTime _selectedDateStart = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+		private DateTime _selectedDateEnd = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 23, 59, 59);
 
 		public DateTime SelectedDateEnd {
 			get => _selectedDateEnd;

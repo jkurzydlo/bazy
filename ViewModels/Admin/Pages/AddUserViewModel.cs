@@ -185,7 +185,7 @@ namespace bazy1.ViewModels.Admin.Pages
                 // Wykorzystanie procedury składowanej do dodania użytkownika
                 try
                 {
-                    using (var connection = new MySqlConnection("Server=localhost;Database=przychodnia9;Uid=root;Pwd=;"))
+                    using (var connection = new MySqlConnection("Server=localhost;Database=przychodnia9;Uid=root;Pwd=12345;"))
                     {
                         connection.Open();
                         using (var command = new MySqlCommand("AddUser", connection))
@@ -203,7 +203,7 @@ namespace bazy1.ViewModels.Admin.Pages
                     }
 
                     // Wyświetlenie loginu i hasła w MessageBoxie
-                    System.Windows.MessageBox.Show($"Login: {tempUser.Login}\nHasło: {password}", "Nowy użytkownik utworzony", MessageBoxButton.OK, MessageBoxImage.Information);
+                    System.Windows.MessageBox.Show($"Login: {login}\nHasło: {password}", "Nowy użytkownik utworzony", MessageBoxButton.OK, MessageBoxImage.Information);
 
                     QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
@@ -218,8 +218,8 @@ namespace bazy1.ViewModels.Admin.Pages
                                 tab.ColumnsDefinition(cl => cl.RelativeColumn(1));
                                 tab.Cell().Text("Dane do pierwszego logowania").AlignCenter().Bold();
                                 tab.Cell().Text("Dane użytkownika").AlignCenter().Bold();
-                                tab.Cell().Text("Użytkownik: " + tempUser.Name + " " + tempUser.Surname);
-                                tab.Cell().Text("Login: " + tempUser.Login);
+                                tab.Cell().Text("Użytkownik: " + UserName + " " + UserSurname);
+                                tab.Cell().Text("Login: " + login);
                                 tab.Cell().Text("Hasło: " + password);
                                 tab.Cell().Text("Wiadomość wygenerowana przez system Medikat").FontSize(8);
 
@@ -227,8 +227,8 @@ namespace bazy1.ViewModels.Admin.Pages
                             });
                         });
 
-                    }).GeneratePdf(Directory.GetCurrentDirectory() + "\\" + "haslologin" + tempUser.Login);
-                    PdfPath = Directory.GetCurrentDirectory() + "\\" + "haslologin" + tempUser.Login;
+                    }).GeneratePdf(Directory.GetCurrentDirectory() + "\\" + "haslologin" + login);
+                    PdfPath = Directory.GetCurrentDirectory() + "\\" + "haslologin" + login;
 
                 }
                 catch (Exception ex)
