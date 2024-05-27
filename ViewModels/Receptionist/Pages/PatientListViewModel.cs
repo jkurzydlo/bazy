@@ -141,6 +141,12 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 			});
 
 			_patientsList = new(DbContext.Patients.ToList());
+
+            foreach (var item in _patientsList)
+            {
+				DbContext.Entry(item).Reload();
+            }
+
 			PatientView = CollectionViewSource.GetDefaultView(_patientsList);
 
 			ShowMedicalHistoryCommand = new BasicCommand((object obj) => {

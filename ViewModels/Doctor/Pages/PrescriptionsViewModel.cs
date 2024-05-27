@@ -59,10 +59,10 @@ namespace bazy1.ViewModels.Doctor.Pages {
 				}
 
 				//_pdfPath = _selectedPrescription != null ? SelectedPrescription.Pdf : "";
-				Console.WriteLine("wymm:"+PdfPath);
+				Console.WriteLine("wymm:"+PdfPath);	
                 OnPropertyChanged(nameof(SelectedPrescription));
 				//var filename = generator.generate(DbContext.Prescriptions.Include("Medicines").Include("Patient").Include("Patient.Addresses").Where(pr => pr.Id == SelectedPrescription.Id).First(), doctor);
-				Console.WriteLine("pdf: "+SelectedPrescription.Pdf);
+				//Console.WriteLine("pdf: "+SelectedPrescription.Pdf);
 
             }
 		}
