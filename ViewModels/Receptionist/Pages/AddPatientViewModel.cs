@@ -408,7 +408,7 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 					DbContext.SaveChanges();
 
 				}
-
+				parentViewModel.CurrentViewModel = new PatientListViewModel(parentViewModel);
 
 
 				//doc.Patients.Add(patient);

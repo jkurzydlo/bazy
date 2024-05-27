@@ -26,8 +26,7 @@
                 <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}"  />
                 <DataGridTextColumn Header="PESEL" Binding="{Binding Pesel}"  />
                 <DataGridTextColumn Header="Telefon" Binding="{Binding PhoneNumber}"  />
-                <DataGridTextColumn Header="Ostatnia wizyta" Binding="{Binding LastVisit}"/>
-                <DataGridTextColumn Header="Najbliższa wizyta" Binding="{Binding nextVisit}"/>
+                <DataGridTextColumn Header="Najbliższa wizyta" Binding="{Binding nextVisit,StringFormat='{}{0:dd/MM/yyyy HH:mm}'}"/>
 
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
@@ -46,7 +45,6 @@
                     <MenuItem Header="Wypisz receptę" Command="{Binding ShowAddMedicationCommand}"/>
                     <MenuItem Header="Wystaw skierowanie" Command="{Binding ShowAddReferralCommand}"/>
                     <MenuItem Header="Usuń pacjenta" Command="{Binding Source={x:Reference deletePatientBox}, Path=Show}" CommandParameter="Usunąć?"/>
-                    <MenuItem Header="Edytuj pacjenta" Command="{Binding EditPatientCommand}" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
 

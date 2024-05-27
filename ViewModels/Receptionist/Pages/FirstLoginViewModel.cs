@@ -45,7 +45,7 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 					{
 						var hash = BCrypt.Net.BCrypt.HashPassword(Password);
 						DbContext.Database.ExecuteSqlRaw($"update user set hash='{hash}' where id={_currentUser.Id}");
-						DbContext.Database.ExecuteSqlRaw($"update user set password='{Password}' where id={_currentUser.Id}");
+						//DbContext.Database.ExecuteSqlRaw($"update user set password='{Password}' where id={_currentUser.Id}");
 						DbContext.Database.ExecuteSqlRaw($"update user set firstLogin=0 where id={_currentUser.Id}");
 						
 						DbContext.Update(_currentUser);

@@ -129,8 +129,14 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 			Console.WriteLine(user.Name + user.Surname + user.Id);
 			this.user = user;
 			doctor = DbContext.Doctors.Where(doctor => doctor.UserId == user.Id).First();
-			//Console.WriteLine("dok: " + .Count());
+            //Console.WriteLine("dok: " + .Count());
+            foreach (var p in DbContext.Patients.Where(patient => patient.Doctors.Contains(doctor)))
+			{
+				DbContext.Entry(p).ReloadAsync();
+
+			}
 			_patientsList = new(DbContext.Patients.Where(patient => patient.Doctors.Contains(doctor)).ToList());
+
 			PatientView = CollectionViewSource.GetDefaultView(_patientsList);
 			Console.WriteLine("cn:" + _patientsList.Count());
 			Console.WriteLine(doctor.Offices.Count());
