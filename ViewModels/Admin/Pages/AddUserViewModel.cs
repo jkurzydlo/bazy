@@ -2,12 +2,14 @@
 using bazy1.Utils;
 using Google.Protobuf.Compiler;
 using Microsoft.AspNetCore.CookiePolicy;
+using MySql.Data.MySqlClient;
 using Org.BouncyCastle.Crypto.Generators;
 using QuestPDF.Fluent;
 using QuestPDF.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Net.Mail;
@@ -176,78 +178,63 @@ namespace bazy1.ViewModels.Admin.Pages
                 UserSurname = char.ToUpper(UserSurname[0]) + UserSurname.Substring(1).ToLower();
 
                 UserCredentialsGenerator generator = new();
+                string login = generator.generateLogin(new User() { Name = UserName, Surname = UserSurname });
+                string password = generator.generatePassword();
+                string passHash = BCrypt.Net.BCrypt.HashPassword(password);
 
-
-                Console.WriteLine("ds");
-                tempUser.Name = UserName;
-                tempUser.Surname = UserSurname;
-                tempUser.Type = ChosenUserType;
-                tempUser.Email = Email;
-                tempUser.FirstLogin = true;
-                tempUser.Login = generator.generateLogin(new User() { Name = UserName, Surname = UserSurname });
-                tempUser.Hash = "0";
-                string Password = generator.generatePassword();
-                string passHash = BCrypt.Net.BCrypt.HashPassword(Password);
-                tempUser.Hash = passHash;
-
-                switch (tempUser.Type)
+                // Wykorzystanie procedury składowanej do dodania użytkownika
+                try
                 {
-                    case "Lekarz":
+                    using (var connection = new MySqlConnection("Server=localhost;Database=przychodnia9;Uid=root;Pwd=;"))
+                    {
+                        connection.Open();
+                        using (var command = new MySqlCommand("AddUser", connection))
                         {
-                            Models.Doctor tempDoctor = new Models.Doctor();
-                            tempDoctor.User = tempUser;
-                            tempDoctor.Name = UserName;
-                            tempDoctor.Surname = UserSurname;
-                            tempDoctor.Specializations.Add(ChosenSpecialization);
-                            DbContext.Doctors.Add(tempDoctor);
+                            command.CommandType = CommandType.StoredProcedure;
+                            command.Parameters.AddWithValue("@p_type", ChosenUserType.ToLower());
+                            command.Parameters.AddWithValue("@p_login", login);
+                            command.Parameters.AddWithValue("@p_name", UserName);
+                            command.Parameters.AddWithValue("@p_surname", UserSurname);
+                            command.Parameters.AddWithValue("@p_hash", passHash);
+                            command.Parameters.AddWithValue("@p_email", Email ?? (object)DBNull.Value);
+
+                            command.ExecuteNonQuery();
                         }
-                        break;
-                    case "Recepcjonista":
+                    }
+
+                    // Wyświetlenie loginu i hasła w MessageBoxie
+                    System.Windows.MessageBox.Show($"Login: {tempUser.Login}\nHasło: {password}", "Nowy użytkownik utworzony", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                    QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
+
+                    Document.Create(doc =>
+                    {
+                        doc.Page(page =>
                         {
-                            Models.Receptionist tempReceptionist = new Models.Receptionist();
-                            tempReceptionist.User = tempUser;
-                            tempReceptionist.Name = UserName;
-                            tempReceptionist.Surname = UserSurname;
-                            DbContext.Receptionists.Add(tempReceptionist);
-                        }
-                        break;
-                    case "Admin":
-                        {
-                            Models.Administrator tempAdmin = new Models.Administrator();
-                            tempAdmin.User = tempUser;
-                            DbContext.Administrators.Add(tempAdmin);
-                        }
-                        break;
+                            page.Size(PageSizes.A5);
+                            page.Margin(5F);
+                            page.Content().Table(tab =>
+                            {
+                                tab.ColumnsDefinition(cl => cl.RelativeColumn(1));
+                                tab.Cell().Text("Dane do pierwszego logowania").AlignCenter().Bold();
+                                tab.Cell().Text("Dane użytkownika").AlignCenter().Bold();
+                                tab.Cell().Text("Użytkownik: " + tempUser.Name + " " + tempUser.Surname);
+                                tab.Cell().Text("Login: " + tempUser.Login);
+                                tab.Cell().Text("Hasło: " + password);
+                                tab.Cell().Text("Wiadomość wygenerowana przez system Medikat").FontSize(8);
+
+
+                            });
+                        });
+
+                    }).GeneratePdf(Directory.GetCurrentDirectory() + "\\" + "haslologin" + tempUser.Login);
+                    PdfPath = Directory.GetCurrentDirectory() + "\\" + "haslologin" + tempUser.Login;
+
                 }
-
-                DbContext.SaveChanges();
-
-                // Wyświetlenie loginu i hasła w MessageBoxie
-                System.Windows.MessageBox.Show($"Login: {tempUser.Login}\nHasło: {Password}", "Nowy użytkownik utworzony", MessageBoxButton.OK, MessageBoxImage.Information);
-
-                QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
-
-                Document.Create(doc => {
-                    doc.Page(page => {
-                        page.Size(PageSizes.A5);
-                        page.Margin(5F);
-                        page.Content().Table(tab =>
-                        {
-                            tab.ColumnsDefinition(cl => cl.RelativeColumn(1));
-							tab.Cell().Text("Dane do pierwszego logowania").AlignCenter().Bold();
-							tab.Cell().Text("Dane użytkownika").AlignCenter().Bold();
-                            tab.Cell().Text("Użytkownik: " + tempUser.Name + " " + tempUser.Surname);
-                            tab.Cell().Text("Login: " + tempUser.Login);
-                            tab.Cell().Text("Hasło: " + Password);
-							tab.Cell().Text("Wiadomość wygenerowana przez system Medikat").FontSize(8);
-
-
-						});
-                    });
-
-                    }).GeneratePdf(Directory.GetCurrentDirectory()+"\\"+ "haslologin"+tempUser.Login);
-                PdfPath = Directory.GetCurrentDirectory() + "\\" + "haslologin" + tempUser.Login;
-
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show($"Wystąpił błąd podczas dodawania użytkownika: {ex.Message}", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
             });
 
             Console.WriteLine(DbContext.Specializations.Count());
