@@ -39,10 +39,8 @@ namespace bazy1.ViewModels.Admin.Pages
 				string adressess = "", info = "";
 				if (SelectedPatient != null)
 				{
-					Console.WriteLine(DbContext.Addresses.Count());
 					var tempPatient = DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First();
 					if (tempPatient.SecondName != null) info += "Drugie imię: " + tempPatient.SecondName + "\n";
-					Console.WriteLine("ile: " + DbContext.Addresses.Where(adr => adr.Patients.Contains(tempPatient)).Count());
 					DbContext.Addresses.Where(adr => adr.Patients.Contains(tempPatient)).ToList().
 						ForEach(adr => adressess += adr.City + " " + adr.PostalCode + " ul." + adr.Street + " " + adr.BuildingNumber + "\n");
 					info = $"Data urodzenia: {tempPatient.BirthDate.Value.ToShortDateString()}\n";
@@ -51,18 +49,20 @@ namespace bazy1.ViewModels.Admin.Pages
 					info += "Adresy:" + adressess;
 					info += "Przyjmowane leki:\n";
 					string tempDoses = "";
-					var names = DbContext.Database.SqlQueryRaw<string>("select med.name from patient_diesease pd join prescription pr on pr.patient_id=pd.patient_id" +
+					var names = DbContext.Database.SqlQueryRaw<string>("select distinct med.name from patient_diesease pd join prescription pr on pr.patient_id=pd.patient_id" +
 				" join prescription_medicine pm on pm.prescription_id = pr.id" +
 				$" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPatient.Id}").ToList();
 
-					var dosages = DbContext.Database.SqlQueryRaw<string>("select med.dose from patient_diesease pd join prescription pr on pr.patient_id=pd.patient_id" +
+					Console.WriteLine("ct: " + names.Count());
+					var dosages = DbContext.Database.SqlQueryRaw<string>("select distinct med.dose from patient_diesease pd join prescription pr on pr.patient_id=pd.patient_id" +
 " join prescription_medicine pm on pm.prescription_id = pr.id" +
 $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPatient.Id} ").ToList();
 					string tempMedicines = "";
+					Console.WriteLine("ct2: " + dosages.Count());
 
-					for (int i = 0; i < names.Count; i++)
+					for (int i = 0; i < names.Count(); i++)
 					{
-						tempMedicines += $"{names[i]}: {dosages[i]}\n";
+						tempMedicines += $"{names[i]}: {(i < dosages.Count() ? dosages[i] : "")}\n";
 					}
 					info += tempMedicines;
 
@@ -71,7 +71,6 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 				return info;
 			}
 			set {
-
 			}
 		}
 

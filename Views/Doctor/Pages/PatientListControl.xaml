@@ -45,7 +45,6 @@
                     <MenuItem Header="Wypisz receptę" Command="{Binding ShowAddMedicationCommand}"/>
                     <MenuItem Header="Wystaw skierowanie" Command="{Binding ShowAddReferralCommand}"/>
                     <MenuItem Header="Usuń pacjenta" Command="{Binding Source={x:Reference deletePatientBox}, Path=Show}" CommandParameter="Usunąć?"/>
-                    <MenuItem Header="Edytuj pacjenta" Command="{Binding EditPatientCommand}" Visibility="{Binding IsAdmin, Converter={StaticResource BooleanToVisibilityConverter}}"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
 
