@@ -213,7 +213,7 @@ namespace bazy1.ViewModels.Receptionist {
 				CurrentUser.Surname = user.Surname;
 				CurrentUser.Login = user.Login;
 				CurrentUser.Type = user.Type;
-				CurrentUser.Password = user.Password;
+				//CurrentUser.Password = user.Password;
 				CurrentUser.FirstLogin = user.FirstLogin;
 				Console.Write("da: " + CurrentUser.Name + CurrentUser.Surname);
 

@@ -157,7 +157,7 @@ namespace bazy1.ViewModels.Doctor {
 						{
 							var hash = BCrypt.Net.BCrypt.HashPassword(FirstLoginViewModel.Password);
 							DbContext.Database.ExecuteSqlRaw($"update user set hash='{hash}' where id={_currentUser.Id}");
-							DbContext.Database.ExecuteSqlRaw($"update user set password='{FirstLoginViewModel.Password}' where id={_currentUser.Id}");
+							//DbContext.Database.ExecuteSqlRaw($"update user set password='{FirstLoginViewModel.Password}' where id={_currentUser.Id}");
 							DbContext.Database.ExecuteSqlRaw($"update user set firstLogin=0 where id={_currentUser.Id}");
 
 							//DbContext.Update(_currentUser);
@@ -187,7 +187,7 @@ namespace bazy1.ViewModels.Doctor {
 				CurrentUser.Surname = user.Surname;
 				CurrentUser.Login = user.Login;
 				CurrentUser.Type = user.Type;
-				CurrentUser.Password = user.Password;
+				//CurrentUser.Password = user.Password;
 				CurrentUser.FirstLogin = user.FirstLogin;
 			}
 		}

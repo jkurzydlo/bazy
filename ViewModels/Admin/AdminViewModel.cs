@@ -14,8 +14,6 @@ using bazy1.Models;
 using bazy1.Models.Part;
 using bazy1.Repositories;
 using bazy1.ViewModels.Admin.Pages;
-using bazy1.ViewModels.Doctor;
-using bazy1.ViewModels.Doctor.Pages;
 using bazy1.Views.Admin.Pages;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.AspNetCore.Mvc.TagHelpers;
@@ -25,10 +23,11 @@ namespace bazy1.ViewModels.Admin
 {
     public class AdminViewModel : ViewModelBase
     {
-        public DoctorViewModel DoctorViewModel { get; set; }
+        //public DoctorViewModel DoctorViewModel { get; set; }
 
         public ICommand ShowUpdateScheduleCommand { get; set; }
-		private ViewModelBase _currentViewModel;
+        private ViewModelBase _currentViewModel;
+        private AdminViewModel _adminViewModel;
         private string _caption;
         private DatabaseService _databaseService;
         private User _currentUser = new();
@@ -79,13 +78,13 @@ namespace bazy1.ViewModels.Admin
         public ICommand ShowUserListViewCommand { get; }
         public ICommand ShowAddWorkhoursCommand { get; set; }
         public ICommand ShowPatientListViewCommand { get; }
-
-        private void ExecuteShowPatientListViewCommand(object obj)
+        public ICommand ShowAdminPatientListViewCommand { get; }
+        private void ExecuteShowAdminPatientListViewCommand(object obj)
         {
-            // Ustawiamy viewmodel dla widoku listy pacjentów
-           // CurrentViewModel = new PatientListViewModel();
+            CurrentViewModel = new AdminPatientListViewModel();
             Caption2 = "Lista pacjentów";
         }
+
 
         private void ExecuteShowUserListViewCommand(object obj)
         {
@@ -104,7 +103,7 @@ namespace bazy1.ViewModels.Admin
 				CurrentUser.Surname = user.Surname;
 				CurrentUser.Login = user.Login;
 				CurrentUser.Type = user.Type;
-				CurrentUser.Password = user.Password;
+				//CurrentUser.Password = user.Password;
 				CurrentUser.FirstLogin = user.FirstLogin;
 			}
 		}
@@ -129,7 +128,8 @@ namespace bazy1.ViewModels.Admin
             ShowUpdateScheduleCommand = new BasicCommand((object obj) => {if(!CurrentUser.FirstLogin || !firstLogin)  CurrentViewModel = new  UpdateScheduleViewModel(this,""); });
             ExecuteShowUserListViewCommand(null);
             // Inicjalizacja DoctorViewModel w AdminViewModel
-            DoctorViewModel = new DoctorViewModel();
+            //DoctorViewModel = new DoctorViewModel();
+            ShowAdminPatientListViewCommand = new BasicCommand(ExecuteShowAdminPatientListViewCommand);
         }
 
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace bazy1.Models;
+namespace bazy1.sakila;
 
 public partial class User
 {

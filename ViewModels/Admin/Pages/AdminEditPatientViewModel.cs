@@ -1,25 +1,20 @@
 ﻿using bazy1.Models;
 using System.Windows.Input;
 
-namespace bazy1.ViewModels.Receptionist.Pages
+namespace bazy1.ViewModels.Admin.Pages
 {
-    public class EditPatientViewModel : ViewModelBase
+    public class AdminEditPatientViewModel : ViewModelBase
     {
         private Patient _selectedPatient;
         private readonly Przychodnia9Context DbContext;
-        private readonly ReceptionistViewModel _receptionistViewModel;
+        private readonly AdminPatientListViewModel _adminPatientListViewModel;
 
-        public EditPatientViewModel(ReceptionistViewModel receptionistViewModel, Patient patient)
+        public AdminEditPatientViewModel(AdminPatientListViewModel adminPatientListViewModel, Patient patient)
         {
-            _receptionistViewModel = receptionistViewModel;
+            _adminPatientListViewModel = adminPatientListViewModel;
             DbContext = new Przychodnia9Context();
             SelectedPatient = patient;
             SavePatientCommand = new BasicCommand(SavePatient);
-        }
-
-        public EditPatientViewModel(Patient selectedPatient)
-        {
-            SelectedPatient = selectedPatient;
         }
 
         public Patient SelectedPatient
@@ -47,10 +42,9 @@ namespace bazy1.ViewModels.Receptionist.Pages
                 DbContext.SaveChanges();
 
                 // Powrót do listy pacjentów po zapisaniu
-                _receptionistViewModel.CurrentViewModel = new PatientListViewModel(_receptionistViewModel);
+                _adminPatientListViewModel.CurrentViewModel = _adminPatientListViewModel;
             }
         }
     }
 }
-
 
