@@ -32,14 +32,14 @@ namespace bazy1.Repositories
 					string login = "admin", password = "admin"; //Pierwsze dane generowane i dostarczane przy dostarczaniu programu klientowi
 					
 					//Dodane Ignore, żeby dodało konkretnego admina tylko raz 
-					command.CommandText = "insert ignore into user(type,login,name,surname,hash,firstLogin,password) values(@type,@login,@name,@surname, @hash, @firstLogin, @password)";
+					command.CommandText = "insert ignore into user(type,login,name,surname,hash,firstLogin) values(@type,@login,@name,@surname, @hash, @firstLogin)";
 					command.Parameters.Add(new MySqlParameter("@type", MySqlDbType.Enum) { Value = login});
 					command.Parameters.Add(new MySqlParameter("@login", MySqlDbType.VarChar) { Value = password });
 					command.Parameters.Add(new MySqlParameter("@name", MySqlDbType.VarChar) { Value = "admin"});
 					command.Parameters.Add(new MySqlParameter("@surname", MySqlDbType.VarChar) { Value = "admin" });
 					command.Parameters.Add(new MySqlParameter("@firstLogin", MySqlDbType.Byte) { Value = 1 });
 					command.Parameters.Add(new MySqlParameter("@hash", MySqlDbType.VarChar) { Value = BCrypt.Net.BCrypt.HashPassword(password) }) ;
-					command.Parameters.Add(new MySqlParameter("@password", MySqlDbType.VarChar) { Value = "admin" });
+					//command.Parameters.Add(new MySqlParameter("@password", MySqlDbType.VarChar) { Value = "admin" });
 					command.ExecuteScalar();
 				}
 			}
@@ -136,11 +136,10 @@ namespace bazy1.Repositories
 								Id = reader.GetInt32(0),
 								Type = reader.GetString(1),
 								Login = reader.GetString(2),
-								Password = reader.GetString(3),
-								Name = reader.GetString(4),
-								Surname = reader.GetString(5),
-								Hash = reader.GetString(6),
-								FirstLogin = reader.GetBoolean(7)
+								Name = reader.GetString(3),
+								Surname = reader.GetString(4),
+								Hash = reader.GetString(5),
+								FirstLogin = reader.GetBoolean(6)
 							};
 						}
 					}

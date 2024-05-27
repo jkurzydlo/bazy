@@ -103,7 +103,7 @@ namespace bazy1.ViewModels.Admin
 				CurrentUser.Surname = user.Surname;
 				CurrentUser.Login = user.Login;
 				CurrentUser.Type = user.Type;
-				CurrentUser.Password = user.Password;
+				//CurrentUser.Password = user.Password;
 				CurrentUser.FirstLogin = user.FirstLogin;
 			}
 		}

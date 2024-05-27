@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 
-namespace bazy1.Models;
+namespace bazy1.sakila;
 
 public partial class Przychodnia9Context : DbContext
 {

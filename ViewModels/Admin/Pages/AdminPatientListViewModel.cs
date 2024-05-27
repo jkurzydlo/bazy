@@ -82,6 +82,7 @@ namespace bazy1.ViewModels.Admin.Pages
                 {
                     using (var DbContext = new Przychodnia9Context())
                     {
+                        //patient_diesease itd...
                         DbContext.Patients.Remove(SelectedPatient);
                         DbContext.SaveChanges();
                     }

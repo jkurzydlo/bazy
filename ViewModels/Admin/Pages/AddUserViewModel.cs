@@ -142,8 +142,8 @@ namespace bazy1.ViewModels.Admin.Pages
                 tempUser.FirstLogin = true;
                 tempUser.Login = generator.generateLogin(new User() { Name = UserName, Surname = UserSurname });
                 tempUser.Hash = "0";
-                tempUser.Password = generator.generatePassword();
-                string passHash = BCrypt.Net.BCrypt.HashPassword(tempUser.Password);
+                string Password = generator.generatePassword();
+                string passHash = BCrypt.Net.BCrypt.HashPassword(Password);
                 tempUser.Hash = passHash;
 
                 switch (tempUser.Type)
@@ -179,7 +179,7 @@ namespace bazy1.ViewModels.Admin.Pages
                 DbContext.SaveChanges();
 
                 // Wyświetlenie loginu i hasła w MessageBoxie
-                System.Windows.MessageBox.Show($"Login: {tempUser.Login}\nHasło: {tempUser.Password}", "Nowy użytkownik utworzony", MessageBoxButton.OK, MessageBoxImage.Information);
+                System.Windows.MessageBox.Show($"Login: {tempUser.Login}\nHasło: {Password}", "Nowy użytkownik utworzony", MessageBoxButton.OK, MessageBoxImage.Information);
 
             });
 

@@ -111,21 +111,24 @@ namespace bazy1.ViewModels.Admin.Pages {
             DeleteUserCommand = new BasicCommand((object obj) =>
             {
                 var selected = DbContext.Users.Where(user => SelectedUser.Id == user.Id).First();
-                var doctors = DbContext.Doctors.Where(doctor => doctor.UserId == selected.Id).First();
-                doctors.User = null;
-                DbContext.Doctors.Remove(doctors);
-                doctors.Specializations = null;
-                doctors.Offices = null;
-                doctors.Workhours = null;
-                doctors.Patients = null;
 
-                DbContext.Users.Remove(selected);
+                Console.WriteLine(selected.Id);
 
-                DbContext.SaveChanges();
-                _adminViewModel.CurrentViewModel = new ListUserViewModel(adminViewModel);
+                    DbContext.Database.ExecuteSqlRaw($"delete from doctor_specialization where doctor_id = (select id from doctor where user_id = {SelectedUser.Id}); ");
+					DbContext.Database.ExecuteSqlRaw($"delete from doctor where user_id = {SelectedUser.Id}; ");
+
+				DbContext.Database.ExecuteSqlRaw($"delete from administrator where user_id = {SelectedUser.Id}; ");
+				DbContext.Database.ExecuteSqlRaw($"delete from receptionist where user_id = {SelectedUser.Id}; ");
+
+
+				DbContext.Database.ExecuteSqlRaw($"delete from user where id = {SelectedUser.Id}; ");
+
+                    DbContext.SaveChanges();
+                    _adminViewModel.CurrentViewModel = new ListUserViewModel(adminViewModel);
+                
 
                 // Refresh 
-                Users.Remove(SelectedUser);
+
             }
             );
         }
