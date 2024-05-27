@@ -14,101 +14,125 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
 
-namespace bazy1.ViewModels.Admin.Pages {
-
-
-    public class AddUserViewModel : ViewModelBase {
+namespace bazy1.ViewModels.Admin.Pages
+{
+    public class AddUserViewModel : ViewModelBase
+    {
         private User _user;
         private List<string> userTypes = new()
         {
             "Lekarz",
             "Recepcjonista",
-            "admin"
+            "Admin"
         };
         private AdminViewModel parentModel;
-        private ObservableCollection<Specialization> _specializations; //ObservableCollection aktualizuje widok przy każdej zmianie kolekcji (usunięciu elementu, dodaniu itd.)
+        private ObservableCollection<Specialization> _specializations;
         private Enum _userTypes;
         private Visibility _doctorOptionsVisible = Visibility.Hidden;
 
         public ICommand AddUserCommand { get; set; }
 
-        public AddUserViewModel() {
-		}
+        public AddUserViewModel()
+        {
+        }
 
-		public ObservableCollection<Specialization> Specializations {
-			get { Console.WriteLine("kel");  return _specializations; }
-			set { _specializations = value;
+        public ObservableCollection<Specialization> Specializations
+        {
+            get => _specializations;
+            set
+            {
+                _specializations = value;
                 OnPropertyChanged(nameof(Specializations));
             }
-		}
-        
-        public List<string> UserTypes {
+        }
+
+        public List<string> UserTypes
+        {
             get => userTypes;
-            set {
+            set
+            {
                 userTypes = value;
                 OnPropertyChanged(nameof(UserTypes));
             }
         }
 
         private string _chosenType = "Administrator";
-		public string ChosenUserType{
-			get { Console.WriteLine("kek"); return _chosenType; }
-            set{
+        public string ChosenUserType
+        {
+            get => _chosenType;
+            set
+            {
                 _chosenType = value;
                 if (!_chosenType.Equals("Lekarz")) DoctorOptionsVisible = Visibility.Hidden;
-                else DoctorOptionsVisible = Visibility.Visible;                
+                else DoctorOptionsVisible = Visibility.Visible;
                 OnPropertyChanged(nameof(ChosenUserType));
             }
+        }
 
-		}
-
-		private Specialization _chosenSpecialization;
-
-		public Specialization ChosenSpecialization {
-			get { Console.WriteLine("kek"); return _chosenSpecialization; }
-			set { _chosenSpecialization = value;
+        private Specialization _chosenSpecialization;
+        public Specialization ChosenSpecialization
+        {
+            get => _chosenSpecialization;
+            set
+            {
+                _chosenSpecialization = value;
                 OnPropertyChanged(nameof(ChosenSpecialization));
             }
-		}
+        }
 
         private string _userSurname;
         private string _userName;
-        public string UserName {
+        public string UserName
+        {
             get => _userName;
-            set {
+            set
+            {
                 _userName = value;
-                OnPropertyChanged(UserName);
+                OnPropertyChanged(nameof(UserName));
             }
         }
 
-		public string UserSurname {
-            get => _userSurname; 
-            set{
+        public string UserSurname
+        {
+            get => _userSurname;
+            set
+            {
                 _userSurname = value;
                 OnPropertyChanged(nameof(UserSurname));
-            } 
+            }
         }
 
-		internal AdminViewModel ParentModel { get => parentModel; set => parentModel = value; }
-		public Visibility DoctorOptionsVisible { 
-            get => _doctorOptionsVisible; 
-            set {
+        internal AdminViewModel ParentModel { get => parentModel; set => parentModel = value; }
+        public Visibility DoctorOptionsVisible
+        {
+            get => _doctorOptionsVisible;
+            set
+            {
                 _doctorOptionsVisible = value;
                 OnPropertyChanged(nameof(DoctorOptionsVisible));
             }
         }
 
-		public AddUserViewModel(User user, AdminViewModel parentModel) {
-            
+        public AddUserViewModel(User user, AdminViewModel parentModel)
+        {
+
             _user = user;
-			ParentModel = parentModel;
+            ParentModel = parentModel;
             var tempUser = new User();
-            var tempDoctor = new Models.Doctor();
-            var tempReceptionist = new Models.Receptionist();
-            var tempAdmin = new Models.Administrator();
             AddUserCommand = new BasicCommand((object obj) =>
             {
-            UserCredentialsGenerator generator = new();
+                // Sprawdzenie, czy imię i nazwisko nie są puste
+                if (string.IsNullOrWhiteSpace(UserName) || string.IsNullOrWhiteSpace(UserSurname))
+                {
+                    System.Windows.MessageBox.Show("Imię i nazwisko nie mogą być puste!", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+
+                // Automatyczna poprawa pierwszej litery imienia i nazwiska na wielką literę
+                UserName = char.ToUpper(UserName[0]) + UserName.Substring(1).ToLower();
+                UserSurname = char.ToUpper(UserSurname[0]) + UserSurname.Substring(1).ToLower();
+
+                UserCredentialsGenerator generator = new();
 
 
                 Console.WriteLine("ds");
@@ -116,46 +140,51 @@ namespace bazy1.ViewModels.Admin.Pages {
                 tempUser.Surname = UserSurname;
                 tempUser.Type = ChosenUserType;
                 tempUser.FirstLogin = true;
-                tempUser.Login = generator.generateLogin(new User() {Name = UserName,Surname = UserSurname});
+                tempUser.Login = generator.generateLogin(new User() { Name = UserName, Surname = UserSurname });
                 tempUser.Hash = "0";
                 tempUser.Password = generator.generatePassword();
                 string passHash = BCrypt.Net.BCrypt.HashPassword(tempUser.Password);
                 tempUser.Hash = passHash;
-                 
+
                 switch (tempUser.Type)
                 {
                     case "Lekarz":
                         {
+                            Models.Doctor tempDoctor = new Models.Doctor();
                             tempDoctor.User = tempUser;
                             tempDoctor.Name = UserName;
                             tempDoctor.Surname = UserSurname;
                             tempDoctor.Specializations.Add(ChosenSpecialization);
                             DbContext.Doctors.Add(tempDoctor);
-                        }break;
+                        }
+                        break;
                     case "Recepcjonista":
                         {
+                            Models.Receptionist tempReceptionist = new Models.Receptionist();
                             tempReceptionist.User = tempUser;
                             tempReceptionist.Name = UserName;
                             tempReceptionist.Surname = UserSurname;
                             DbContext.Receptionists.Add(tempReceptionist);
-                        }break;
-                    case "admin":
+                        }
+                        break;
+                    case "Admin":
                         {
+                            Models.Administrator tempAdmin = new Models.Administrator();
                             tempAdmin.User = tempUser;
                             DbContext.Administrators.Add(tempAdmin);
-                        }break;
+                        }
+                        break;
                 }
 
                 DbContext.SaveChanges();
 
-
-
+                // Wyświetlenie loginu i hasła w MessageBoxie
+                System.Windows.MessageBox.Show($"Login: {tempUser.Login}\nHasło: {tempUser.Password}", "Nowy użytkownik utworzony", MessageBoxButton.OK, MessageBoxImage.Information);
 
             });
 
-            Console.WriteLine(DbContext.Specializations.Count()); 
-            Specializations = new ObservableCollection<Specialization>(DbContext.Specializations); //wczytaj specjalizacje z bazy
-
-		}
+            Console.WriteLine(DbContext.Specializations.Count());
+            Specializations = new ObservableCollection<Specialization>(DbContext.Specializations);
+        }
     }
 }

@@ -7,6 +7,7 @@
         Title="App" Height="200" Width="200" WindowStyle="None" AllowsTransparency="True" WindowStartupLocation="CenterScreen" MouseDown="Window_MouseDown">
     <Grid>
         <views:StartPage/>
+        <ContentControl Content="{Binding CurrentViewModel}" />
     </Grid>
 
 </Window>

@@ -7,11 +7,11 @@ namespace bazy1.ViewModels.Admin.Pages
     {
         private Patient _selectedPatient;
         private readonly Przychodnia9Context DbContext;
-        private readonly AdminViewModel _adminViewModel;
+        private readonly AdminPatientListViewModel _adminPatientListViewModel;
 
-        public AdminEditPatientViewModel(AdminViewModel adminViewModel, Patient patient)
+        public AdminEditPatientViewModel(AdminPatientListViewModel adminPatientListViewModel, Patient patient)
         {
-            _adminViewModel = adminViewModel;
+            _adminPatientListViewModel = adminPatientListViewModel;
             DbContext = new Przychodnia9Context();
             SelectedPatient = patient;
             SavePatientCommand = new BasicCommand(SavePatient);
@@ -42,7 +42,7 @@ namespace bazy1.ViewModels.Admin.Pages
                 DbContext.SaveChanges();
 
                 // Powrót do listy pacjentów po zapisaniu
-                _adminViewModel.CurrentViewModel = new AdminPatientListViewModel();
+                _adminPatientListViewModel.CurrentViewModel = _adminPatientListViewModel;
             }
         }
     }

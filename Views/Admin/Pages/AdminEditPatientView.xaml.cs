@@ -1,4 +1,5 @@
-﻿using System;
+﻿using bazy1.ViewModels.Admin.Pages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,9 +10,15 @@ namespace bazy1.Views.Admin.Pages
 {
     public partial class AdminEditPatientView : System.Windows.Controls.UserControl
     {
-        public AdminEditPatientView() 
+        public AdminEditPatientView()
         {
             InitializeComponent();
+        }
+        public AdminEditPatientView(AdminEditPatientViewModel viewModel) 
+        {
+            InitializeComponent();
+            DataContext = viewModel;
+
         }
     }
 }

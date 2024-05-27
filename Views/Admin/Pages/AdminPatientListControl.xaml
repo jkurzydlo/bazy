@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:jm="clr-namespace:JacekMatulewski.WpfUtils;assembly=JacekMatulewski.WpfUtils"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:pages="clr-namespace:bazy1.ViewModels.Admin.Pages" d:DataContext="{d:DesignInstance Type=pages:AdminPatientListViewModel}"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:pages="clr-namespace:bazy1.ViewModels.Admin.Pages"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
@@ -14,7 +14,7 @@
             <RowDefinition Height="2*"/>
             <RowDefinition Height="13*"/>
         </Grid.RowDefinitions>
-
+        
         <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" ColumnWidth="*" Style="{StaticResource DataGrid}" SelectionMode="Single" HeadersVisibility="Column" IsReadOnly="True" ItemsSource="{Binding PatientView, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedPatient, UpdateSourceTrigger=PropertyChanged}" Margin="0,5,0,0" SelectionChanged="DataGrid_SelectionChanged" Grid.Row="1">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Imię" Binding="{Binding Name}" />
@@ -39,7 +39,7 @@
                     <MenuItem Header="Dodaj schorzenie" Command="{Binding ShowAddDiseaseCommand}" />
                     <MenuItem Header="Wypisz receptę" Command="{Binding ShowAddMedicationCommand}"/>
                     <MenuItem Header="Wystaw skierowanie" Command="{Binding ShowAddReferralCommand}"/>
-                    <MenuItem Header="Edytuj dane pacjenta" Command="{Binding ShowEditPatientCommand}" CommandParameter="{Binding SelectedPatient}" />
+                    <MenuItem Header="Edytuj dane pacjenta" Command="{Binding AdminEditPatientCommand}" CommandParameter="{Binding SelectedPatient}" />
                     <MenuItem Header="Usuń pacjenta" Command="{Binding PatientDeleteCommand}" />
                 </ContextMenu>
             </DataGrid.ContextMenu>

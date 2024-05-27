@@ -53,6 +53,13 @@
             <pagesViews:AdminPatientListControl/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type pagesViewModels:AdminEditPatientViewModel}">
+            <pagesViews:AdminEditPatientView />
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type pagesViewModels:AdminMedicalHistoryViewModel}">
+            <pagesViews:AdminMedicalHistoryView />
+        </DataTemplate>
+
 
     </Window.Resources>
     
