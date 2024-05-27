@@ -7,7 +7,9 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -82,7 +84,10 @@ namespace bazy1.ViewModels.Admin.Pages
 
         private string _userSurname;
         private string _userName;
-        public string UserName
+        private string _userEmail;
+        private string _userPhoneNumber;
+
+		public string UserName
         {
             get => _userName;
             set
@@ -102,7 +107,24 @@ namespace bazy1.ViewModels.Admin.Pages
             }
         }
 
-        internal AdminViewModel ParentModel { get => parentModel; set => parentModel = value; }
+
+		public string UserPhone {
+			get => _userPhoneNumber;
+			set {
+				_userPhoneNumber = value;
+				OnPropertyChanged(nameof(UserPhone));
+			}
+		}
+
+		public string Email {
+			get => _userEmail;
+			set {
+				_userEmail = value;
+				OnPropertyChanged(nameof(Email));
+			}
+		}
+
+		internal AdminViewModel ParentModel { get => parentModel; set => parentModel = value; }
         public Visibility DoctorOptionsVisible
         {
             get => _doctorOptionsVisible;
@@ -128,6 +150,15 @@ namespace bazy1.ViewModels.Admin.Pages
                     return;
                 }
 
+				MailAddress mail;
+
+				if (!string.IsNullOrEmpty(Email) && (!MailAddress.TryCreate(Email, out mail)))
+                {
+                    System.Windows.MessageBox.Show("Niepoprawny adres email!", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+					return;
+
+                }
+
                 // Automatyczna poprawa pierwszej litery imienia i nazwiska na wielką literę
                 UserName = char.ToUpper(UserName[0]) + UserName.Substring(1).ToLower();
                 UserSurname = char.ToUpper(UserSurname[0]) + UserSurname.Substring(1).ToLower();
@@ -139,6 +170,7 @@ namespace bazy1.ViewModels.Admin.Pages
                 tempUser.Name = UserName;
                 tempUser.Surname = UserSurname;
                 tempUser.Type = ChosenUserType;
+                tempUser.Email = Email;
                 tempUser.FirstLogin = true;
                 tempUser.Login = generator.generateLogin(new User() { Name = UserName, Surname = UserSurname });
                 tempUser.Hash = "0";

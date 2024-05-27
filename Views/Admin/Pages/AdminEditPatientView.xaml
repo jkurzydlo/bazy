@@ -6,9 +6,7 @@
              xmlns:pages="clr-namespace:bazy1.ViewModels.Admin.Pages" 
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.DataContext>
-        <pages:AdminPatientListViewModel/>
-    </UserControl.DataContext>
+
     <Grid>
 		<StackPanel>
 			<TextBlock Text="Edytuj Pacjenta" FontSize="20" Margin="10"/>

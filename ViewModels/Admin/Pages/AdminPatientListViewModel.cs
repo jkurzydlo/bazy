@@ -11,6 +11,7 @@ using bazy1.ViewModels.Receptionist.Pages;
 using CommunityToolkit.Mvvm.Input;
 using bazy1.Views.Admin.Pages;
 using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
 
 namespace bazy1.ViewModels.Admin.Pages
 {
@@ -27,11 +28,54 @@ namespace bazy1.ViewModels.Admin.Pages
         public ICommand ShowAddReferralCommand { get; set; }
         public ICommand ShowAddAppointmentCommand { get; set; }
         public ICommand AdminEditPatientCommand { get; set; }
+        public ICommand ShowPatientListCommand { get; set;}
 
         private ICollectionView patientsView;
         private string _filterText;
 
-        public string FilterText
+
+		public string PatientDetails {
+			get {
+				string adressess = "", info = "";
+				if (SelectedPatient != null)
+				{
+					Console.WriteLine(DbContext.Addresses.Count());
+					var tempPatient = DbContext.Patients.Where(pat => pat.Id == SelectedPatient.Id).First();
+					if (tempPatient.SecondName != null) info += "Drugie imię: " + tempPatient.SecondName + "\n";
+					Console.WriteLine("ile: " + DbContext.Addresses.Where(adr => adr.Patients.Contains(tempPatient)).Count());
+					DbContext.Addresses.Where(adr => adr.Patients.Contains(tempPatient)).ToList().
+						ForEach(adr => adressess += adr.City + " " + adr.PostalCode + " ul." + adr.Street + " " + adr.BuildingNumber + "\n");
+					info = $"Data urodzenia: {tempPatient.BirthDate.Value.ToShortDateString()}\n";
+					if (tempPatient.PhoneNumber != null) info += "Telefon: " + tempPatient.PhoneNumber + "\n";
+					if (tempPatient.Email != null) info += "Email: " + tempPatient.Email + "\n";
+					info += "Adresy:" + adressess;
+					info += "Przyjmowane leki:\n";
+					string tempDoses = "";
+					var names = DbContext.Database.SqlQueryRaw<string>("select med.name from patient_diesease pd join prescription pr on pr.patient_id=pd.patient_id" +
+				" join prescription_medicine pm on pm.prescription_id = pr.id" +
+				$" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPatient.Id}").ToList();
+
+					var dosages = DbContext.Database.SqlQueryRaw<string>("select med.dose from patient_diesease pd join prescription pr on pr.patient_id=pd.patient_id" +
+" join prescription_medicine pm on pm.prescription_id = pr.id" +
+$" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPatient.Id} ").ToList();
+					string tempMedicines = "";
+
+					for (int i = 0; i < names.Count; i++)
+					{
+						tempMedicines += $"{names[i]}: {dosages[i]}\n";
+					}
+					info += tempMedicines;
+
+
+				}
+				return info;
+			}
+			set {
+
+			}
+		}
+
+		public string FilterText
         {
             get => _filterText;
             set
@@ -64,38 +108,60 @@ namespace bazy1.ViewModels.Admin.Pages
             }
         }
 
-        public AdminPatientListViewModel()
+        public AdminPatientListViewModel(AdminViewModel viewModel)
         {
+            CurrentViewModel = viewModel;
             using (var DbContext = new Przychodnia9Context())
             {
                 _patientsList = new ObservableCollection<Patient>(DbContext.Patients.ToList());
             }
             PatientView = CollectionViewSource.GetDefaultView(_patientsList);
 
+            ShowPatientListCommand = new BasicCommand((object obj) =>
+            { 
+                				viewModel.CurrentViewModel = new AdminPatientListViewModel(viewModel);
+            });
             ShowAddAppointmentCommand = new BasicCommand((object obj) => { /* Implementacja */ });
             ShowAddMedicationCommand = new BasicCommand(obj => { /* Implementacja */ });
             ShowAddReferralCommand = new BasicCommand(obj => { /* Implementacja */ });
-            AddPatientCommand = new BasicCommand(obj => { /* Implementacja */ });
+            AddPatientCommand = new BasicCommand(obj => viewModel.CurrentViewModel = new  AddPatientAdminControl(this));
             PatientDeleteCommand = new BasicCommand(obj =>
             {
                 if (SelectedPatient != null)
                 {
                     using (var DbContext = new Przychodnia9Context())
                     {
-                        //patient_diesease itd...
-                        DbContext.Patients.Remove(SelectedPatient);
-                        DbContext.SaveChanges();
+						//patient_diesease itd...
+						//DbContext.Patients.Remove(SelectedPatient);
+						DbContext.Database.ExecuteSql($"Delete from patient_diesease where patient_id = {SelectedPatient.Id}");
+						DbContext.Database.ExecuteSql($"Delete from patient_address where patient_id = {SelectedPatient.Id}");
+						DbContext.Database.ExecuteSql($"Delete from doctor_has_patient where patient_id = {SelectedPatient.Id}");
+                        DbContext.Database.ExecuteSql($"delete from appointment where patient_id={SelectedPatient.Id}");
+						DbContext.Database.ExecuteSql($"delete from prescription_medicine where prescription_patient_id ={SelectedPatient.Id};");
+						DbContext.Database.ExecuteSql($"delete from prescription where patient_id={SelectedPatient.Id}");
+						DbContext.Database.ExecuteSql($"delete from referral where patient_id={SelectedPatient.Id}");
+
+						DbContext.Database.ExecuteSql($"delete from patient where id={SelectedPatient.Id}");
+                        foreach(var p in PatientsList) DbContext.Update(p);
+                        //DbContext.SaveChanges();
                     }
                     _patientsList.Remove(SelectedPatient);
                     PatientView.Refresh();
                 }
             });
 
-            ShowMedicalHistoryCommand = new RelayCommand(ShowMedicalHistory);
+            ShowMedicalHistoryCommand = new RelayCommand((object obj) =>
+            {
+				if (SelectedPatient != null)
+				{
+					viewModel.CurrentViewModel = new AdminMedicalHistoryViewModel(SelectedPatient);
+				}
+			});
             ShowAddDiseaseCommand = new BasicCommand((object obj) => { /* Implementacja */ });
-            AdminEditPatientCommand = new RelayCommand(AdminEditPatient);
+            AdminEditPatientCommand = new BasicCommand((object obj)=> 
+            viewModel.CurrentViewModel = new AdminEditPatientViewModel(this,SelectedPatient));
 
-            CurrentViewModel = this;
+           // CurrentViewModel = this;
         }
         private void ShowMedicalHistory(object obj)
         {
@@ -115,7 +181,6 @@ namespace bazy1.ViewModels.Admin.Pages
                 if (SelectedPatient != null)
                 {
                     CurrentViewModel = new AdminEditPatientViewModel(this, SelectedPatient);
-                    Console.WriteLine("CurrentViewModel set to AdminEditPatientViewModel");
                 }
             }
             catch (Exception ex)

@@ -27,14 +27,6 @@
                 <DataGridTextColumn Header="Dodatkowe informacje" Binding="{Binding Comments}"  />
             </DataGrid.Columns>
 
-            <DataGrid.ContextMenu>
-
-                <ContextMenu>
-                    <MenuItem Header="Przepisz leki" Command="{Binding ShowAddMedicationCommand}" />
-                </ContextMenu>
-
-            </DataGrid.ContextMenu>
-
         </DataGrid>
     </Grid>
 </UserControl>

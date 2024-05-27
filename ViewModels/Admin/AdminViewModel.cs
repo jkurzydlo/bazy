@@ -81,7 +81,10 @@ namespace bazy1.ViewModels.Admin
         public ICommand ShowAdminPatientListViewCommand { get; }
         private void ExecuteShowAdminPatientListViewCommand(object obj)
         {
-            CurrentViewModel = new AdminPatientListViewModel();
+            if (!_currentUser.FirstLogin || !firstLogin)
+            {
+                CurrentViewModel = new AdminPatientListViewModel(this);
+            }
             Caption2 = "Lista pacjentów";
         }
 

@@ -128,6 +128,11 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 				DbContext.Database.ExecuteSql($"Delete from patient_diesease where patient_id = {SelectedPatient.Id}");
 				DbContext.Database.ExecuteSql($"Delete from patient_address where patient_id = {SelectedPatient.Id}");
 				DbContext.Database.ExecuteSql($"Delete from doctor_has_patient where patient_id = {SelectedPatient.Id}");
+				DbContext.Database.ExecuteSql($"delete from appointment where patient_id={SelectedPatient.Id}");
+				DbContext.Database.ExecuteSql($"delete from prescription_medicine where prescription_patient_id ={SelectedPatient.Id};");
+				DbContext.Database.ExecuteSql($"delete from prescription where patient_id={SelectedPatient.Id}");
+				DbContext.Database.ExecuteSql($"delete from referral where patient_id={SelectedPatient.Id}");
+				DbContext.Database.ExecuteSql($"delete from patient where patient_id={SelectedPatient.Id}");
 				DbContext.SaveChanges();
 				//viewModel.CurrentViewModel = new PatientListViewModel(user, viewModel);
 			});

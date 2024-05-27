@@ -9,19 +9,36 @@
              d:DesignHeight="450" d:DesignWidth="800"
              
              >
-    <Grid>
-        <TextBlock Text="Imię" Margin="10,10,-10,-10"/>
-        <TextBlock Text="Nazwisko" Margin="10,45,-10,-45"/>
-        <TextBlock Text="Typ" Margin="10,80,-10,-80"/>
-        <TextBlock Text="Specjalizacja" Margin="10,115,-10,-115" Visibility="{Binding DoctorOptionsVisible, UpdateSourceTrigger=PropertyChanged}"/>
+    <Grid Background="AliceBlue">
+        <StackPanel Orientation="Vertical" Margin="10">
+            <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Imię" VerticalAlignment="Center"/>
+                <TextBox x:Name="Imię" HorizontalAlignment="Left" Height="23" Margin="48,0,0,10" TextWrapping="Wrap" Text="{Binding UserName,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Width="120"/>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Nazwisko" VerticalAlignment="Center"/>
+                <TextBox x:Name="Nazwisko" HorizontalAlignment="Left" Height="23" Margin="20,0,0,10" TextWrapping="Wrap" Text="{Binding UserSurname,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120" TextChanged="Logins_TextChanged"/>
+            </StackPanel>
 
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Email" VerticalAlignment="Center"/>
+                <TextBox x:Name="emil" HorizontalAlignment="Left" Height="23" Margin="42,0,0,10" TextWrapping="Wrap" Text="{Binding Email,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
+            </StackPanel>
+            
 
-        <TextBox x:Name="Imię" HorizontalAlignment="Left" Height="23" Margin="140,10,0,0" TextWrapping="Wrap" Text="{Binding UserName,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="Nazwisko" HorizontalAlignment="Left" Height="23" Margin="140,45,0,0" TextWrapping="Wrap" Text="{Binding UserSurname,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Top" Width="120" TextChanged="Logins_TextChanged"/>
-        
-        <ComboBox ItemsSource="{Binding UserTypes}" SelectedItem="{Binding ChosenUserType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="140,80,0,0" VerticalAlignment="Top" Width="120"/>
-        <ComboBox ItemsSource="{Binding Specializations}" SelectedItem="{Binding ChosenSpecialization }" Visibility="{Binding DoctorOptionsVisible}" HorizontalAlignment="Left" Margin="140,115,0,0" VerticalAlignment="Top" Width="120" DisplayMemberPath="Name"/>
-        <Button Content="Dodaj użytkownika" Command="{Binding AddUserCommand}" Width="80" Height="20"></Button>
+            <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Typ"/>
+                <ComboBox ItemsSource="{Binding UserTypes}" SelectedItem="{Binding ChosenUserType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" Margin="51,0,0,10"  VerticalAlignment="Center" Width="120"/>
+        </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Visibility="{Binding DoctorOptionsVisible}">
+                <TextBlock Text="Specjalizacja"/>
+                <ComboBox ItemsSource="{Binding Specializations}" SelectedItem="{Binding ChosenSpecialization }" Visibility="{Binding DoctorOptionsVisible}" HorizontalAlignment="Left" Margin="3,0,0,0" VerticalAlignment="Top" Width="120" DisplayMemberPath="Name"/>
+
+            </StackPanel>
+            <Button Content="Dodaj użytkownika" Command="{Binding AddUserCommand}" Width="120" HorizontalAlignment="Left" Margin="0,10,0,0" Height="20"></Button>
+
+        </StackPanel>
 
     </Grid>
 </UserControl>

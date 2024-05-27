@@ -9,7 +9,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
              >
-    <Grid>
+    <Grid Background="AliceBlue">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
@@ -26,7 +26,7 @@
                 <DataGridTextColumn Header="Imię" Binding="{Binding Name}" />
                 <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}"  />
                 <DataGridTextColumn Header="Login" Binding="{Binding Login}"  />
-                <DataGridTextColumn Header="Ostatnie logowanie" Binding="{Binding LastLogin}"/>
+                <DataGridTextColumn Header="Ostatnie logowanie" Binding="{Binding LastLogin, StringFormat='{}{0:dd/MM/yyyy HH:mm}'}"/>
             </DataGrid.Columns>
             <DataGrid.ContextMenu>
                 <ContextMenu>
@@ -55,8 +55,15 @@
                  CaretBrush="White"
                  Background="Transparent"
                  BorderThickness="1,1,1,1" />
+
+            <TextBlock Text="Email " FontFamily="Roboto" VerticalAlignment="Center" HorizontalAlignment="Left" />
+            <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontFamily="Roboto" Width="120" Height="23" VerticalAlignment="Center"  HorizontalAlignment="Left"
+                 Foreground="Black"
+                 CaretBrush="White"
+                 Background="Transparent"
+                 BorderThickness="1,1,1,1" />
         </UniformGrid>
 
-        <Button x:Name="btnSave" Visibility="{Binding EditFormVisible}" Content="Zapisz" Command="{Binding ModifyUserCommand}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,0,20,0"/>
+        <Button x:Name="btnSave" Visibility="{Binding EditFormVisible}" Content="Zapisz" Command="{Binding ModifyUserCommand}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,120,0,0" Grid.Row="1" Width="76"/>
     </Grid>
 </UserControl>

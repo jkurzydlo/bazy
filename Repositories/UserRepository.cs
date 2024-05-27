@@ -41,6 +41,18 @@ namespace bazy1.Repositories
 					command.Parameters.Add(new MySqlParameter("@hash", MySqlDbType.VarChar) { Value = BCrypt.Net.BCrypt.HashPassword(password) }) ;
 					//command.Parameters.Add(new MySqlParameter("@password", MySqlDbType.VarChar) { Value = "admin" });
 					command.ExecuteScalar();
+
+					var specs = new List<string> { "Chirurg", "Dermatolog", "Kardiolog", "Laryngolog", "Neurolog", "Okulista", "Ortopeda", "Pediatra", "Psychiatra", "Psycholog", "Stomatolog", "Urolog" };
+
+                    command.Connection = connection;
+
+					for (int i = 0;i < specs.Count;i++)
+                    {
+                       command.CommandText = $"insert ignore into specialization(name) values(@{i})";
+						command.Parameters.Add(new MySqlParameter($"@{i}", MySqlDbType.VarChar) { Value = specs[i] });
+						command.ExecuteScalar();
+                    }
+
 				}
 			}
 		}

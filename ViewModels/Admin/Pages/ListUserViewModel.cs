@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Net.Mail;
 using System.Windows;
 using System.Windows.Input;
 
@@ -58,7 +59,16 @@ namespace bazy1.ViewModels.Admin.Pages {
             }
         }
 
-        private string _login;
+		private string _email;
+		public string Email {
+			get => _email;
+			set {
+				_email = value;
+				OnPropertyChanged(nameof(Email));
+			}
+		}
+
+		private string _login;
         public string Login {
             get => _login;
             set {
@@ -86,11 +96,14 @@ namespace bazy1.ViewModels.Admin.Pages {
                 if (SelectedUser != null)
                 {
                     var userToUpdate = DbContext.Users.FirstOrDefault(u => u.Id == SelectedUser.Id);
-                    if (userToUpdate != null)
+                    MailAddress mail;
+                    if((string.IsNullOrEmpty(Email) || string.IsNullOrWhiteSpace(Email)) || (MailAddress.TryCreate(Email, out mail)))
+                    if (userToUpdate != null && !string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(Surname))
                     {
                         userToUpdate.Name = Name;
                         userToUpdate.Surname = Surname;
                         userToUpdate.Login = Login;
+                        userToUpdate.Email = Email;
                         try
                         {
                             // Zapisujemy zmiany do bazy danych

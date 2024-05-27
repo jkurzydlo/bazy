@@ -25,14 +25,6 @@
                 <DataGridTextColumn Header="Data wystawienia" Binding="{Binding DateOfPrescription, StringFormat='{}{0:dd/MM/yyyy}'}"/>
             </DataGrid.Columns>
 
-            <DataGrid.ContextMenu>
-
-                <ContextMenu>
-                    <MenuItem Header="Przepisz leki" Command="{Binding ShowAddMedicationCommand}" />
-                </ContextMenu>
-
-            </DataGrid.ContextMenu>
-
         </DataGrid>
         <wv2:WebView2 Grid.Column="1" Grid.RowSpan="2" Name="webView" x:FieldModifier="public" Source= "{Binding RelativeSource={
   RelativeSource FindAncestor, 

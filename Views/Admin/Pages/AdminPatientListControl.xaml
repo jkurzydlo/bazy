@@ -21,8 +21,6 @@
                 <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}" />
                 <DataGridTextColumn Header="PESEL" Binding="{Binding Pesel}" />
                 <DataGridTextColumn Header="Telefon" Binding="{Binding PhoneNumber}" />
-                <DataGridTextColumn Header="Ostatnia wizyta" Binding="{Binding LastVisit}"/>
-                <DataGridTextColumn Header="Najbliższa wizyta" Binding="{Binding NextVisit}"/>
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
@@ -36,9 +34,6 @@
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Historia przebytych chorób" Command="{Binding ShowMedicalHistoryCommand}" />
-                    <MenuItem Header="Dodaj schorzenie" Command="{Binding ShowAddDiseaseCommand}" />
-                    <MenuItem Header="Wypisz receptę" Command="{Binding ShowAddMedicationCommand}"/>
-                    <MenuItem Header="Wystaw skierowanie" Command="{Binding ShowAddReferralCommand}"/>
                     <MenuItem Header="Edytuj dane pacjenta" Command="{Binding AdminEditPatientCommand}" CommandParameter="{Binding SelectedPatient}" />
                     <MenuItem Header="Usuń pacjenta" Command="{Binding PatientDeleteCommand}" />
                 </ContextMenu>
