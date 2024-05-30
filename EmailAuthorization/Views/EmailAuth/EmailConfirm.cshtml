@@ -1,0 +1,73 @@
+﻿<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+    window.history.forward(-1);
+</script>
+
+@if(ViewBag.ok == "1"){
+@model EmailAuthorization.Models.User
+
+    ViewBag.Title = "Aktywacja konta";
+
+@using (Html.BeginForm("EmailConfirm","EmailAuth"))
+{
+    <div class="h-100 d-flex align-items-center justify-content-center" style="background-color: #F0F8FF">
+        <h9>Aktywacja konta użytkownika dla programu Medikat</h9>
+        <img src="https://cdn1.iconfinder.com/data/icons/health-and-medical-glyphs-4/128/162-512.png" width="150" height="150" />
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal align-items-center">
+        <h5>Ustaw nowe hasło</h5>
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group" >
+            <label>Hasło</label>
+            <div class="col-md-10">
+                @Html.PasswordFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                    <br />
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <label>Powtórz hasło</label>
+            <div class="col-md-10">
+                @Html.PasswordFor(model => model.PasswordConfirmation, new { htmlAttributes = new { @class = "form-control" } })
+                <br/>
+                @Html.ValidationMessageFor(model => model.PasswordConfirmation, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="col-md-offset-2 col-md-10" style="margin-top:5; margin-bottom:5">
+            <input type="submit" value="Zapisz" class="btn btn-dark" />
+        </div>
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">Zasady dot. złożoności hasła</h5>
+                    <p class="card-text">Hasło musi składać się z przynajmniej 8 znaków, w tym 1 cyfry, 1 małej litery, 1 dużej liter i jednego znaku </p>
+
+                </div>
+            </div>
+       </div>
+    </div>
+
+    }
+}
+else if(ViewBag.ok == "-1")
+{
+    <div class="h-100 d-flex align-items-center justify-content-center" style="background-color: #F0F8FF">
+		<h9 style="color:orangered">Błąd aktywacji konta w systemie Medikat. Link aktywacyjny wygasł lub jest niepoprawny.</h9>
+        <br/>
+        <h9 style="color:orangered">Skontaktuj się z administratorem</h9>
+        <img src="https://cdn1.iconfinder.com/data/icons/health-and-medical-glyphs-4/128/162-512.png" width="150" height="150" />
+    </div>
+}
+else
+{
+    <div class="h-100 d-flex align-items-center justify-content-center" style="background-color: #F0F8FF">
+        <h9>Konto zostało aktywowane. Możesz już korzystać z oprogramowania Medikat</h9>
+        <img src="https://cdn1.iconfinder.com/data/icons/health-and-medical-glyphs-4/128/162-512.png" width="150" height="150" />
+    </div>
+}
+```
+
