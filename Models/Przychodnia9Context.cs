@@ -575,6 +575,9 @@ public partial class Przychodnia9Context : DbContext
             entity.HasIndex(e => e.Login, "login").IsUnique();
 
             entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Activated)
+                .HasDefaultValueSql("'0'")
+                .HasColumnName("activated");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasColumnName("email");
@@ -594,6 +597,13 @@ public partial class Przychodnia9Context : DbContext
             entity.Property(e => e.Surname)
                 .HasMaxLength(45)
                 .HasColumnName("surname");
+            entity.Property(e => e.Token)
+                .HasMaxLength(250)
+                .HasColumnName("token");
+            entity.Property(e => e.Tokendate)
+                .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                .HasColumnType("datetime")
+                .HasColumnName("tokendate");
             entity.Property(e => e.Type)
                 .HasColumnType("enum('recepcjonista','admin','lekarz')")
                 .HasColumnName("type");

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 
 namespace bazy1.Models;
 
@@ -23,9 +22,4 @@ public partial class Workhour
     public DateTime? BlockEnd { get; set; }
 
     public virtual Doctor Doctor { get; set; } = null!;
-	public override string ToString() {
-		var cultureInfo = new CultureInfo("pl-PL");
-		return cultureInfo.DateTimeFormat.GetDayName(BlockStart.Value.DayOfWeek) + ", " + BlockStart.Value + "-" + BlockEnd.Value.ToString("HH:mm");
-
-	}
 }

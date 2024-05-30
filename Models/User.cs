@@ -23,6 +23,12 @@ public partial class User
 
     public string? Email { get; set; }
 
+    public string? Token { get; set; }
+
+    public bool? Activated { get; set; }
+
+    public DateTime? Tokendate { get; set; }
+
     public virtual ICollection<Administrator> Administrators { get; set; } = new List<Administrator>();
 
     public virtual ICollection<Doctor> Doctors { get; set; } = new List<Doctor>();

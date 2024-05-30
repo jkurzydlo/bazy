@@ -2,6 +2,7 @@
 using bazy1.Utils;
 using Google.Protobuf.Compiler;
 using Microsoft.AspNetCore.CookiePolicy;
+using Microsoft.EntityFrameworkCore;
 using MySql.Data.MySqlClient;
 using Org.BouncyCastle.Crypto.Generators;
 using QuestPDF.Fluent;
@@ -155,6 +156,8 @@ namespace bazy1.ViewModels.Admin.Pages
             _user = user;
             ParentModel = parentModel;
             var tempUser = new User();
+
+
             AddUserCommand = new BasicCommand((object obj) =>
             {
                 // Sprawdzenie, czy imię i nazwisko nie są puste
@@ -197,10 +200,16 @@ namespace bazy1.ViewModels.Admin.Pages
                             command.Parameters.AddWithValue("@p_surname", UserSurname);
                             command.Parameters.AddWithValue("@p_hash", passHash);
                             command.Parameters.AddWithValue("@p_email", Email ?? (object)DBNull.Value);
+                            command.Parameters.AddWithValue("@p_token", Guid.NewGuid().ToString());
 
                             command.ExecuteNonQuery();
                         }
                     }
+                    
+
+                    EmailSender emailSender = new();
+                    Console.WriteLine(DbContext.Users.OrderBy(u => u.Tokendate).Last().Email);
+                    emailSender.send(DbContext.Users.OrderBy(u=>u.Tokendate).Last());
 
                     // Wyświetlenie loginu i hasła w MessageBoxie
                     System.Windows.MessageBox.Show($"Login: {login}\nHasło: {password}", "Nowy użytkownik utworzony", MessageBoxButton.OK, MessageBoxImage.Information);

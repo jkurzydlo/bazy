@@ -1,5 +1,6 @@
 ﻿using bazy1.Models;
 using bazy1.Models.Part;
+using bazy1.Utils;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.ObjectModel;
@@ -86,6 +87,7 @@ namespace bazy1.ViewModels.Admin.Pages {
         }
 
         public ListUserViewModel(AdminViewModel adminViewModel) {
+
             _adminViewModel = adminViewModel;
             _users = new ObservableCollection<User>(DbContext.Users);
 
@@ -129,7 +131,6 @@ namespace bazy1.ViewModels.Admin.Pages {
 
                     DbContext.Database.ExecuteSqlRaw($"delete from doctor_specialization where doctor_id = (select id from doctor where user_id = {SelectedUser.Id}); ");
 					DbContext.Database.ExecuteSqlRaw($"delete from doctor where user_id = {SelectedUser.Id}; ");
-
 				DbContext.Database.ExecuteSqlRaw($"delete from administrator where user_id = {SelectedUser.Id}; ");
 				DbContext.Database.ExecuteSqlRaw($"delete from receptionist where user_id = {SelectedUser.Id}; ");
 

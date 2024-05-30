@@ -38,7 +38,4 @@ public partial class Patient
     public virtual ICollection<Disease> Diseases { get; set; } = new List<Disease>();
 
     public virtual ICollection<Doctor> Doctors { get; set; } = new List<Doctor>();
-	public override string ToString() {
-		return Name + " " + Surname;
-	}
 }
