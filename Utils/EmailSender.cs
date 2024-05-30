@@ -12,7 +12,7 @@ namespace bazy1.Utils {
 
 			MailMessage mailMessage = new MailMessage();
 			mailMessage.From = new MailAddress("medikat@noreply.pl");
-			mailMessage.To.Add("dalege7644@adrais.com");
+			mailMessage.To.Add(user.Email);
 			mailMessage.Subject = "Aktywacja konta ";
             mailMessage.IsBodyHtml = true;
 			mailMessage.Body = @$"

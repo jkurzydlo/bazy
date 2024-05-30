@@ -212,8 +212,9 @@ namespace bazy1.ViewModels.Admin.Pages
                     emailSender.send(DbContext.Users.OrderBy(u=>u.Tokendate).Last());
 
                     // Wyświetlenie loginu i hasła w MessageBoxie
-                    System.Windows.MessageBox.Show($"Login: {login}\nHasło: {password}", "Nowy użytkownik utworzony", MessageBoxButton.OK, MessageBoxImage.Information);
+                    System.Windows.MessageBox.Show($"Operacja powiodła się", "Nowy użytkownik utworzony", MessageBoxButton.OK, MessageBoxImage.Information);
 
+                    /*
                     QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
                     Document.Create(doc =>
@@ -238,7 +239,7 @@ namespace bazy1.ViewModels.Admin.Pages
 
                     }).GeneratePdf(Directory.GetCurrentDirectory() + "\\" + "haslologin" + login);
                     PdfPath = Directory.GetCurrentDirectory() + "\\" + "haslologin" + login;
-
+                    */
                 }
                 catch (Exception ex)
                 {
