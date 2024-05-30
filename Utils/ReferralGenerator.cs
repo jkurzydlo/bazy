@@ -71,7 +71,7 @@ namespace bazy1.Utils {
 			//ViewModels.ViewModelBase.DbContext.Update(prescription.Medicines);
 
 			//Console.WriteLine("pdff:"+prescription.Pdf);
-			ViewModels.ViewModelBase.DbContext.SaveChanges();
+			//ViewModels.ViewModelBase.DbContext.SaveChanges();
 			return fileTitle;
 		}
 

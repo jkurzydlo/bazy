@@ -32,6 +32,7 @@
                 <ContextMenu>
                     <MenuItem Header="Zmodyfikuj" Command="{Binding ShowModifyPanel}" />
                     <MenuItem Header="Usuń" Command="{Binding DeleteUserCommand}" />
+                    <MenuItem Header="Wyślij wiadomość aktywacyjną" Command="{Binding SendAccountVerificationEmail}"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>

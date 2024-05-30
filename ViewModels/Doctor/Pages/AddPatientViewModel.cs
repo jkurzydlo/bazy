@@ -224,7 +224,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 				}
 				if(fieldName == "Pesel" && needToValidate[fieldName])
 				{
-					if (!PeselValidator.isValid(Pesel)) result = "Niepoprawny PESEL";
+					if (!PeselValidator.isValid(Pesel) || DbContext.Patients.Where(p => p.Pesel == Pesel).Count() > 0) result = "Niepoprawny PESEL";
 					else if (ErrorCollection.ContainsKey(fieldName))
 						ErrorCollection.Remove(fieldName);
 				}

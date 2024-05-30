@@ -19,8 +19,10 @@ namespace bazy1.ViewModels.Admin.Pages {
         public ICommand ShowModifyPanel { get; set; }
         public ICommand ModifyUserCommand { get; set; }
         public ICommand DeleteUserCommand { get; }
+        public ICommand SendAccountVerificationEmail { get; set;}
 
-        public ObservableCollection<User> Users {
+
+		public ObservableCollection<User> Users {
             get => _users;
             set {
                 _users = value;
@@ -92,6 +94,16 @@ namespace bazy1.ViewModels.Admin.Pages {
             _users = new ObservableCollection<User>(DbContext.Users);
 
             ShowModifyPanel = new BasicCommand((object obj) => EditFormVisible = Visibility.Visible);
+
+
+            SendAccountVerificationEmail = new BasicCommand((object obj) =>
+            {
+                EmailSender emailSender = new EmailSender();
+                emailSender.send(SelectedUser);
+                SelectedUser.Token = Guid.NewGuid().ToString();
+                SelectedUser.Tokendate = DateTime.Now;
+                DbContext.SaveChanges();
+            });
 
             ModifyUserCommand = new BasicCommand((object obj) =>
             {

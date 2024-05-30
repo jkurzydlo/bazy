@@ -372,6 +372,7 @@ public partial class Przychodnia9Context : DbContext
             entity.Property(e => e.BirthDate)
                 .HasColumnType("date")
                 .HasColumnName("birthDate");
+            entity.Property(e => e.Deleted).HasColumnName("deleted");
             entity.Property(e => e.Email)
                 .HasMaxLength(45)
                 .HasColumnName("email");

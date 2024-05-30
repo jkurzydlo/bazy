@@ -123,9 +123,9 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 		public DateTime SelectedDateEnd {
 			get => _selectedDateEnd;
 			set {
-				Console.WriteLine(DbContext.Workhours.Where(w => w.DoctorId == SelectedDoctor.Id).OrderBy(w => w.BlockEnd).Count());
+				//Console.WriteLine(DbContext.Workhours.Where(w => w.DoctorId == SelectedDoctor.Id).OrderBy(w => w.BlockEnd).Count());
 
-				if (DbContext.Workhours.Where(w => w.DoctorId == SelectedDoctor.Id).Count() > 0)
+				if (SelectedDoctor != null && DbContext.Workhours.Where(w => w.DoctorId == SelectedDoctor.Id).Count() > 0)
 				{
 					if (value.Date <= DbContext.Workhours.Where(w => w.DoctorId == SelectedDoctor.Id).OrderBy(w => w.BlockEnd).Last().End && value.Date >= SelectedDateStart.Date)
 					{

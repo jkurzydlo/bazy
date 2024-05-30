@@ -21,7 +21,7 @@ namespace bazy1.Repositories
 				using (MySqlConnection conn = GetConnection())
 				{
 					conn.Open();
-					string query = "SELECT * FROM appointment where patient_id=@id";
+					string query = "SELECT DISTINCT a.id,a.date,a.goal, a.patient_ID,a.doctor_id  FROM appointment a join patient p where a.patient_id=@id && !p.deleted";
                     MySqlCommand cmd = new();
                     cmd.Connection = conn;
                     cmd.CommandText = query;

@@ -128,6 +128,7 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 			AddPatientCommand = new BasicCommand(obj => viewModel.CurrentViewModel = new AddPatientViewModel(viewModel));
 			PatientDeleteCommand = new BasicCommand(obj =>
 			{
+				/*
 				DbContext.Database.ExecuteSql($"Delete from patient_diesease where patient_id = {SelectedPatient.Id}");
 				DbContext.Database.ExecuteSql($"Delete from patient_address where patient_id = {SelectedPatient.Id}");
 				DbContext.Database.ExecuteSql($"Delete from doctor_has_patient where patient_id = {SelectedPatient.Id}");
@@ -136,11 +137,13 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 				DbContext.Database.ExecuteSql($"delete from prescription where patient_id={SelectedPatient.Id}");
 				DbContext.Database.ExecuteSql($"delete from referral where patient_id={SelectedPatient.Id}");
 				DbContext.Database.ExecuteSql($"delete from patient where patient_id={SelectedPatient.Id}");
+				*/
+				DbContext.Database.ExecuteSql($"update patient set deleted = '1' where patient_id={SelectedPatient.Id}");
 				DbContext.SaveChanges();
 				viewModel.CurrentViewModel = new PatientListViewModel(viewModel);
 			});
 
-			_patientsList = new(DbContext.Patients.ToList());
+			_patientsList = new(DbContext.Patients.Where(p=>!p.Deleted).ToList());
 
             foreach (var item in _patientsList)
             {

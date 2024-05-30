@@ -27,6 +27,8 @@ public partial class Patient
 
     public string? SecondName { get; set; }
 
+    public bool Deleted { get; set; }
+
     public virtual ICollection<Appointment> Appointments { get; set; } = new List<Appointment>();
 
     public virtual ICollection<Prescription> Prescriptions { get; set; } = new List<Prescription>();
@@ -38,4 +40,8 @@ public partial class Patient
     public virtual ICollection<Disease> Diseases { get; set; } = new List<Disease>();
 
     public virtual ICollection<Doctor> Doctors { get; set; } = new List<Doctor>();
+
+	public override string ToString() {
+        return Name + " " + Surname;
+	}
 }
