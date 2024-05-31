@@ -16,8 +16,6 @@ using System.Windows.Markup;
 
 namespace bazy1.ViewModels {
     class LoginViewModel : ViewModelBase {
-
-
         private string _username;
         private string _password;
         private string _errorMessage;
@@ -33,10 +31,7 @@ namespace bazy1.ViewModels {
         private bool isVisible = true;
 
         public LoginViewModel() {
-			//File.WriteAllText("C:\\utut.txt", "dsfsdfsd");
-            //Console.WriteLine(File.ReadAllText("C:\\utut.txt"));
-
-			var prescription = new Prescription() {Doctor = new Models.Doctor() { Name = "Jan", Surname="Kowalski", PhoneNumber = "2234569797",
+            var prescription = new Prescription() {Doctor = new Models.Doctor() { Name = "Jan", Surname="Kowalski", PhoneNumber = "2234569797",
                 Specializations = new List<Specialization>() {new Specialization { Name = "Chirurg" } } },
                 Patient = new Patient() { Pesel = "02658769845", Name="Adam", Surname="Nowak",
                 Addresses = new List<Address>() { new Address() { City = "Warszawa", BuildingNumber = "124", Street = "Prosta" } } },
@@ -46,13 +41,14 @@ namespace bazy1.ViewModels {
 
                 
             };
-			userRepository = new UserRepository();
+            userRepository = new UserRepository();
 
             //Wygeneruj pierwsze konto admina
             ((UserRepository)userRepository).adminGenerate();
             //ustawiamy komendę dla viewmodelu
             LoginCommand = new BasicCommand(ExecuteLoginCommand, CanExecuteLoginCommand);
         }
+
         private bool CanExecuteLoginCommand(object obj) {
             return !(string.IsNullOrWhiteSpace(Username) || string.IsNullOrWhiteSpace(Password));
         }
@@ -66,7 +62,19 @@ namespace bazy1.ViewModels {
             }
             else
             {
-                ErrorMessage = "Niepoprawne dane logowania";
+                var user = userRepository.findByUsername(Username);
+                if (user != null)
+                {
+                    ErrorMessage = $"Niepoprawne dane logowania. \nLiczba nieudanych prób: {user.FailedLoginAttempts}";
+                    if (user.LockoutEnd.HasValue && user.LockoutEnd.Value > DateTime.Now)
+                    {
+                        ErrorMessage += $" Twoje konto jest zablokowane do {user.LockoutEnd.Value}.";
+                    }
+                }
+                else
+                {
+                    ErrorMessage = "Niepoprawne dane logowania";
+                }
             }
         }
 
@@ -86,6 +94,7 @@ namespace bazy1.ViewModels {
                 OnPropertyChanged(nameof(Password));
             }
         }
+
         public string ErrorMessage {
             get => _errorMessage;
             set {
@@ -93,6 +102,7 @@ namespace bazy1.ViewModels {
                 OnPropertyChanged(nameof(ErrorMessage));
             }
         }
+
         public bool IsVisible {
             get => isVisible;
             set {
@@ -100,20 +110,21 @@ namespace bazy1.ViewModels {
             }
         }
 
-		public string LoginMessage {
+        public string LoginMessage {
             get => _loginMessage;
             set {
                 _loginMessage = value;
                 OnPropertyChanged(nameof(LoginMessage));
             }
         }
-		public string PasswordMessage {
+
+        public string PasswordMessage {
             get => _passwordMessage;
             set {
                 _passwordMessage = value;
                 OnPropertyChanged(nameof(PasswordMessage));
             }
         }
-	}
-
+    }
 }
+
