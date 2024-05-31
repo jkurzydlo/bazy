@@ -95,14 +95,14 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 		public ICommand AddAppointmentCommand { get; set; }
 
 		public AddAppointmentViewModel(ViewModelBase parentViewModel, Patient patient) {
-			SelectedDoctor = DbContext.Doctors.ElementAt(0);
+			SelectedDoctor = DbContext.Doctors.Where(d=>!d.User.Deleted).ElementAt(0);
             Console.WriteLine("ldsgsd");
             AddAppointmentCommand = new BasicCommand((object obj) =>
 			{
 			if (Workhours.Count != 0 && SelectedPatient != null && SelectedDoctor != null)
 				{
-					if(!DbContext.Doctors.Where(d => d.Id == SelectedDoctor.Id).Include("Patients").First().Patients.Contains(SelectedPatient))
-                    SelectedDoctor.Patients.Add(patient);
+					if (!DbContext.Doctors.Where(d=>!d.User.Deleted).Include("Patients").Where(d => d.Id == SelectedDoctor.Id).First().Patients.Contains(patient))
+						DbContext.Database.ExecuteSql($"insert into doctor_has_patient values({SelectedDoctor.Id},{SelectedDoctor.UserId},{patient.Id})");
 					DbContext.Database.ExecuteSqlRaw($"update workhours set open = false where doctor_id={SelectedDoctor.Id} && id={SelectedWorkhour.Id}");
 					SelectedDoctor.Appointments.Add(new Appointment { Date = SelectedWorkhour.Start, Patient = patient , Goal = AppointmentGoal });
 					//SelectedPatient.Appointments.Where(a => a.Date == SelectedWorkhour.Start).First().Notifications.Add(new Notification() { });
@@ -112,7 +112,7 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 				}
 
 			});
-			Doctors = DbContext.Doctors.Include("Workhours").ToList();
+			Doctors = DbContext.Doctors.Where(d=>!d.User.Deleted).Include("Workhours").ToList();
 			Patients = DbContext.Patients.ToList();
 
 			var doc_id = new MySqlParameter("doc_id", SelectedDoctor.Id);

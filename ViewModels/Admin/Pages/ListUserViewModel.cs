@@ -40,6 +40,7 @@ namespace bazy1.ViewModels.Admin.Pages {
                     Name = _selectedUser.Name;
                     Surname = _selectedUser.Surname;
                     Login = _selectedUser.Login;
+                    Email = _selectedUser.Email;
                 }
             }
         }
@@ -141,15 +142,18 @@ namespace bazy1.ViewModels.Admin.Pages {
 
                 Console.WriteLine(selected.Id);
 
-                    DbContext.Database.ExecuteSqlRaw($"delete from doctor_specialization where doctor_id = (select id from doctor where user_id = {SelectedUser.Id}); ");
-					DbContext.Database.ExecuteSqlRaw($"delete from doctor where user_id = {SelectedUser.Id}; ");
-				DbContext.Database.ExecuteSqlRaw($"delete from administrator where user_id = {SelectedUser.Id}; ");
-				DbContext.Database.ExecuteSqlRaw($"delete from receptionist where user_id = {SelectedUser.Id}; ");
+                DbContext.Database.ExecuteSql($"update user set deleted = 1 where id = {SelectedUser.Id}");
+
+              //  DbContext.Database.ExecuteSql($"update appointment set doctor_id =NULL, doctor_user_id =NULL where doctor_user_id={SelectedUser.Id}");
+                //    DbContext.Database.ExecuteSqlRaw($"delete from doctor_specialization where doctor_id = (select id from doctor where user_id = {SelectedUser.Id}); ");
+					//DbContext.Database.ExecuteSqlRaw($"delete from doctor where user_id = {SelectedUser.Id}; ");
+				//DbContext.Database.ExecuteSqlRaw($"delete from administrator where user_id = {SelectedUser.Id}; ");
+				//DbContext.Database.ExecuteSqlRaw($"delete from receptionist where user_id = {SelectedUser.Id}; ");
 
 
-				DbContext.Database.ExecuteSqlRaw($"delete from user where id = {SelectedUser.Id}; ");
+				//DbContext.Database.ExecuteSqlRaw($"delete from user where id = {SelectedUser.Id}; ");
 
-                    DbContext.SaveChanges();
+                 //   DbContext.SaveChanges();
                     _adminViewModel.CurrentViewModel = new ListUserViewModel(adminViewModel);
                 
 

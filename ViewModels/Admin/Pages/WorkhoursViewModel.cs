@@ -188,7 +188,7 @@ namespace bazy1.ViewModels.Admin.Pages
 		public List<string> WorkhoursErrors { get; set; } = [];
 
 		public WorkhoursViewModel() {
-			Doctors = new(DbContext.Doctors);
+			Doctors = new(DbContext.Doctors.Where(d =>!d.User.Deleted));
 
 			Save = new BasicCommand((object obj) =>
 			{

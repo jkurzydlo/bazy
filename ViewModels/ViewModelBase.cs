@@ -1,4 +1,5 @@
 using bazy1.Models;
+using bazy1.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using MySql.Data.MySqlClient;
@@ -10,10 +11,10 @@ namespace bazy1.ViewModels
 	public abstract class ViewModelBase : INotifyPropertyChanged //Klasa bazowa, wszystkie viewmodele bêd¹ z niej dziedziczyæ	
 	{
 		static ViewModelBase() {
-			if (DbContext == null) DbContext = new Przychodnia9Context();
+			if (DbContext == null) DbContext = new przychodnia9Context();
 		}
 
-		public static Przychodnia9Context DbContext { get; set; }
+		public static przychodnia9Context DbContext { get; set; }
 
 		private readonly string _connectionStrings = "Server=localhost;Database=przychodnia9;Uid=root;Pwd=;";
 

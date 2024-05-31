@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace bazy1.Models;
 
-public partial class Przychodnia9Context : DbContext
+public partial class przychodnia9Context : DbContext
 {
-    public Przychodnia9Context()
+    public przychodnia9Context()
     {
     }
 
-    public Przychodnia9Context(DbContextOptions<Przychodnia9Context> options)
+    public przychodnia9Context(DbContextOptions<przychodnia9Context> options)
         : base(options)
     {
     }
@@ -579,6 +579,7 @@ public partial class Przychodnia9Context : DbContext
             entity.Property(e => e.Activated)
                 .HasDefaultValueSql("'0'")
                 .HasColumnName("activated");
+            entity.Property(e => e.Deleted).HasColumnName("deleted");
             entity.Property(e => e.FailedLoginAttempts)
                 .HasDefaultValueSql("'0'")
                 .HasColumnName("FailedLoginAttempts");

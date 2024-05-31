@@ -25,7 +25,9 @@ namespace bazy1.ViewModels.Admin
     {
         //public DoctorViewModel DoctorViewModel { get; set; }
 
-        public ICommand ShowUpdateScheduleCommand { get; set; }
+        public ICommand ShowAdminSchedulesViewCommand { get; set; }
+
+		public ICommand ShowUpdateScheduleCommand { get; set; }
         private ViewModelBase _currentViewModel;
         private AdminViewModel _adminViewModel;
         private string _caption;
@@ -116,7 +118,7 @@ namespace bazy1.ViewModels.Admin
             // RefreshCommand = new BasicCommand((object obj) => CurrentViewModel);
             loadCurrentUser();
             Console.WriteLine("ab: "+CurrentUser.Name+CurrentUser.Id+ CurrentUser.FirstLogin);
-            _databaseService = new DatabaseService(new Przychodnia9Context());
+            _databaseService = new DatabaseService(new przychodnia9Context());
             Users = 
                 DatabaseService.getDbContext().Users.Select(u => new UserPart(){
                 Name = u.Name,
@@ -124,6 +126,7 @@ namespace bazy1.ViewModels.Admin
                 Type = u.Type
             }).ToList();
 
+            ShowAdminSchedulesViewCommand = new BasicCommand((object obj) => { if (!CurrentUser.FirstLogin || !firstLogin) CurrentViewModel = new SchedulesViewModel(); });
             ShowAddUserViewCommand = new BasicCommand(ExecuteShowAddUserViewCommand);
             ShowUserListViewCommand = new BasicCommand(ExecuteShowUserListViewCommand);
             ShowAddWorkhoursCommand = new BasicCommand((object obj) => { if(!CurrentUser.FirstLogin || !firstLogin)CurrentViewModel = new WorkhoursViewModel(); });
@@ -143,7 +146,7 @@ namespace bazy1.ViewModels.Admin
 			// RefreshCommand = new BasicCommand((object obj) => CurrentViewModel);
 			loadCurrentUser();
 			Console.WriteLine("abdzia: " + CurrentUser.Name + CurrentUser.Id+ CurrentUser.FirstLogin);
-			_databaseService = new DatabaseService(new Przychodnia9Context());
+			_databaseService = new DatabaseService(new przychodnia9Context());
 			Users =
 				DatabaseService.getDbContext().Users.Select(u => new UserPart()
 				{

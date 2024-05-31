@@ -162,9 +162,9 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 
 		public PatientListViewModel() {
 			// Inicjalizacja pacjentów
-			using (var DbContext = new Przychodnia9Context())
+			using (var DbContext = new przychodnia9Context())
 			{
-				_patientsList = new ObservableCollection<Patient>(DbContext.Patients.ToList());
+				_patientsList = new ObservableCollection<Patient>(DbContext.Patients.Where(p=>!p.Deleted).ToList());
 			}
 			PatientView = CollectionViewSource.GetDefaultView(_patientsList);
 
@@ -189,9 +189,9 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 			{
 				if (SelectedPatient != null)
 				{
-					using (var DbContext = new Przychodnia9Context())
+					using (var DbContext = new przychodnia9Context())
 					{
-						DbContext.Patients.Remove(SelectedPatient);
+						DbContext.Patients.Where(p => p.Id == SelectedPatient.Id).First().Deleted = true;
 						DbContext.SaveChanges();
 					}
 					_patientsList.Remove(SelectedPatient);

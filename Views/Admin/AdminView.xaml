@@ -25,7 +25,11 @@
         <DataTemplate DataType="{x:Type pagesViewModels:AddUserViewModel}">
             <pagesViews:UserAddControl/>
         </DataTemplate>
-        
+
+        <DataTemplate DataType="{x:Type pagesViewModels:SchedulesViewModel}">
+            <pagesViews:SchedulesView/>
+        </DataTemplate>
+
         <DataTemplate DataType="{x:Type pagesViewModels:ListUserViewModel}">
             <pagesViews:UserListControl/>
         </DataTemplate>
@@ -83,7 +87,8 @@
             </Button>
             <Button x:Name="Zmienharmonogram" Width="150" Height="40" Content="Zmień harmonogram" Command="{Binding ShowUpdateScheduleCommand}"/>
 
-            <Button x:Name="patientList" Width="150" Height="40" Content="Lista pacjentów" Command="{Binding ShowAdminPatientListViewCommand}"/> 
+            <Button x:Name="patientList" Width="150" Height="40" Content="Lista pacjentów" Command="{Binding ShowAdminPatientListViewCommand}"/>
+            <Button x:Name="HarmonogramyAdmin" Width="150" Height="40" Content="Harmonogramy" Command="{Binding ShowAdminSchedulesViewCommand}"/>
 
 
         </StackPanel>

@@ -79,6 +79,10 @@ namespace bazy1.Repositories
                     //Dodane binary żeby zwracał uwagę na wielkość znaków
                     command.CommandText = "select hash from User where @login = binary login";
                     var hash = (string)command.ExecuteScalar();
+                    command.CommandText = "select deleted from User where @login2 = binary login";
+                    command.Parameters.Add("@login2", MySqlDbType.VarChar).Value = credential.UserName;
+
+                    var deleted = (bool)command.ExecuteScalar();
 
                     Console.WriteLine("hash: " + hash);
                     if (hash != null)

@@ -6,13 +6,13 @@ namespace bazy1.ViewModels.Admin.Pages
     public class AdminEditPatientViewModel : ViewModelBase
     {
         private Patient _selectedPatient;
-        private readonly Przychodnia9Context DbContext;
+        private readonly przychodnia9Context DbContext;
         private readonly AdminPatientListViewModel _adminPatientListViewModel;
 
         public AdminEditPatientViewModel(AdminPatientListViewModel adminPatientListViewModel, Patient patient)
         {
             _adminPatientListViewModel = adminPatientListViewModel;
-            DbContext = new Przychodnia9Context();
+            DbContext = new przychodnia9Context();
             SelectedPatient = patient;
             SavePatientCommand = new BasicCommand(SavePatient);
         }
