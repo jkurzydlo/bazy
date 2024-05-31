@@ -20,7 +20,7 @@ namespace bazy1.ViewModels.Admin.Pages
         {
             SelectedPatient = selectedPatient;
 
-            using (var DbContext = new Przychodnia9Context())
+            using (var DbContext = new przychodnia9Context())
             {
                 _diseasesList = new ObservableCollection<Disease>(DbContext.Diseases.Where(d => d.Patients.Contains(SelectedPatient)).ToList());
             }

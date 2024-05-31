@@ -8,13 +8,13 @@ using System.Threading.Tasks;
 namespace bazy1 {
 	internal class DatabaseService {
 		
-		private static Przychodnia9Context _dbContext;
+		private static przychodnia9Context _dbContext;
 
-		public DatabaseService(Przychodnia9Context dbContext) {
+		public DatabaseService(przychodnia9Context dbContext) {
 			_dbContext = dbContext;
 		}
 
-		public static Przychodnia9Context getDbContext() {
+		public static przychodnia9Context getDbContext() {
 			return _dbContext;
 		}
 		

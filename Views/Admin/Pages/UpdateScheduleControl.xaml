@@ -10,10 +10,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid Background="AliceBlue">
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
             <DatePicker SelectedDate="{Binding SelectedDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <ComboBox VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ItemsSource="{Binding Doctors}" Width="120" Height="40" SelectedItem="{Binding SelectedDoctor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <ComboBox VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ItemsSource="{Binding Doctors}" Width="120" Height="20" SelectedItem="{Binding SelectedDoctor, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
             </StackPanel>
            

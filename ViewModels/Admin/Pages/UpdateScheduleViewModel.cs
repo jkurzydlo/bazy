@@ -41,6 +41,7 @@ namespace bazy1.ViewModels.Admin.Pages
 			set {
 				_selectedDoctor = value;
 				OnPropertyChanged(nameof(SelectedDoctor));
+                SelectedDate = DateTime.Now;
 			}
 		}
 
@@ -61,8 +62,8 @@ namespace bazy1.ViewModels.Admin.Pages
 			WorkHours.Clear();
 			var whStarts = DbContext.Workhours.Where(ws => ws.BlockStart.Value.Date == SelectedDate.Date && SelectedDoctor.Id == ws.DoctorId).GroupBy(ws => ws.BlockStart).Select(g => g.First());
 			var whEnds = DbContext.Workhours.Where(ws => ws.BlockStart.Value.Date == SelectedDate.Date && SelectedDoctor.Id == ws.DoctorId).GroupBy(ws => ws.BlockEnd).Select(g => g.First());
-
-			foreach (var item in whEnds)
+            Console.WriteLine(whStarts.Count()+"--"+SelectedDate.Date);
+            foreach (var item in whEnds)
 			{
 				WorkHours.Add(new WorkHour() { start1 = (DateTime)item.BlockStart, end1 = (DateTime)item.BlockEnd });
 			}
@@ -85,14 +86,14 @@ namespace bazy1.ViewModels.Admin.Pages
         public DateTime SelectedDate {
             get => _selectedDate;
             set {
-                if (SelectedDoctor != null && value.Date <= DbContext.Workhours.Where(w => w.DoctorId == SelectedDoctor.Id).OrderBy(w => w.BlockEnd).Last().End &&
-                    value.Date >= DbContext.Workhours.Where(w=>w.DoctorId == SelectedDoctor.Id).OrderBy(w => w.BlockStart).First().Start )
+                if (SelectedDoctor != null && value.Date.Date <= DbContext.Workhours.Where(w => w.DoctorId == SelectedDoctor.Id).OrderBy(w => w.BlockEnd).Last().End.Value.Date &&
+                    value.Date.Date >= DbContext.Workhours.Where(w => w.DoctorId == SelectedDoctor.Id).OrderBy(w => w.BlockStart).First().Start.Value.Date)
                 {
                     _selectedDate = value;
                     OnPropertyChanged(nameof(SelectedDate));
                     LoadWorkhours();
                 }
-                else _selectedDate = DateTime.Now;
+                else _selectedDate = DateTime.Now.Date;
 
 			}
 		}
@@ -135,8 +136,11 @@ namespace bazy1.ViewModels.Admin.Pages
                     MsgBoxMessage = "";
                     foreach (var item in WorkHours)
                     {
-                        foreach (var app in appointmentRepository.GetAppointments().Where(ap => ap.DoctorId == SelectedDoctor.Id && ap.Date.Value.Date == SelectedDate.Date))
+                        var apps = DbContext.Appointments.Include("Patient").Include("Doctor").Where(ap => !ap.Patient.Deleted && ap.DoctorId == SelectedDoctor.Id && ap.Date.Value.Date == SelectedDate.Date).ToList();
+
+						foreach (var app in apps)
                         {
+                            
                             if (WorkHours.Any(wh => { return new TimeRange(wh.start1, wh.end1).HasInside(app.Date.Value); })) { }
                             else
                             {

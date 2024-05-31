@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace bazy1.Models;
 
-public partial class Przychodnia9Context : DbContext
+public partial class przychodnia9Context : DbContext
 {
-    public Przychodnia9Context()
+    public przychodnia9Context()
     {
     }
 
-    public Przychodnia9Context(DbContextOptions<Przychodnia9Context> options)
+    public przychodnia9Context(DbContextOptions<przychodnia9Context> options)
         : base(options)
     {
     }
