@@ -21,6 +21,25 @@
                 <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}" />
                 <DataGridTextColumn Header="PESEL" Binding="{Binding Pesel}" />
                 <DataGridTextColumn Header="Telefon" Binding="{Binding PhoneNumber}" />
+                <DataGridTemplateColumn Header="Aktywny" CanUserResize="False" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Text" Value="Tak" />
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Deleted }" Value="True">
+                                                <Setter Property="Text" Value="Nie" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
             </DataGrid.Columns>
             <DataGrid.RowDetailsTemplate>
                 <DataTemplate>
@@ -35,7 +54,7 @@
                 <ContextMenu>
                     <MenuItem Header="Historia przebytych chorób" Command="{Binding ShowMedicalHistoryCommand}" />
                     <MenuItem Header="Edytuj dane pacjenta" Command="{Binding AdminEditPatientCommand}" CommandParameter="{Binding SelectedPatient}" />
-                    <MenuItem Header="Usuń pacjenta" Command="{Binding PatientDeleteCommand}" />
+                    <MenuItem Header="Usuń pacjenta" Command="{Binding Source={x:Reference deletePatientBox}, Path=Show}" CommandParameter="Usunąć?"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>

@@ -109,7 +109,7 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 
         public AdminPatientListViewModel(AdminViewModel viewModel)
         {
-            CurrentViewModel = viewModel;
+            //CurrentViewModel = viewModel;
             using (var DbContext = new Przychodnia9Context())
             {
                 _patientsList = new ObservableCollection<Patient>(DbContext.Patients.ToList());
@@ -130,8 +130,12 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
                 {
                     using (var DbContext = new Przychodnia9Context())
                     {
+                        DbContext.Database.ExecuteSql($"update patient set deleted = 1 where id = {SelectedPatient.Id}");
+						DbContext.Database.ExecuteSql($"update workhours set open = true where start in (select date from appointment a join patient p on p.id=a.patient_id where p.deleted = 1)");
+
 						//patient_diesease itd...
 						//DbContext.Patients.Remove(SelectedPatient);
+						/*
 						DbContext.Database.ExecuteSql($"Delete from patient_diesease where patient_id = {SelectedPatient.Id}");
 						DbContext.Database.ExecuteSql($"Delete from patient_address where patient_id = {SelectedPatient.Id}");
 						DbContext.Database.ExecuteSql($"Delete from doctor_has_patient where patient_id = {SelectedPatient.Id}");
@@ -141,11 +145,13 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 						DbContext.Database.ExecuteSql($"delete from referral where patient_id={SelectedPatient.Id}");
 
 						DbContext.Database.ExecuteSql($"delete from patient where id={SelectedPatient.Id}");
-                        foreach(var p in PatientsList) DbContext.Update(p);
+                        */
+						foreach (var p in PatientsList) DbContext.Update(p);
                         //DbContext.SaveChanges();
                     }
-                    _patientsList.Remove(SelectedPatient);
+                   // _patientsList.Remove(SelectedPatient);
                     PatientView.Refresh();
+                    viewModel.CurrentViewModel = new AdminPatientListViewModel(viewModel);
                 }
             });
 

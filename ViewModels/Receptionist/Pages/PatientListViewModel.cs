@@ -138,8 +138,9 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 				DbContext.Database.ExecuteSql($"delete from referral where patient_id={SelectedPatient.Id}");
 				DbContext.Database.ExecuteSql($"delete from patient where patient_id={SelectedPatient.Id}");
 				*/
-				DbContext.Database.ExecuteSql($"update patient set deleted = '1' where patient_id={SelectedPatient.Id}");
-				DbContext.SaveChanges();
+				DbContext.Database.ExecuteSql($"update patient set deleted = 1 where id={SelectedPatient.Id}");
+				DbContext.Database.ExecuteSql($"update workhours set open = true where start in (select date from appointment a join patient p on p.id=a.patient_id where p.deleted = 1)");
+				//DbContext.SaveChanges();
 				viewModel.CurrentViewModel = new PatientListViewModel(viewModel);
 			});
 

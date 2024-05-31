@@ -29,6 +29,8 @@ public partial class User
 
     public DateTime? Tokendate { get; set; }
 
+    public bool Deleted { get; set; }
+
     public virtual ICollection<Administrator> Administrators { get; set; } = new List<Administrator>();
 
     public virtual ICollection<Doctor> Doctors { get; set; } = new List<Doctor>();

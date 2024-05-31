@@ -17,7 +17,7 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 		private ObservableCollection<Workhour> _workhourList = new();
 		private Dictionary<DateTime, List<TimeRange>> _hoursList = new();
 		private ObservableCollection<Appointment> _appointments = new();
-		private ObservableCollection<Models.Doctor> _doctorList = new(DbContext.Doctors.ToList());
+		private ObservableCollection<Models.Doctor> _doctorList = new(DbContext.Doctors.Where(d=>!d.User.Deleted).ToList());
 		private string _selectedAppointments;
 		private Workhour _selectedWorkhour;
 		private Models.Doctor doctor;
@@ -99,7 +99,7 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 		}
 
 		private void LoadAppointments() {
-			AppointmentsList = new(DbContext.Appointments.FromSqlRaw($"select a.id, a.doctor_id,a.doctor_user_id, a.dateTo, a.goal, a.date, a.patient_id, p.name, p.surname from appointment a join patient p on a.patient_id=p.id where a.doctor_id ={SelectedDoctor.Id} && a.date between '{SelectedDateStart.ToString("yyyy-MM-dd HH:mm:ss")}' and '{SelectedDateEnd.ToString("yyyy-MM-dd HH:mm:ss")}'").Include("Patient"));
+			AppointmentsList = new(DbContext.Appointments.FromSqlRaw($"select a.id, a.doctor_id,a.doctor_user_id, a.dateTo, a.goal, a.date, a.patient_id, p.name, p.surname from appointment a join patient p on a.patient_id=p.id where !p.deleted && a.doctor_id ={SelectedDoctor.Id} && !p.deleted && a.date between '{SelectedDateStart.ToString("yyyy-MM-dd HH:mm:ss")}' and '{SelectedDateEnd.ToString("yyyy-MM-dd HH:mm:ss")}' order by p.id").Include("Patient"));
 		}
 
 		public ObservableCollection<Appointment> AppointmentsList {

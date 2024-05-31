@@ -579,6 +579,7 @@ public partial class Przychodnia9Context : DbContext
             entity.Property(e => e.Activated)
                 .HasDefaultValueSql("'0'")
                 .HasColumnName("activated");
+            entity.Property(e => e.Deleted).HasColumnName("deleted");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasColumnName("email");

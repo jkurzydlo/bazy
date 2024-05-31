@@ -27,7 +27,7 @@ namespace bazy1.ViewModels.Admin.Pages
         private AppointmentRepository appointmentRepository = new();
 
 		private Models.Doctor _selectedDoctor;
-        private ObservableCollection<Models.Doctor> _doctors = new(DbContext.Doctors);
+        private ObservableCollection<Models.Doctor> _doctors = new(DbContext.Doctors.Where(d => !d.User.Deleted));
         public ObservableCollection<Models.Doctor> Doctors {
             get => _doctors;
             set {

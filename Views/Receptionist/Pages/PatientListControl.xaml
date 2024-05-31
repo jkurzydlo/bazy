@@ -38,7 +38,6 @@
                     <MenuItem Header="Umów wizytę" Command="{Binding ShowAddAppointmentViewCommand}" />
                     <MenuItem Header="Edytuj pacjenta" Command="{Binding EditPatientCommand}" />
                     <MenuItem Header="Recepty/Skierowania" Command="{Binding ShowPatientDocumentsList}"/>
-                    <MenuItem Header="Usuń pacjenta" Command="{Binding Source={x:Reference deletePatientBox}, Path=Show}" CommandParameter="Usunąć?"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
 

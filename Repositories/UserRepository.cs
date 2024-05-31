@@ -71,10 +71,14 @@ namespace bazy1.Repositories
 					command.CommandText = "select hash from User where @login = binary login";
 					command.Parameters.Add("@login",MySqlDbType.VarChar).Value = credential.UserName;
 					var hash = (string)command.ExecuteScalar();
+					command.CommandText = "select deleted from User where @login2 = binary login";
+					command.Parameters.Add("@login2", MySqlDbType.VarChar).Value = credential.UserName;
+
+					var deleted = (bool)command.ExecuteScalar();
 
 					Console.WriteLine("hash: "+hash);
 					if (hash != null){
-						if (BCrypt.Net.BCrypt.Verify(credential.Password, hash))
+						if (BCrypt.Net.BCrypt.Verify(credential.Password, hash) && !deleted)
 						{
 							//Jeśli dane ok - ustaw datę ostatniego logowania
 							command.CommandText = "update user set lastLogin=@date where login=@login";

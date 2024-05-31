@@ -41,7 +41,8 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 		public DateTime SelectedDate {
 			get => _selectedDate;
 			set {
-				_selectedDate = value;
+				if(_selectedDate >= DateTime.Now.Date) _selectedDate = value;
+				else _selectedDate = DateTime.Now.Date;
 				OnPropertyChanged(nameof(SelectedDate));
 
 				var doc_id = new MySqlParameter("doc_id", SelectedAppointment.Doctor.Id);
