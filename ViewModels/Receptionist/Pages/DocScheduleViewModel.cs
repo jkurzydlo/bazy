@@ -134,7 +134,7 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 						LoadWorkhours();
 						LoadAppointments();
 					}
-					else _selectedDateEnd = DateTime.Now;
+					else _selectedDateEnd = DateTime.Now.Date;
 				}
 			}
 		}
@@ -151,7 +151,7 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 						LoadWorkhours();
 						LoadAppointments();
 					}
-					else _selectedDateStart = DateTime.Now;
+					else _selectedDateStart = DateTime.Now.Date;
 				}
 
 

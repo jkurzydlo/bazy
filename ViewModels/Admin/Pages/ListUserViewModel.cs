@@ -40,6 +40,7 @@ namespace bazy1.ViewModels.Admin.Pages {
                     Name = _selectedUser.Name;
                     Surname = _selectedUser.Surname;
                     Login = _selectedUser.Login;
+                    Email = _selectedUser.Email;
                 }
             }
         }
