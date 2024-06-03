@@ -57,22 +57,30 @@ namespace bazy1.Repositories
 			}
 		}
 
-		public bool authenticate(NetworkCredential credential) {
+        public bool authenticate(NetworkCredential credential)
+        {
+            bool valid = false;
+            using (var connection = GetConnection())
+            {
+                using (var command = new MySqlCommand())
+                {
+                    connection.Open();
+                    command.Connection = connection;
 
-			bool valid = false;
-			using (var connection = GetConnection()) {
-				using (var command = new MySqlCommand()) {
-					connection.Open();
-					command.Connection = connection;
+                    // Sprawdź, czy konto jest zablokowane
+                    command.CommandText = "select lockoutEnd from User where @login = binary login";
+                    command.Parameters.AddWithValue("@login", credential.UserName);
+                    var lockoutEnd = command.ExecuteScalar() as DateTime?;
+                    if (lockoutEnd.HasValue && lockoutEnd.Value > DateTime.Now)
+                    {
+                        return false; // Konto jest zablokowane
+                    }
 
-
-					
-					//Dodane binary żeby zwracał uwagę na wielkość znaków
-					command.CommandText = "select hash from User where @login = binary login";
-					command.Parameters.Add("@login",MySqlDbType.VarChar).Value = credential.UserName;
-					var hash = (string)command.ExecuteScalar();
-					command.CommandText = "select deleted from User where @login2 = binary login";
-					command.Parameters.Add("@login2", MySqlDbType.VarChar).Value = credential.UserName;
+                    //Dodane binary żeby zwracał uwagę na wielkość znaków
+                    command.CommandText = "select hash from User where @login = binary login";
+                    var hash = (string)command.ExecuteScalar();
+                    command.CommandText = "select deleted from User where @login2 = binary login";
+                    command.Parameters.Add("@login2", MySqlDbType.VarChar).Value = credential.UserName;
 
 
 					Console.WriteLine("hash: "+hash);
@@ -87,17 +95,49 @@ namespace bazy1.Repositories
 							command.ExecuteScalar();
 							valid = true;
 
-						}
-					}
-					Console.WriteLine(credential.UserName + credential.Password);
-					//valid = command.ExecuteScalar() == null ? false : true;
+                            command.CommandText = "select MaxFailedLoginAttempts, LockoutDurationMinutes from login_settings limit 1";
+                            using (var settingsReader = command.ExecuteReader())
+                            {
+                                if (settingsReader.Read())
+                                {
+                                    maxFailedLoginAttempts = settingsReader.GetInt32(0);
+                                    lockoutDurationMinutes = settingsReader.GetInt32(1);
+                                }
+                            }
 
-				}
-			}
-			return valid;
-		}
+                            command.CommandText = "select FailedLoginAttempts from User where @login = binary login";
+                            command.Parameters.Clear();
+                            command.Parameters.AddWithValue("@login", credential.UserName);
+                            var failedLoginAttempts = (int?)command.ExecuteScalar() ?? 0;
+                            failedLoginAttempts++;
 
-		public IEnumerable<User> findAll() {
+                            DateTime? lockoutEndValue = null;
+                            if (failedLoginAttempts >= maxFailedLoginAttempts)
+                            {
+                                // Zablokuj konto
+                                lockoutEndValue = DateTime.Now.AddMinutes(lockoutDurationMinutes);
+                                command.CommandText = "update user set LockoutEnd=@lockoutEnd where login=@login";
+                                command.Parameters.Clear();
+                                command.Parameters.AddWithValue("@lockoutEnd", lockoutEndValue);
+                                command.Parameters.AddWithValue("@login", credential.UserName);
+                                command.ExecuteScalar();
+                            }
+
+                            command.CommandText = "update user set FailedLoginAttempts=@failedLoginAttempts where login=@login";
+                            command.Parameters.Clear();
+                            command.Parameters.AddWithValue("@failedLoginAttempts", failedLoginAttempts);
+                            command.Parameters.AddWithValue("@login", credential.UserName);
+                            command.ExecuteScalar();
+                        }
+                    }
+                    Console.WriteLine(credential.UserName + credential.Password);
+                }
+            }
+            return valid;
+        }
+
+
+        public IEnumerable<User> findAll() {
 			throw new NotImplementedException();
 		}
 
@@ -155,9 +195,11 @@ namespace bazy1.Repositories
 								Login = reader.GetString(2),
 								Name = reader.GetString(3),
 								Surname = reader.GetString(4),
-								Hash = reader.GetString(5),
-								FirstLogin = reader.GetBoolean(6)
-							};
+                                Hash = reader.GetString(5),
+                                FirstLogin = reader.GetBoolean(6),
+                                FailedLoginAttempts = reader.GetInt32(12),
+                                LockoutEnd = reader.GetDateTime(13)
+                            };
 						}
 					}
 				}

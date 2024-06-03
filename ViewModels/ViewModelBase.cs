@@ -16,7 +16,7 @@ namespace bazy1.ViewModels
 
 		public static Przychodnia9Context DbContext { get; set; }
 
-		private readonly string _connectionStrings = "Server=localhost;Database=przychodnia9;Uid=root;Pwd=12345;";
+		private readonly string _connectionStrings = "Server=localhost;Database=przychodnia9;Uid=root;Pwd=;";
 
 		
 		protected MySqlConnection GetConnection() {
