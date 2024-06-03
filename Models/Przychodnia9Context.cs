@@ -4,13 +4,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace bazy1.Models;
 
-public partial class przychodnia9Context : DbContext
+public partial class Przychodnia9Context : DbContext
 {
-    public przychodnia9Context()
+    public Przychodnia9Context()
     {
     }
 
-    public przychodnia9Context(DbContextOptions<przychodnia9Context> options)
+    public Przychodnia9Context(DbContextOptions<Przychodnia9Context> options)
         : base(options)
     {
     }
@@ -26,6 +26,8 @@ public partial class przychodnia9Context : DbContext
     public virtual DbSet<Disease> Diseases { get; set; }
 
     public virtual DbSet<Doctor> Doctors { get; set; }
+
+    public virtual DbSet<LoginSetting> LoginSettings { get; set; }
 
     public virtual DbSet<Medicine> Medicines { get; set; }
 
@@ -306,6 +308,16 @@ public partial class przychodnia9Context : DbContext
                         j.IndexerProperty<int>("DoctorUserId").HasColumnName("Doctor_User_id");
                         j.IndexerProperty<int>("SpecializationId").HasColumnName("Specialization_id");
                     });
+        });
+
+        modelBuilder.Entity<LoginSetting>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("login_settings");
+
+            entity.Property(e => e.LockoutDurationMinutes).HasDefaultValueSql("'5'");
+            entity.Property(e => e.MaxFailedLoginAttempts).HasDefaultValueSql("'5'");
         });
 
         modelBuilder.Entity<Medicine>(entity =>
@@ -613,17 +625,13 @@ public partial class przychodnia9Context : DbContext
 
         modelBuilder.Entity<Workhour>(entity =>
         {
-            entity.HasKey(e => new { e.Id, e.DoctorId, e.DoctorUserId }).HasName("PRIMARY");
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
 
             entity.ToTable("workhours");
 
-            entity.HasIndex(e => new { e.DoctorId, e.DoctorUserId }, "fk_WorkHours_Doctor1_idx");
+            entity.HasIndex(e => e.UserId, "user_id");
 
-            entity.Property(e => e.Id)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("id");
-            entity.Property(e => e.DoctorId).HasColumnName("Doctor_id");
-            entity.Property(e => e.DoctorUserId).HasColumnName("Doctor_User_id");
+            entity.Property(e => e.Id).HasColumnName("id");
             entity.Property(e => e.BlockEnd)
                 .HasColumnType("datetime")
                 .HasColumnName("blockEnd");
@@ -637,11 +645,11 @@ public partial class przychodnia9Context : DbContext
             entity.Property(e => e.Start)
                 .HasColumnType("datetime(5)")
                 .HasColumnName("start");
+            entity.Property(e => e.UserId).HasColumnName("user_id");
 
-            entity.HasOne(d => d.Doctor).WithMany(p => p.Workhours)
-                .HasForeignKey(d => new { d.DoctorId, d.DoctorUserId })
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("fk_WorkHours_Doctor1");
+            entity.HasOne(d => d.User).WithMany(p => p.Workhours)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("workhours_ibfk_1");
         });
 
         OnModelCreatingPartial(modelBuilder);

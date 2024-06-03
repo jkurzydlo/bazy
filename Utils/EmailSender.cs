@@ -11,7 +11,7 @@ namespace bazy1.Utils {
 		public void send(Models.User user) {
 
 			MailMessage mailMessage = new MailMessage();
-			mailMessage.From = new MailAddress("medikat@noreply.pl");
+			mailMessage.From = new MailAddress("medikat@noreply2.pl");
 			mailMessage.To.Add(user.Email != null ? user.Email : "");
 			mailMessage.Subject = "Aktywacja konta ";
             mailMessage.IsBodyHtml = true;

@@ -11,10 +11,10 @@ namespace bazy1.ViewModels
 	public abstract class ViewModelBase : INotifyPropertyChanged //Klasa bazowa, wszystkie viewmodele bêd¹ z niej dziedziczyæ	
 	{
 		static ViewModelBase() {
-			if (DbContext == null) DbContext = new przychodnia9Context();
+			if (DbContext == null) DbContext = new Przychodnia9Context();
 		}
 
-		public static przychodnia9Context DbContext { get; set; }
+		public static Przychodnia9Context DbContext { get; set; }
 
 		private readonly string _connectionStrings = "Server=localhost;Database=przychodnia9;Uid=root;Pwd=12345;";
 

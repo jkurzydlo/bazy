@@ -17,25 +17,25 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 		private ObservableCollection<Workhour> _workhourList = new();
 		private Dictionary<DateTime, List<TimeRange>> _hoursList = new();
 		private ObservableCollection<Appointment> _appointments = new();
-		private ObservableCollection<Models.Doctor> _doctorList = new(DbContext.Doctors.Where(d=>!d.User.Deleted).ToList());
+		private ObservableCollection<User> _doctorList = new(DbContext.Users.Where(d=>!d.Deleted && d.Type == "lekarz").ToList());
 		private string _selectedAppointments;
 		private Workhour _selectedWorkhour;
-		private Models.Doctor doctor;
+		private User _user;
 
-		public ObservableCollection<Models.Doctor> Doctors {
+		public ObservableCollection<User> Users {
 			get => _doctorList;
 			set {
 				_doctorList = value;
-				OnPropertyChanged(nameof(Doctors));
+				OnPropertyChanged(nameof(Users));
 			}
 		}
-		public Models.Doctor SelectedDoctor {
-			get => doctor;
+		public User SelectedUser {
+			get => _user;
 			set {
-				doctor = value;
+				_user = value;
 				LoadWorkhours();
 				LoadAppointments();
-				OnPropertyChanged(nameof(doctor));
+				OnPropertyChanged(nameof(SelectedUser));
 			}
 		}
 
@@ -48,7 +48,7 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 				SelectedAppointments = "";
 				if (SelectedWorkhour != null)
 				{
-					foreach (var app in AppointmentsList.Where(a => a.DoctorId == SelectedDoctor.Id && SelectedWorkhour.BlockStart <= a.Date && SelectedWorkhour.BlockEnd >= a.Date))
+					foreach (var app in AppointmentsList.Where(a => a.DoctorUserId == SelectedUser.Id && SelectedWorkhour.BlockStart <= a.Date && SelectedWorkhour.BlockEnd >= a.Date))
 						SelectedAppointments += "Termin: " + app.Date.Value.ToString("HH:mm") + "\nPacjent:" + app.Patient.Name + " " + app.Patient.Surname + "\n" + "Cel wizyty: " + app.Goal + "\n\n";
 				}
 			}
@@ -65,8 +65,8 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 
 		private void LoadWorkhours() {
 			HoursList.Clear();
-			var whStarts = DbContext.Workhours.Where(ws => ws.DoctorId == SelectedDoctor.Id && ws.BlockStart.Value.Date >= SelectedDateStart.Date && ws.BlockEnd.Value.Date <= SelectedDateEnd).GroupBy(ws => ws.BlockStart).Select(g => g.First());
-			var whEnds = DbContext.Workhours.Where(ws => ws.DoctorId == SelectedDoctor.Id && ws.BlockStart.Value.Date >= SelectedDateStart.Date && ws.BlockEnd.Value.Date <= SelectedDateEnd).GroupBy(ws => ws.BlockEnd).Select(g => g.First());
+			var whStarts = DbContext.Workhours.Where(ws => ws.UserId == SelectedUser.Id && ws.BlockStart.Value.Date >= SelectedDateStart.Date && ws.BlockEnd.Value.Date <= SelectedDateEnd).GroupBy(ws => ws.BlockStart).Select(g => g.First());
+			var whEnds = DbContext.Workhours.Where(ws => ws.UserId == SelectedUser.Id && ws.BlockStart.Value.Date >= SelectedDateStart.Date && ws.BlockEnd.Value.Date <= SelectedDateEnd).GroupBy(ws => ws.BlockEnd).Select(g => g.First());
 
 
 			for (int i = 0; i < whStarts.Count(); i++)
@@ -99,7 +99,7 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 		}
 
 		private void LoadAppointments() {
-			AppointmentsList = new(DbContext.Appointments.FromSqlRaw($"select a.id, a.doctor_id,a.doctor_user_id, a.dateTo, a.goal, a.date, a.patient_id, p.name, p.surname from appointment a join patient p on a.patient_id=p.id where !p.deleted && a.doctor_id ={SelectedDoctor.Id} && !p.deleted && a.date between '{SelectedDateStart.ToString("yyyy-MM-dd HH:mm:ss")}' and '{SelectedDateEnd.ToString("yyyy-MM-dd HH:mm:ss")}' order by p.id").Include("Patient"));
+			AppointmentsList = new(DbContext.Appointments.FromSqlRaw($"select a.id, a.doctor_id,a.doctor_user_id, a.dateTo, a.goal, a.date, a.patient_id, p.name, p.surname from appointment a join patient p on a.patient_id=p.id where !p.deleted && a.doctor_id =(select id from doctor where user_id={SelectedUser.Id}) && !p.deleted && a.date between '{SelectedDateStart.ToString("yyyy-MM-dd HH:mm:ss")}' and '{SelectedDateEnd.ToString("yyyy-MM-dd HH:mm:ss")}' order by p.id").Include("Patient"));
 		}
 
 		public ObservableCollection<Appointment> AppointmentsList {
@@ -125,9 +125,9 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 			set {
 				//Console.WriteLine(DbContext.Workhours.Where(w => w.DoctorId == SelectedDoctor.Id).OrderBy(w => w.BlockEnd).Count());
 
-				if (SelectedDoctor != null && DbContext.Workhours.Where(w => w.DoctorId == SelectedDoctor.Id).Count() > 0)
+				if (SelectedUser != null && DbContext.Workhours.Where(w => w.UserId == SelectedUser.Id).Count() > 0)
 				{
-					if (value.Date <= DbContext.Workhours.Where(w => w.DoctorId == SelectedDoctor.Id).OrderBy(w => w.BlockEnd).Last().End && value.Date >= SelectedDateStart.Date)
+					if (value.Date <= DbContext.Workhours.Where(w => w.UserId == SelectedUser.Id).OrderBy(w => w.BlockEnd).Last().End && value.Date >= SelectedDateStart.Date)
 					{
 						_selectedDateEnd = value;
 						OnPropertyChanged(nameof(SelectedDateEnd));
@@ -142,9 +142,9 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 		public DateTime SelectedDateStart {
 			get => _selectedDateStart;
 			set {
-				if (DbContext.Workhours.Where(w => w.DoctorId == SelectedDoctor.Id).Count() > 0)
+				if (DbContext.Workhours.Where(w => w.UserId== SelectedUser.Id).Count() > 0)
 				{
-					if (value.Date >= DbContext.Workhours.Where(w => w.DoctorId == SelectedDoctor.Id).OrderBy(w => w.BlockStart).First().Start && value.Date <= SelectedDateEnd.Date)
+					if (value.Date >= DbContext.Workhours.Where(w => w.UserId == SelectedUser.Id).OrderBy(w => w.BlockStart).First().Start && value.Date <= SelectedDateEnd.Date)
 					{
 						_selectedDateStart = value;
 						OnPropertyChanged(nameof(SelectedDateStart));

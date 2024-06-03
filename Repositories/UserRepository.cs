@@ -74,10 +74,11 @@ namespace bazy1.Repositories
 					command.CommandText = "select deleted from User where @login2 = binary login";
 					command.Parameters.Add("@login2", MySqlDbType.VarChar).Value = credential.UserName;
 
-					var deleted = (bool)command.ExecuteScalar();
 
 					Console.WriteLine("hash: "+hash);
 					if (hash != null){
+						var deleted = (bool)command.ExecuteScalar();
+
 						if (BCrypt.Net.BCrypt.Verify(credential.Password, hash) && !deleted)
 						{
 							//Jeśli dane ok - ustaw datę ostatniego logowania

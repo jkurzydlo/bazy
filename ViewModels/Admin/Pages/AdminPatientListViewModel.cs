@@ -110,7 +110,7 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
         public AdminPatientListViewModel(AdminViewModel viewModel)
         {
             //CurrentViewModel = viewModel;
-            using (var DbContext = new przychodnia9Context())
+            using (var DbContext = new Przychodnia9Context())
             {
                 _patientsList = new ObservableCollection<Patient>(DbContext.Patients.ToList());
             }
@@ -128,7 +128,7 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
             {
                 if (SelectedPatient != null)
                 {
-                    using (var DbContext = new przychodnia9Context())
+                    using (var DbContext = new Przychodnia9Context())
                     {
                         DbContext.Database.ExecuteSql($"update patient set deleted = 1 where id = {SelectedPatient.Id}");
 						DbContext.Database.ExecuteSql($"update workhours set open = true where start in (select date from appointment a join patient p on p.id=a.patient_id where p.deleted = 1)");

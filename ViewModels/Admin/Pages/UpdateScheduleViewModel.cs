@@ -22,25 +22,25 @@ namespace bazy1.ViewModels.Admin.Pages
 			public DateTime start1 { get; set; }
 			public DateTime end1 { get; set; }
 		}
-        private Models.Doctor doctor;
+        private Models.User _user;
 
         private AppointmentRepository appointmentRepository = new();
 
-		private Models.Doctor _selectedDoctor;
-        private ObservableCollection<Models.Doctor> _doctors = new(DbContext.Doctors.Where(d => !d.User.Deleted));
-        public ObservableCollection<Models.Doctor> Doctors {
-            get => _doctors;
+		private User _selectedUser;
+        private ObservableCollection<Models.User> _users = new(DbContext.Users.Where(d => !d.Deleted));
+        public ObservableCollection<Models.User> Users {
+            get => _users;
             set {
-                _doctors = value;
-                OnPropertyChanged(nameof(Doctors));
+                _users = value;
+                OnPropertyChanged(nameof(Users));
             }
         }
 
-		public Models.Doctor SelectedDoctor {
-			get => _selectedDoctor;
+		public User SelectedUser {
+			get => _selectedUser;
 			set {
-				_selectedDoctor = value;
-				OnPropertyChanged(nameof(SelectedDoctor));
+				_selectedUser = value;
+				OnPropertyChanged(nameof(SelectedUser));
                 SelectedDate = DateTime.Now;
 			}
 		}
@@ -60,8 +60,8 @@ namespace bazy1.ViewModels.Admin.Pages
 
         private void LoadWorkhours() {
 			WorkHours.Clear();
-			var whStarts = DbContext.Workhours.Where(ws => ws.BlockStart.Value.Date == SelectedDate.Date && SelectedDoctor.Id == ws.DoctorId).GroupBy(ws => ws.BlockStart).Select(g => g.First());
-			var whEnds = DbContext.Workhours.Where(ws => ws.BlockStart.Value.Date == SelectedDate.Date && SelectedDoctor.Id == ws.DoctorId).GroupBy(ws => ws.BlockEnd).Select(g => g.First());
+			var whStarts = DbContext.Workhours.Where(ws => ws.BlockStart.Value.Date == SelectedDate.Date && SelectedUser.Id == ws.UserId).GroupBy(ws => ws.BlockStart).Select(g => g.First());
+			var whEnds = DbContext.Workhours.Where(ws => ws.BlockStart.Value.Date == SelectedDate.Date && SelectedUser.Id == ws.UserId).GroupBy(ws => ws.BlockEnd).Select(g => g.First());
             Console.WriteLine(whStarts.Count()+"--"+SelectedDate.Date);
             foreach (var item in whEnds)
 			{
@@ -86,8 +86,8 @@ namespace bazy1.ViewModels.Admin.Pages
         public DateTime SelectedDate {
             get => _selectedDate;
             set {
-                if (SelectedDoctor != null && value.Date.Date <= DbContext.Workhours.Where(w => w.DoctorId == SelectedDoctor.Id).OrderBy(w => w.BlockEnd).Last().End.Value.Date &&
-                    value.Date.Date >= DbContext.Workhours.Where(w => w.DoctorId == SelectedDoctor.Id).OrderBy(w => w.BlockStart).First().Start.Value.Date)
+                if (DbContext.Workhours.Where(w=>w.UserId == SelectedUser.Id).Count() >0&& SelectedUser != null && value.Date.Date <= DbContext.Workhours.Where(w => w.UserId == SelectedUser.Id).OrderBy(w => w.BlockEnd).Last().End.Value.Date &&
+                    value.Date.Date >= DbContext.Workhours.Where(w => w.UserId == SelectedUser.Id).OrderBy(w => w.BlockStart).First().Start.Value.Date)
                 {
                     _selectedDate = value;
                     OnPropertyChanged(nameof(SelectedDate));
@@ -136,7 +136,7 @@ namespace bazy1.ViewModels.Admin.Pages
                     MsgBoxMessage = "";
                     foreach (var item in WorkHours)
                     {
-                        var apps = DbContext.Appointments.Include("Patient").Include("Doctor").Where(ap => !ap.Patient.Deleted && ap.DoctorId == SelectedDoctor.Id && ap.Date.Value.Date == SelectedDate.Date).ToList();
+                        var apps = DbContext.Appointments.Include("Patient").Include("Doctor").Where(ap => !ap.Patient.Deleted && ap.DoctorUserId == SelectedUser.Id && ap.Date.Value.Date == SelectedDate.Date).ToList();
 
 						foreach (var app in apps)
                         {
@@ -156,7 +156,7 @@ namespace bazy1.ViewModels.Admin.Pages
                     if (MsgBoxMessage.Length == 0)
                     {
 
-                        DbContext.Database.ExecuteSqlRaw($"delete from workhours where doctor_id={SelectedDoctor.Id} && dayofyear(start) = {SelectedDate.Date.DayOfYear} && year(start) = {SelectedDate.Date.Year}");
+                        DbContext.Database.ExecuteSqlRaw($"delete from workhours where user_id={SelectedUser.Id} && dayofyear(start) = {SelectedDate.Date.DayOfYear} && year(start) = {SelectedDate.Date.Year}");
                         GenerateNewWorkhours();
 
                         MsgBoxMessage = "Zmieniono harmonogram";
@@ -204,7 +204,7 @@ namespace bazy1.ViewModels.Admin.Pages
 
 			foreach (var slot in slots)
 			{
-                DbContext.Database.ExecuteSqlRaw($"insert into workhours(start,end, doctor_id,doctor_user_id,blockStart,open,blockEnd) values('{slot.Key.Start.ToString("yyyy-MM-dd HH:mm:ss")}','{slot.Key.End.ToString("yyyy-MM-dd HH:mm:ss")}',{SelectedDoctor.Id},{SelectedDoctor.UserId},'{slot.Value.Start.ToString("yyyy-MM-dd HH:mm:ss")}',1,'{slot.Value.End.ToString("yyyy-MM-dd HH:mm:ss")}')");
+                DbContext.Database.ExecuteSqlRaw($"insert into workhours(start,end,user_id,blockStart,open,blockEnd) values('{slot.Key.Start.ToString("yyyy-MM-dd HH:mm:ss")}','{slot.Key.End.ToString("yyyy-MM-dd HH:mm:ss")}',{SelectedUser.Id},'{slot.Value.Start.ToString("yyyy-MM-dd HH:mm:ss")}',1,'{slot.Value.End.ToString("yyyy-MM-dd HH:mm:ss")}')");
 			}
 		}
     }

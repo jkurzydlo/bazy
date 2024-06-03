@@ -36,4 +36,9 @@ public partial class User
     public virtual ICollection<Doctor> Doctors { get; set; } = new List<Doctor>();
 
     public virtual ICollection<Receptionist> Receptionists { get; set; } = new List<Receptionist>();
+
+    public virtual ICollection<Workhour> Workhours { get; set; } = new List<Workhour>();
+	public override string ToString() {
+        return Name + " " + Surname;
+	}
 }

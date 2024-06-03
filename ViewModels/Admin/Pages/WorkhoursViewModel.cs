@@ -22,8 +22,8 @@ namespace bazy1.ViewModels.Admin.Pages
 			public int end2 { get; set; }
 		}
 
-		private ObservableCollection<Models.Doctor> _doctors;
-		private Models.Doctor _selectedDoctor;
+		private ObservableCollection<User> _users;
+		private User _selectedUser;
 		private List<string> _weekdays = ["Poniedziałek", "Wtorek", "Środa", "Czwartek", "Piątek", "Sobota", "Niedziela"];
 		private ObservableCollection<WorkHour> _HoursListMonday = [];
 		private ObservableCollection<WorkHour> _HoursListTuesday = [];
@@ -145,11 +145,11 @@ namespace bazy1.ViewModels.Admin.Pages
 			}
 		}
 
-		public ObservableCollection<Models.Doctor> Doctors {
-            get => _doctors;
+		public ObservableCollection<User> Users {
+            get => _users;
             set {
-                _doctors = value;
-                OnPropertyChanged(nameof(Doctors));
+                _users = value;
+                OnPropertyChanged(nameof(Users));
             }
         }
 
@@ -170,11 +170,11 @@ namespace bazy1.ViewModels.Admin.Pages
 			}
 		}
 
-		public Models.Doctor SelectedDoctor {
-            get => _selectedDoctor;
+		public User SelectedUser {
+            get => _selectedUser;
             set {
-                _selectedDoctor = value;
-                OnPropertyChanged(nameof(SelectedDoctor));
+                _selectedUser = value;
+                OnPropertyChanged(nameof(SelectedUser));
             }
         }
 		public ICommand Save { get; set; }
@@ -188,7 +188,7 @@ namespace bazy1.ViewModels.Admin.Pages
 		public List<string> WorkhoursErrors { get; set; } = [];
 
 		public WorkhoursViewModel() {
-			Doctors = new(DbContext.Doctors.Where(d =>!d.User.Deleted));
+			Users = new(DbContext.Users.Where(d =>!d.Deleted));
 
 			Save = new BasicCommand((object obj) =>
 			{
@@ -210,12 +210,12 @@ namespace bazy1.ViewModels.Admin.Pages
 
                 }
 
-				if (SelectedDoctor == null) HideErrorBox = true;
-                if (SelectedDoctor != null && WorkhoursErrors.Count == 0)
+				if (SelectedUser == null) HideErrorBox = true;
+                if (SelectedUser != null && WorkhoursErrors.Count == 0)
 				{
 					HideErrorBox = false;
 					MsgBoxMessage = "Dodano harmonogram";
-					DbContext.Database.ExecuteSqlRaw($"delete from workhours where doctor_id={SelectedDoctor.Id}");
+					DbContext.Database.ExecuteSqlRaw($"delete from workhours where user_id={SelectedUser.Id}");
 					DbContext.SaveChanges();
 
 					var docWorkhours = new List<TimeRange>();
@@ -280,7 +280,7 @@ namespace bazy1.ViewModels.Admin.Pages
 
 					var slots = new HashSet<KeyValuePair<TimeRange, TimeRange>>();
 
-					Models.Doctor d1 = DbContext.Doctors.Where(doc => doc.Id == SelectedDoctor.Id).First();
+					User d1 = DbContext.Users.Where(doc => doc.Id == SelectedUser.Id).First();
 					for (int i = 0; i < 48 * 365; i++)
 					{
                         var start =  DateTime.Now.Date.AddHours((double)i / 2);

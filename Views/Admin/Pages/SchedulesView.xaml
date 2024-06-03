@@ -34,8 +34,8 @@
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="0" VerticalAlignment="Center" Margin="5">
-            <TextBlock Text="Lekarz" VerticalAlignment="Center" Margin="0,0,10,0"></TextBlock>
-            <ComboBox VerticalAlignment="Top" Width="120" Height="30" ItemsSource="{Binding Doctors, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedItem="{Binding SelectedDoctor}"/>
+            <TextBlock Text="Pracownik" VerticalAlignment="Center" Margin="0,0,10,0"></TextBlock>
+            <ComboBox VerticalAlignment="Top" Width="120" Height="30" ItemsSource="{Binding Users, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedItem="{Binding SelectedUser}"/>
             <TextBlock VerticalAlignment="Center" Text="Od "/>
             <DatePicker SelectedDate="{Binding SelectedDateStart, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"></DatePicker>
             <TextBlock Text=" Do " VerticalAlignment="Center"/>

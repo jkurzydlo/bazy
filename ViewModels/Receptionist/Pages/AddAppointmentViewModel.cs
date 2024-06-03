@@ -55,11 +55,11 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 				_selectedDate = value;
 				if (_selectedDate.Date >= DateTime.Now.Date && SelectedDoctor != null)
 				{
-					var doc_id = new MySqlParameter("doc_id", SelectedDoctor.Id);
+					var doc_id = new MySqlParameter("doc_id", SelectedDoctor.UserId);
 					var day_of_year = new MySqlParameter("day_of_year", SelectedDate.DayOfYear);
 
 
-					var test = DbContext.Workhours.FromSqlRaw($"select * from przychodnia9.workhours where doctor_id = @doc_id", doc_id).ToList();
+					var test = DbContext.Workhours.FromSqlRaw($"select * from przychodnia9.workhours where user_id = @doc_id", doc_id).ToList();
 					test = test.Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear).ToList();
 					Workhours = new(test);
 
@@ -80,7 +80,7 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 			set {
 				_selectedDoctor = value;
 				OnPropertyChanged(nameof(SelectedDoctor));
-				Workhours = new(DbContext.Workhours.Where(wh => wh.DoctorId == SelectedDoctor.Id).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear));
+				Workhours = new(DbContext.Workhours.Where(wh => wh.UserId == SelectedDoctor.UserId).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear));
 			}
 		}
 
@@ -103,23 +103,23 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 				{
 					if (!DbContext.Doctors.Where(d=>!d.User.Deleted).Include("Patients").Where(d => d.Id == SelectedDoctor.Id).First().Patients.Contains(patient))
 						DbContext.Database.ExecuteSql($"insert into doctor_has_patient values({SelectedDoctor.Id},{SelectedDoctor.UserId},{patient.Id})");
-					DbContext.Database.ExecuteSqlRaw($"update workhours set open = false where doctor_id={SelectedDoctor.Id} && id={SelectedWorkhour.Id}");
+					DbContext.Database.ExecuteSqlRaw($"update workhours set open = false where user_id={SelectedDoctor.UserId} && id={SelectedWorkhour.Id}");
 					SelectedDoctor.Appointments.Add(new Appointment { Date = SelectedWorkhour.Start, Patient = patient , Goal = AppointmentGoal });
 					//SelectedPatient.Appointments.Where(a => a.Date == SelectedWorkhour.Start).First().Notifications.Add(new Notification() { });
-					DbContext.Workhours.Where(w => w.DoctorId == SelectedDoctor.Id && w.Id == SelectedWorkhour.Id).First().Open = false;
+					DbContext.Workhours.Where(w => w.UserId== SelectedDoctor.UserId && w.Id == SelectedWorkhour.Id).First().Open = false;
 					DbContext.SaveChanges();
 					SelectedDate = SelectedDate;
 				}
 
 			});
-			Doctors = DbContext.Doctors.Where(d=>!d.User.Deleted).Include("Workhours").ToList();
+			Doctors = DbContext.Doctors.Where(d=>!d.User.Deleted).ToList();
 			Patients = DbContext.Patients.ToList();
 
-			var doc_id = new MySqlParameter("doc_id", SelectedDoctor.Id);
+			var doc_id = new MySqlParameter("doc_id", SelectedDoctor.UserId);
 			var day_of_year = new MySqlParameter("day_of_year", SelectedDate.DayOfYear);
 
 
-			var test = DbContext.Workhours.FromSqlRaw($"select * from przychodnia9.workhours where doctor_id = @doc_id", doc_id).ToList();
+			var test = DbContext.Workhours.FromSqlRaw($"select * from przychodnia9.workhours where user_id = @doc_id", doc_id).ToList();
 			test = test.Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear).ToList();
 			Workhours = new(test);
             foreach (var item in test)
