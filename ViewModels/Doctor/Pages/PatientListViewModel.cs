@@ -144,7 +144,7 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 				viewModel.CurrentViewModel = new PatientListViewModel(user, viewModel);
 			});
 
-			Console.WriteLine(user.Name + user.Surname + user.Id);
+			//Console.WriteLine(user.Name + user.Surname + user.Id);
 			this.user = user;
 			doctor = DbContext.Doctors.Where(doctor => doctor.UserId == user.Id).First();
             //Console.WriteLine("dok: " + .Count());
