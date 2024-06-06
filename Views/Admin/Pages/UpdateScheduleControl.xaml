@@ -13,7 +13,7 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
             <DatePicker SelectedDate="{Binding SelectedDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                <ComboBox VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ItemsSource="{Binding Users}" Width="120" Height="20" SelectedItem="{Binding SelectedUser, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                <ComboBox IsTextSearchEnabled="True" IsEditable="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ItemsSource="{Binding Users}" Width="120" Height="20" SelectedItem="{Binding SelectedUser, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
 
             </StackPanel>
            

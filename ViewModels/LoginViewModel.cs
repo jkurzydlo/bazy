@@ -62,19 +62,7 @@ namespace bazy1.ViewModels {
             }
             else
             {
-                var user = userRepository.findByUsername(Username);
-                if (user != null)
-                {
-                    ErrorMessage = $"Niepoprawne dane logowania. \nLiczba nieudanych prób: {user.FailedLoginAttempts}";
-                    if (user.LockoutEnd.HasValue && user.LockoutEnd.Value > DateTime.Now)
-                    {
-                        ErrorMessage += $" Twoje konto jest zablokowane do {user.LockoutEnd.Value}.";
-                    }
-                }
-                else
-                {
-                    ErrorMessage = "Niepoprawne dane logowania";
-                }
+                    ErrorMessage = "Niepoprawne dane logowania";               
             }
         }
 

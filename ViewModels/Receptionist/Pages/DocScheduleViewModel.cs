@@ -32,10 +32,13 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 		public User SelectedUser {
 			get => _user;
 			set {
-				_user = value;
-				LoadWorkhours();
-				LoadAppointments();
-				OnPropertyChanged(nameof(SelectedUser));
+				if (value != null)
+				{
+					_user = value;
+					LoadWorkhours();
+					LoadAppointments();
+					OnPropertyChanged(nameof(SelectedUser));
+				}
 			}
 		}
 

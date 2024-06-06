@@ -45,8 +45,10 @@ namespace bazy1.ViewModels.Admin
         private List<UserPart> _users;
         public ICommand RefreshCommand{ get; set; }
         private Visibility _leftPaneVisible = Visibility.Visible;
+        public ICommand ShowResourcesViewCommand { get; set; }
 
-        public Visibility LeftPaneVisible {
+
+		public Visibility LeftPaneVisible {
             get => _leftPaneVisible;
             set {
                 _leftPaneVisible = value;
@@ -136,11 +138,12 @@ namespace bazy1.ViewModels.Admin
             // Inicjalizacja DoctorViewModel w AdminViewModel
             //DoctorViewModel = new DoctorViewModel();
             ShowAdminPatientListViewCommand = new BasicCommand(ExecuteShowAdminPatientListViewCommand);
-        }
+			ShowResourcesViewCommand = new BasicCommand((object obj) => { if (!CurrentUser.FirstLogin || !firstLogin) CurrentViewModel = new ResourcesDownloadViewModel(this); });
+
+		}
 
 
 		public AdminViewModel(bool firstLogin) {
-
 
 			this.firstLogin = firstLogin;
 			// RefreshCommand = new BasicCommand((object obj) => CurrentViewModel);
@@ -159,6 +162,7 @@ namespace bazy1.ViewModels.Admin
 			ShowUserListViewCommand = new BasicCommand(ExecuteShowUserListViewCommand);
             ExecuteShowUserListViewCommand(false);
 			ShowAddWorkhoursCommand = new BasicCommand((object obj) => { if (!CurrentUser.FirstLogin || !firstLogin) CurrentViewModel = new WorkhoursViewModel(); });
+			ShowResourcesViewCommand = new BasicCommand((object obj) => { if (!CurrentUser.FirstLogin || !firstLogin) CurrentViewModel = new ResourcesDownloadViewModel(this); });
 
 			ShowUpdateScheduleCommand = new BasicCommand((object obj) => { if (!CurrentUser.FirstLogin || !firstLogin) CurrentViewModel = new UpdateScheduleViewModel(this, ""); });
 

@@ -51,7 +51,7 @@ public partial class Przychodnia9Context : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseMySQL("Server=localhost;Database=przychodnia9;Uid=root;Pwd=;");
+        => optionsBuilder.UseMySQL("Server=localhost;Database=przychodnia9;Uid=root;Pwd=12345;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -592,9 +592,6 @@ public partial class Przychodnia9Context : DbContext
                 .HasDefaultValueSql("'0'")
                 .HasColumnName("activated");
             entity.Property(e => e.Deleted).HasColumnName("deleted");
-            entity.Property(e => e.FailedLoginAttempts)
-                .HasDefaultValueSql("'0'")
-                .HasColumnName("FailedLoginAttempts");
             entity.Property(e => e.Email)
                 .HasMaxLength(100)
                 .HasColumnName("email");
@@ -605,9 +602,6 @@ public partial class Przychodnia9Context : DbContext
             entity.Property(e => e.LastLogin)
                 .HasColumnType("datetime")
                 .HasColumnName("lastLogin");
-            entity.Property(e => e.LockoutEnd)
-                .HasColumnType("datetime")
-                .HasColumnName("LockoutEnd");
             entity.Property(e => e.Login)
                 .HasMaxLength(45)
                 .HasColumnName("login");

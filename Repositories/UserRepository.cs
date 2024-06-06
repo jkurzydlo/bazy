@@ -70,11 +70,6 @@ namespace bazy1.Repositories
                     // Sprawdź, czy konto jest zablokowane
                     command.CommandText = "select lockoutEnd from User where @login = binary login";
                     command.Parameters.AddWithValue("@login", credential.UserName);
-                    var lockoutEnd = command.ExecuteScalar() as DateTime?;
-                    if (lockoutEnd.HasValue && lockoutEnd.Value > DateTime.Now)
-                    {
-                        return false; // Konto jest zablokowane
-                    }
 
                     //Dodane binary żeby zwracał uwagę na wielkość znaków
                     command.CommandText = "select hash from User where @login = binary login";
@@ -94,40 +89,6 @@ namespace bazy1.Repositories
 							command.Parameters.Add("@date", MySqlDbType.DateTime).Value = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 							command.ExecuteScalar();
 							valid = true;
-
-                            command.CommandText = "select MaxFailedLoginAttempts, LockoutDurationMinutes from login_settings limit 1";
-                            using (var settingsReader = command.ExecuteReader())
-                            {
-                                if (settingsReader.Read())
-                                {
-                                    maxFailedLoginAttempts = settingsReader.GetInt32(0);
-                                    lockoutDurationMinutes = settingsReader.GetInt32(1);
-                                }
-                            }
-
-                            command.CommandText = "select FailedLoginAttempts from User where @login = binary login";
-                            command.Parameters.Clear();
-                            command.Parameters.AddWithValue("@login", credential.UserName);
-                            var failedLoginAttempts = (int?)command.ExecuteScalar() ?? 0;
-                            failedLoginAttempts++;
-
-                            DateTime? lockoutEndValue = null;
-                            if (failedLoginAttempts >= maxFailedLoginAttempts)
-                            {
-                                // Zablokuj konto
-                                lockoutEndValue = DateTime.Now.AddMinutes(lockoutDurationMinutes);
-                                command.CommandText = "update user set LockoutEnd=@lockoutEnd where login=@login";
-                                command.Parameters.Clear();
-                                command.Parameters.AddWithValue("@lockoutEnd", lockoutEndValue);
-                                command.Parameters.AddWithValue("@login", credential.UserName);
-                                command.ExecuteScalar();
-                            }
-
-                            command.CommandText = "update user set FailedLoginAttempts=@failedLoginAttempts where login=@login";
-                            command.Parameters.Clear();
-                            command.Parameters.AddWithValue("@failedLoginAttempts", failedLoginAttempts);
-                            command.Parameters.AddWithValue("@login", credential.UserName);
-                            command.ExecuteScalar();
                         }
                     }
                     Console.WriteLine(credential.UserName + credential.Password);
@@ -197,8 +158,6 @@ namespace bazy1.Repositories
 								Surname = reader.GetString(4),
                                 Hash = reader.GetString(5),
                                 FirstLogin = reader.GetBoolean(6),
-                                FailedLoginAttempts = reader.GetInt32(12),
-                                LockoutEnd = reader.GetDateTime(13)
                             };
 						}
 					}

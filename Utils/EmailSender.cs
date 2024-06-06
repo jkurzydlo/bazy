@@ -5,17 +5,24 @@ using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net;
+using Mailjet.Client.Resources;
+using Mailjet.Client.TransactionalEmails;
 
 namespace bazy1.Utils {
 	internal class EmailSender {
 		public void send(Models.User user) {
 
-			MailMessage mailMessage = new MailMessage();
-			mailMessage.From = new MailAddress("medikat@noreply2.pl");
-			mailMessage.To.Add(user.Email != null ? user.Email : "");
-			mailMessage.Subject = "Aktywacja konta ";
-            mailMessage.IsBodyHtml = true;
-			mailMessage.Body = @$"
+            Mailjet.Client.MailjetClient client = new("883ab859b107ab895f12eae661983acb", "b4bbac4a4adb2649a561c780ee7c6757");
+
+            Mailjet.Client.MailjetRequest request = new Mailjet.Client.MailjetRequest
+            {
+                Resource = Send.Resource
+            };
+
+            var email = new TransactionalEmailBuilder().
+                WithFrom(new SendContact("afraczek12@interia.pl")).
+                WithSubject("Aktywacja konta").
+                WithHtmlPart(@$"
 <!DOCTYPE html PUBLIC ""-//W3C//DTD XHTML 1.0 Strict//EN"" ""http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"">
 <html xmlns=""http://www.w3.org/1999/xhtml"">
 
@@ -45,7 +52,7 @@ namespace bazy1.Utils {
                   <div style=""padding: 20px; background-color: rgb(255, 255, 255);"">
                     <div style=""color: rgb(0, 0, 0); text-align: center;"">
                       <h1 style=""margin: 1rem 0"">Aktywacja konta</h1>
-                      <p style=""padding-bottom: 16px"">Twój login: {user.Login} .</p>
+                      <p style=""padding-bottom: 16px"">Twój login: {user.Login}</p>
 
                       <p style=""padding-bottom: 16px"">Kliknij link poniżej aby zweryfikować konto.</p>
                       <p style=""padding-bottom: 16px""><a href=""https://localhost:7137/EmailAuth/EmailConfirm/{user.Token}"" target=""_blank""
@@ -64,25 +71,8 @@ namespace bazy1.Utils {
   </table>
 </body>
 
-</html>";
-
-			SmtpClient smtpClient = new SmtpClient();
-			smtpClient.Host = "smtp-relay.brevo.com";
-			smtpClient.Port = 587;
-			smtpClient.UseDefaultCredentials = false;
-			smtpClient.Credentials = new NetworkCredential("75be54001@smtp-brevo.com", "T2jBEgC7QkG31nbA");
-			smtpClient.EnableSsl = true;
-
-			try
-			{
-				smtpClient.Send(mailMessage);
-				Console.WriteLine("Email Sent Successfully.");
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine("Error: " + ex.Message);
-			}
-
+</html>").WithTo(new SendContact(user.Email)).Build();
+            var response = client.SendTransactionalEmailAsync(email);
 		}
 	}
 }

@@ -78,10 +78,13 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 		public Models.Doctor SelectedDoctor {
 			get => _selectedDoctor;
 			set {
-				_selectedDoctor = value;
-				OnPropertyChanged(nameof(SelectedDoctor));
-				Workhours = new(DbContext.Workhours.Where(wh => wh.UserId == SelectedDoctor.UserId).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear));
-			}
+				if (value != null)
+				{
+					_selectedDoctor = value;
+					OnPropertyChanged(nameof(SelectedDoctor));
+					Workhours = new(DbContext.Workhours.Where(wh => wh.UserId == SelectedDoctor.UserId).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear));
+				}
+				}
 		}
 
 		public Models.Patient SelectedPatient {

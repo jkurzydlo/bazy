@@ -20,7 +20,11 @@
             <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
 
-        <TextBlock FontFamily="Roboto" Grid.Row="0" Text="Lista użytkowników" FontSize="15" Margin="5" Grid.ColumnSpan="2"/>
+        <StackPanel Orientation="Horizontal" Grid.Row="0">
+            <TextBlock FontFamily="Roboto" Grid.Row="0" Text="Lista użytkowników" FontSize="15" Margin="5" Grid.ColumnSpan="2"/>
+        <TextBox Width="80" Margin="0,2,0,2" Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0"/>
+        </StackPanel>
+
         <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" ColumnWidth="*" Grid.Row="1" Style="{StaticResource DataGrid}" SelectionMode="Single" HeadersVisibility="Column" IsReadOnly="True" ItemsSource="{Binding Users, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedUser, Mode=TwoWay}" Margin="5,5,5,180">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Imię" Binding="{Binding Name}" />
@@ -60,27 +64,19 @@
             <TextBlock Text="Imię" FontFamily="Roboto" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
             <TextBox Text="{Binding Name, Mode=TwoWay}" FontFamily="Roboto" Width="120" Height="20" VerticalAlignment="Center" HorizontalAlignment="Left"
                  Foreground="Black"
-                 CaretBrush="White"
-                 Background="Transparent"
                  BorderThickness="1,1,1,1"/>
             <TextBlock Text="Nazwisko " FontFamily="Roboto" VerticalAlignment="Center" HorizontalAlignment="Left" />
             <TextBox Text="{Binding Surname, Mode=TwoWay}" FontFamily="Roboto"  Width="120" Height="23" VerticalAlignment="Center" HorizontalAlignment="Left" 
                  Foreground="Black"
-                 CaretBrush="White"
-                 Background="Transparent"
                  BorderThickness="1,1,1,1" />
             <TextBlock Text="Login " FontFamily="Roboto" VerticalAlignment="Center" HorizontalAlignment="Left" />
             <TextBox Text="{Binding Login, Mode=TwoWay}" FontFamily="Roboto" Width="120" Height="23" VerticalAlignment="Center"  HorizontalAlignment="Left"
                  Foreground="Black"
-                 CaretBrush="White"
-                 Background="Transparent"
                  BorderThickness="1,1,1,1" />
 
             <TextBlock Text="Email " FontFamily="Roboto" VerticalAlignment="Center" HorizontalAlignment="Left" />
             <TextBox Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontFamily="Roboto" Width="120" Height="23" VerticalAlignment="Center"  HorizontalAlignment="Left"
                  Foreground="Black"
-                 CaretBrush="White"
-                 Background="Transparent"
                  BorderThickness="1,1,1,1" />
         </UniformGrid>
 

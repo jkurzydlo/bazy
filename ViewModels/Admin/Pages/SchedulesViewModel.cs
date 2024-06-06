@@ -30,10 +30,13 @@ namespace bazy1.ViewModels.Admin.Pages {
 		public Models.User SelectedUser {
 			get => _user;
 			set {
-				_user = value;
-				LoadWorkhours();
-				LoadAppointments();
-				OnPropertyChanged(nameof(SelectedUser));
+				if (value != null)
+				{
+					_user = value;
+					LoadWorkhours();
+					LoadAppointments();
+					OnPropertyChanged(nameof(SelectedUser));
+				}
 			}
 		}
 

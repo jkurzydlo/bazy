@@ -19,11 +19,13 @@ using QuestPDF.Helpers;
 using bazy1.Utils;
 using bazy1.ViewModels.Receptionist.Pages;
 using bazy1.Views.Admin.Pages;
+using System.Windows;
 
 namespace bazy1.ViewModels.Doctor.Pages {
 	public class PatientListViewModel : ViewModelBase {
 		private User user;
 		private Patient _selectedPatient;
+		private Visibility _loaded = Visibility.Visible;
 		private dbm.Doctor doctor;
 		private ObservableCollection<Patient> _patientsList;
 		public ICommand ShowMedicalHistoryCommand { get; }
@@ -35,6 +37,13 @@ namespace bazy1.ViewModels.Doctor.Pages {
 		public ICommand EditPatientCommand { get;set; }
 		public ICommand ShowAddAppointmentCommand { get; set; }
 
+		public Visibility Loaded {
+			get => _loaded;
+			set {
+				_loaded = value;
+				OnPropertyChanged(nameof(Loaded));
+			}
+		}
 		public string PatientDetails {
 			get {
 				string adressess = "", info = "";
@@ -86,9 +95,18 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 				PatientView.Filter += (object patient) =>
 				{
 					var tempPatient = patient as Patient;
-					return tempPatient.Name.ToLower().Contains(FilterText.ToLower().Trim()) ||
-					tempPatient.Surname.ToLower().Contains(FilterText.ToLower().Trim()) ||
-					tempPatient.Pesel.ToString().ToLower().Contains(FilterText.ToLower().Trim());
+					return (tempPatient.PhoneNumber == null || tempPatient.PhoneNumber.Trim().Length == 0) ?
+
+						   (tempPatient.Name.ToLower().Contains(FilterText.ToLower().Trim()) ||
+						   tempPatient.Surname.ToLower().Contains(FilterText.ToLower().Trim()) ||
+						   tempPatient.Pesel.ToString().ToLower().Contains(FilterText.ToLower().Trim()) ||
+						   (tempPatient.Name + " " + tempPatient.Surname).ToLower().Contains(FilterText.ToLower().Trim())
+						   ) :
+						   (tempPatient.Name.ToLower().Contains(FilterText.ToLower().Trim()) ||
+						   tempPatient.Surname.ToLower().Contains(FilterText.ToLower().Trim()) ||
+						   tempPatient.Pesel.ToString().ToLower().Contains(FilterText.ToLower().Trim()) ||
+						   (tempPatient.Name + " " + tempPatient.Surname).ToLower().Contains(FilterText.ToLower().Trim()) ||
+							tempPatient.PhoneNumber.Trim().Contains(FilterText.Trim()));
 
 				};
 				OnPropertyChanged(nameof(FilterText));

@@ -13,7 +13,7 @@
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Vertical" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Center">
             <TextBlock Text="Zapisz do" HorizontalAlignment="Left"></TextBlock>
-            <ComboBox Width="120" ItemsSource="{Binding Doctors}" SelectedIndex="1" SelectedItem="{Binding SelectedDoctor}"></ComboBox>
+            <ComboBox IsTextSearchEnabled="True" IsEditable="True" Width="120" ItemsSource="{Binding Doctors}" SelectedIndex="1" SelectedItem="{Binding SelectedDoctor}"></ComboBox>
             <TextBlock Text="Termin" HorizontalAlignment="Left"></TextBlock>
 
             <DatePicker Width="120" SelectedDate="{Binding SelectedDate, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>

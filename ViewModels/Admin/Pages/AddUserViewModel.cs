@@ -188,7 +188,7 @@ namespace bazy1.ViewModels.Admin.Pages
                 // Wykorzystanie procedury składowanej do dodania użytkownika
                 try
                 {
-                    using (var connection = new MySqlConnection("Server=localhost;Database=przychodnia9;Uid=root;Pwd=;"))
+                    using (var connection = new MySqlConnection("Server=localhost;Database=przychodnia9;Uid=root;Pwd=12345;"))
                     {
                         connection.Open();
                         using (var command = new MySqlCommand("AddUser", connection))
