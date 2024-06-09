@@ -60,9 +60,11 @@
     <PackageReference Include="MvvmDialogs" Version="9.1.2" />
     <PackageReference Include="MySql.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="PDFsharp" Version="6.0.0" />
+    <PackageReference Include="Quartz" Version="3.9.0" />
     <PackageReference Include="QuestPDF" Version="2024.3.1" />
     <PackageReference Include="SimpleModal.WPF" Version="1.0.0" />
     <PackageReference Include="TimePeriodLibrary.NET" Version="2.1.5" />
+    <PackageReference Include="Twilio" Version="7.1.1" />
   </ItemGroup>
 
   <ItemGroup>

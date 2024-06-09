@@ -206,6 +206,28 @@ namespace bazy1.Repositories
 
             return availableAppointments;
         }
+        public int GetReminderTimeBeforeAppointment()
+        {
+            int reminderTime = 24; // domyślna wartość
+
+            using (var connection = GetConnection())
+            {
+                using (var command = new MySqlCommand())
+                {
+                    connection.Open();
+                    command.Connection = connection;
+                    command.CommandText = "SELECT reminder_time_before_appointment FROM reminder_settings LIMIT 1";
+
+                    var result = command.ExecuteScalar();
+                    if (result != null)
+                    {
+                        reminderTime = Convert.ToInt32(result);
+                    }
+                }
+            }
+
+            return reminderTime;
+        }
     }
 
 }
