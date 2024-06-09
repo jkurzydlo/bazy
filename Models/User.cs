@@ -37,7 +37,8 @@ public partial class User
 
     public virtual ICollection<Receptionist> Receptionists { get; set; } = new List<Receptionist>();
 
-    public int FailedLoginAttempts { get; set; }
-
-    public DateTime? LockoutEnd { get; set; }
+    public virtual ICollection<Workhour> Workhours { get; set; } = new List<Workhour>();
+	public override string ToString() {
+        return Name + " " + Surname;
+	}
 }

@@ -6,13 +6,13 @@ namespace bazy1.ViewModels.Receptionist.Pages
     public class EditPatientViewModel : ViewModelBase
     {
         private Patient _selectedPatient;
-        private readonly przychodnia9Context DbContext;
+        private readonly Przychodnia9Context DbContext;
         private readonly ReceptionistViewModel _receptionistViewModel;
 
         public EditPatientViewModel(ReceptionistViewModel receptionistViewModel, Patient patient)
         {
             _receptionistViewModel = receptionistViewModel;
-            DbContext = new przychodnia9Context();
+            DbContext = new Przychodnia9Context();
             SelectedPatient = patient;
             SavePatientCommand = new BasicCommand(SavePatient);
         }

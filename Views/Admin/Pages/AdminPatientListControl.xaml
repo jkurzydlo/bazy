@@ -55,6 +55,7 @@
                     <MenuItem Header="Historia przebytych chorób" Command="{Binding ShowMedicalHistoryCommand}" />
                     <MenuItem Header="Edytuj dane pacjenta" Command="{Binding AdminEditPatientCommand}" CommandParameter="{Binding SelectedPatient}" />
                     <MenuItem Header="Usuń pacjenta" Command="{Binding Source={x:Reference deletePatientBox}, Path=Show}" CommandParameter="Usunąć?"/>
+                    <MenuItem Header="Lista wizyt" Command="{Binding VisitsListShowCommand}"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>

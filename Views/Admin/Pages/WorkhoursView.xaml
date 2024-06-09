@@ -167,8 +167,8 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
             </Button>
-            
-            <ComboBox VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ItemsSource="{Binding Doctors}" Width="120" Height="40" SelectedItem="{Binding SelectedDoctor}"/>
+
+            <ComboBox IsTextSearchEnabled="True" IsEditable="True" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" ItemsSource="{Binding Users}" Width="120" Height="40" SelectedItem="{Binding SelectedUser}"/>
         </StackPanel>
 
         <jm:SimpleMessageDialogBox x:Name="msgBoxError" />

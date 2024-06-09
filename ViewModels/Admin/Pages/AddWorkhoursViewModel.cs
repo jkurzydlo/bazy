@@ -16,9 +16,9 @@ namespace bazy1.ViewModels.Admin.Pages {
 		private DateTime _selectedDate = DateTime.Now;
 		private Workhour _selectedWorkhour;
 		private ObservableCollection<Workhour> _workhours;
-		public List<Models.Doctor> Doctors { get; set; }
+		public List<User> Users { get; set; }
 		public List<Models.Patient> Patients { get; set; }
-		private Models.Doctor _selectedDoctor = DbContext.Doctors.First();
+		private User _selectedUser = DbContext.Users.First();
 		private Models.Patient _selectedPatient = DbContext.Patients.First();
 		public Dictionary<Workhour, System.Drawing.Brush> RowColor { get; set; }
 		public System.Windows.Media.Brush RowColors { get; set; } = new SolidColorBrush(Colors.Green);
@@ -56,17 +56,17 @@ namespace bazy1.ViewModels.Admin.Pages {
 				{
 					
 					OnPropertyChanged(nameof(SelectedDate));
-					Workhours = new(DbContext.Workhours.Where(wh => wh.DoctorId == SelectedDoctor.Id).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear));
+					Workhours = new(DbContext.Workhours.Where(wh => wh.UserId == SelectedUser.Id).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear));
 				}else _selectedDate = DateTime.Now;
 			}
 		}
 
-		public Models.Doctor SelectedDoctor {
-			get => _selectedDoctor;
+		public User SelectedUser {
+			get => _selectedUser;
 			set {
-				_selectedDoctor= value;
-				OnPropertyChanged(nameof(SelectedDoctor));
-				Workhours = new(DbContext.Workhours.Where(wh => wh.DoctorId == SelectedDoctor.Id).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear));
+				_selectedUser= value;
+				OnPropertyChanged(nameof(SelectedUser));
+				Workhours = new(DbContext.Workhours.Where(wh => wh.UserId == SelectedUser.Id).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear));
 			}
 		}
 
@@ -85,19 +85,19 @@ namespace bazy1.ViewModels.Admin.Pages {
 			{
 				if (!DbContext.Database.SqlQuery<bool>($"select open from appointment where date={SelectedDate}").First())
 				{
-					DbContext.Database.ExecuteSqlRaw($"update workhours set open = false where doctor_id={SelectedDoctor.Id} && id={SelectedWorkhour.Id}");
-					SelectedDoctor.Appointments.Add(new Appointment { Date = SelectedDate, Patient = SelectedPatient, Goal = AppointmentGoal });
+					DbContext.Database.ExecuteSqlRaw($"update workhours set open = false where doctor_id=(select id from doctor where doctor_user_id={SelectedUser.Id}) && id={SelectedWorkhour.Id}");
+					DbContext.Doctors.Where(d=>d.UserId ==SelectedUser.Id).First().Appointments.Add(new Appointment { Date = SelectedDate, Patient = SelectedPatient, Goal = AppointmentGoal });
 					DbContext.SaveChanges();
-					Workhours = new(DbContext.Workhours.Where(wh => wh.DoctorId == SelectedDoctor.Id).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear));
+					Workhours = new(DbContext.Workhours.Where(wh => wh.UserId == SelectedUser.Id).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear));
 
 				}
 			});
-			Doctors = DbContext.Doctors.ToList();
-			Patients = DbContext.Patients.ToList();
-			Workhours = new(DbContext.Workhours.Where(wh => wh.DoctorId == SelectedDoctor.Id).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear));
+			Users = DbContext.Users.Where(u=> !u.Deleted).ToList();
+			Patients = DbContext.Patients.Where(p=>!p.Deleted).ToList();
+			Workhours = new(DbContext.Workhours.Where(wh => wh.UserId == SelectedUser.Id).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear));
 
 
-			var wh = DbContext.Workhours.Where(wh => wh.DoctorId == SelectedDoctor.Id).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear);
+			var wh = DbContext.Workhours.Where(wh => wh.UserId == SelectedUser.Id).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear);
             Console.WriteLine("zs: "+wh.Count());
 
             var docWorkhours = new List<TimeRange>();
@@ -112,7 +112,7 @@ namespace bazy1.ViewModels.Admin.Pages {
 
 			var slots = new HashSet<TimeRange>();
 
-			Models.Doctor d1 = DbContext.Doctors.Where(doc => doc.Id == SelectedDoctor.Id).First();
+			Models.Doctor d1 = DbContext.Doctors.Where(doc => doc.UserId == SelectedUser.Id).First();
 			for(int i = 0; i < 48*365; i++)
 			{
 				var start = DateTime.Now.Date.AddHours(i / 2);

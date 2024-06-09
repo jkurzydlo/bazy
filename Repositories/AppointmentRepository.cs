@@ -174,38 +174,6 @@ namespace bazy1.Repositories
 				Console.WriteLine("Error sciaganie appointments z bazy: " + ex.Message);
 			}
 		}
-
-        public List<DateTime> GetAvailableAppointments(int doctorId, DateTime date)
-        {
-            // Pobierz godziny pracy lekarza
-            var workhours = DatabaseService.getDbContext().Workhours.Where(w => w.DoctorId == doctorId).ToList();
-
-            List<DateTime> availableAppointments = new List<DateTime>();
-
-            foreach (var workhour in workhours)
-            {
-                /*
-                if (workhour.DayOfWeek == date.DayOfWeek)
-                {
-                    DateTime start = date.Date.Add(workhour.Start.Value.TimeOfDay);
-                    DateTime end = date.Date.Add(workhour.End.Value.TimeOfDay);
-
-                    while (start < end)
-                    {
-                        // Sprawdź, czy termin jest już zajęty
-                       // if (!DatabaseService.getDbContext().Appointments.Any(a => DateTime.Parse(a.DateTime) == start))
-                       // {
-                       //     availableAppointments.Add(start);
-                       // }
-
-                        // Przejdź do następnego możliwego terminu wizyty
-                        start = start.AddMinutes(20);
-                    }
-                }*/
-            }
-
-            return availableAppointments;
-        }
         public int GetReminderTimeBeforeAppointment()
         {
             int reminderTime = 24; // domyślna wartość

@@ -1,5 +1,6 @@
 ﻿using bazy1.Models;
 using bazy1.Utils;
+using bazy1.ViewModels.Admin.Pages;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -411,6 +412,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 
 					DbContext.Database.ExecuteSqlRaw($"insert into doctor_has_patient values({doctor.Id},{doctor.UserId},(select id from patient where pesel='{Pesel}'))");
 					DbContext.Update(doctor);
+					parentViewModel.CurrentViewModel = new PatientListViewModel(DbContext.Users.Where(u => u.Id == doctor.UserId).First(), parentViewModel);
 
 				}
 				

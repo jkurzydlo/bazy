@@ -30,7 +30,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			
 			var watch = new Stopwatch();
 			watch.Start();
-			var db = new przychodnia9Context();
+			var db = new Przychodnia9Context();
 			watch.Stop();
 			Console.WriteLine("czas"+ watch.ElapsedMilliseconds);
 			_currentUser.Surname = "sds";

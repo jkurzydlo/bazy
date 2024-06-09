@@ -90,10 +90,18 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 				PatientView.Filter += (object patient) =>
 				{
 					var tempPatient = patient as Patient;
-					return tempPatient.Name.ToLower().Contains(FilterText.ToLower().Trim()) ||
-					tempPatient.Surname.ToLower().Contains(FilterText.ToLower().Trim()) ||
-					tempPatient.Pesel.ToString().ToLower().Contains(FilterText.ToLower().Trim());
+					return (tempPatient.PhoneNumber == null || tempPatient.PhoneNumber.Trim().Length == 0) ?
 
+						   (tempPatient.Name.ToLower().Contains(FilterText.ToLower().Trim()) ||
+						   tempPatient.Surname.ToLower().Contains(FilterText.ToLower().Trim()) ||
+						   tempPatient.Pesel.ToString().ToLower().Contains(FilterText.ToLower().Trim()) ||
+						   (tempPatient.Name + " " + tempPatient.Surname).ToLower().Contains(FilterText.ToLower().Trim())
+						   ) :
+						   (tempPatient.Name.ToLower().Contains(FilterText.ToLower().Trim()) ||
+						   tempPatient.Surname.ToLower().Contains(FilterText.ToLower().Trim()) ||
+						   tempPatient.Pesel.ToString().ToLower().Contains(FilterText.ToLower().Trim()) ||
+						   (tempPatient.Name + " " + tempPatient.Surname).ToLower().Contains(FilterText.ToLower().Trim()) ||
+							tempPatient.PhoneNumber.Trim().Contains(FilterText.Trim()));
 				};
 				OnPropertyChanged(nameof(FilterText));
 

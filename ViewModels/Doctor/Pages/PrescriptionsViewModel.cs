@@ -42,7 +42,8 @@ namespace bazy1.ViewModels.Doctor.Pages {
 					var tempPrescription = prescription as Prescription;
 					return tempPrescription.DateOfPrescription.Value.ToLongDateString().ToLower().Contains(FilterText.ToLower().Trim())
 					|| tempPrescription.Patient.Name.ToLower().Contains(FilterText.ToLower().Trim()) ||
-					tempPrescription.Patient.Surname.ToLower().Contains(FilterText.ToLower().Trim());
+					tempPrescription.Patient.Surname.ToLower().Contains(FilterText.ToLower().Trim())
+					|| (tempPrescription.Patient.Name + " " + tempPrescription.Patient.Surname).ToLower().Contains(FilterText.ToLower().Trim());
 				};
 				OnPropertyChanged(nameof(FilterText));
 

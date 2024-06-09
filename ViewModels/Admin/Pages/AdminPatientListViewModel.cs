@@ -29,8 +29,10 @@ namespace bazy1.ViewModels.Admin.Pages
         public ICommand ShowAddAppointmentCommand { get; set; }
         public ICommand AdminEditPatientCommand { get; set; }
         public ICommand ShowPatientListCommand { get; set;}
+        public ICommand VisitsListShowCommand { get; set; }
 
-        private ICollectionView patientsView;
+
+		private ICollectionView patientsView;
         private string _filterText;
 
 
@@ -83,10 +85,22 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
                 PatientView.Filter = (object patient) =>
                 {
                     var tempPatient = patient as Patient;
-                    return tempPatient.Name.ToLower().Contains(FilterText.ToLower().Trim()) ||
+                   if(tempPatient.PhoneNumber != null) Console.WriteLine("->"+tempPatient.PhoneNumber+"<-");
+
+                    return (tempPatient.PhoneNumber == null || tempPatient.PhoneNumber.Trim().Length == 0) ?
+
+                           (tempPatient.Name.ToLower().Contains(FilterText.ToLower().Trim()) ||
                            tempPatient.Surname.ToLower().Contains(FilterText.ToLower().Trim()) ||
-                           tempPatient.Pesel.ToString().ToLower().Contains(FilterText.ToLower().Trim());
-                };
+                           tempPatient.Pesel.ToString().ToLower().Contains(FilterText.ToLower().Trim()) ||
+                           (tempPatient.Name + " " + tempPatient.Surname).ToLower().Contains(FilterText.ToLower().Trim())
+                           ) :
+                           (tempPatient.Name.ToLower().Contains(FilterText.ToLower().Trim()) ||
+                           tempPatient.Surname.ToLower().Contains(FilterText.ToLower().Trim()) ||
+                           tempPatient.Pesel.ToString().ToLower().Contains(FilterText.ToLower().Trim()) ||
+                           (tempPatient.Name + " " + tempPatient.Surname).ToLower().Contains(FilterText.ToLower().Trim()) ||
+                            tempPatient.PhoneNumber.Trim().Contains(FilterText.Trim()));
+
+				};
                 OnPropertyChanged(nameof(FilterText));
             }
         }
@@ -110,7 +124,7 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
         public AdminPatientListViewModel(AdminViewModel viewModel)
         {
             //CurrentViewModel = viewModel;
-            using (var DbContext = new przychodnia9Context())
+            using (var DbContext = new Przychodnia9Context())
             {
                 _patientsList = new ObservableCollection<Patient>(DbContext.Patients.ToList());
             }
@@ -124,11 +138,16 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
             ShowAddMedicationCommand = new BasicCommand(obj => { /* Implementacja */ });
             ShowAddReferralCommand = new BasicCommand(obj => { /* Implementacja */ });
             AddPatientCommand = new BasicCommand(obj => viewModel.CurrentViewModel = new  AddPatientAdminControl(this));
-            PatientDeleteCommand = new BasicCommand(obj =>
+
+			VisitsListShowCommand = new BasicCommand((object obj) =>
+			{
+				viewModel.CurrentViewModel = new VisitsListViewModel(viewModel, SelectedPatient);
+			});
+			PatientDeleteCommand = new BasicCommand(obj =>
             {
                 if (SelectedPatient != null)
                 {
-                    using (var DbContext = new przychodnia9Context())
+                    using (var DbContext = new Przychodnia9Context())
                     {
                         DbContext.Database.ExecuteSql($"update patient set deleted = 1 where id = {SelectedPatient.Id}");
 						DbContext.Database.ExecuteSql($"update workhours set open = true where start in (select date from appointment a join patient p on p.id=a.patient_id where p.deleted = 1)");

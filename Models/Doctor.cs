@@ -23,15 +23,12 @@ public partial class Doctor
 
     public virtual User User { get; set; } = null!;
 
-    public virtual ICollection<Workhour> Workhours { get; set; } = new List<Workhour>();
-
     public virtual ICollection<Office> Offices { get; set; } = new List<Office>();
 
     public virtual ICollection<Patient> Patients { get; set; } = new List<Patient>();
 
     public virtual ICollection<Specialization> Specializations { get; set; } = new List<Specialization>();
 	public override string ToString() {
-        return Name + " " + Surname;
+		return Name+" "+Surname;
 	}
-
 }

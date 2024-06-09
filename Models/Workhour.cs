@@ -12,17 +12,15 @@ public partial class Workhour
 
     public DateTime? End { get; set; }
 
-    public int DoctorId { get; set; }
-
-    public int DoctorUserId { get; set; }
-
     public DateTime? BlockStart { get; set; }
 
     public bool? Open { get; set; }
 
     public DateTime? BlockEnd { get; set; }
 
-    public virtual Doctor Doctor { get; set; } = null!;
+    public int? UserId { get; set; }
+
+    public virtual User? User { get; set; }
 
 	public override string ToString() {
 		var cultureInfo = new CultureInfo("pl-PL");

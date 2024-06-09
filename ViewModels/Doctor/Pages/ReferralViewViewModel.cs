@@ -42,7 +42,8 @@ namespace bazy1.ViewModels.Doctor.Pages {
 					return tempReferral.Date.Value.ToLongDateString().ToLower().Contains(FilterText.ToLower().Trim())
 					|| tempReferral.Patient.Name.ToLower().Contains(FilterText.ToLower().Trim()) ||
 					tempReferral.Patient.Surname.ToLower().Contains(FilterText.ToLower().Trim()) ||
-					tempReferral.MedicalEntity.ToLower().Contains(FilterText.ToLower().Trim());
+					tempReferral.MedicalEntity.ToLower().Contains(FilterText.ToLower().Trim()) ||
+					(tempReferral.Patient.Name +" "+tempReferral.Patient.Surname).ToLower().Contains(FilterText.ToLower().Trim());
 				};
 				OnPropertyChanged(nameof(FilterText));
 

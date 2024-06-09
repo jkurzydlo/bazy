@@ -47,8 +47,8 @@ namespace bazy1.ViewModels.Doctor.Pages {
 
 		private void LoadWorkhours() {
 			HoursList.Clear();
-			var whStarts = DbContext.Workhours.Where(ws => ws.DoctorId == doctor.Id && ws.BlockStart.Value.Date >= SelectedDateStart.Date && ws.BlockEnd.Value.Date <= SelectedDateEnd).GroupBy(ws => ws.BlockStart).Select(g => g.First());
-			var whEnds = DbContext.Workhours.Where(ws => ws.DoctorId == doctor.Id && ws.BlockStart.Value.Date >= SelectedDateStart.Date && ws.BlockEnd.Value.Date <= SelectedDateEnd).GroupBy(ws => ws.BlockEnd).Select(g => g.First());
+			var whStarts = DbContext.Workhours.Where(ws => ws.UserId == doctor.UserId && ws.BlockStart.Value.Date >= SelectedDateStart.Date && ws.BlockEnd.Value.Date <= SelectedDateEnd).GroupBy(ws => ws.BlockStart).Select(g => g.First());
+			var whEnds = DbContext.Workhours.Where(ws => ws.UserId == doctor.UserId && ws.BlockStart.Value.Date >= SelectedDateStart.Date && ws.BlockEnd.Value.Date <= SelectedDateEnd).GroupBy(ws => ws.BlockEnd).Select(g => g.First());
 			
 
 			for (int i = 0; i < whStarts.Count(); i++)
@@ -107,11 +107,11 @@ namespace bazy1.ViewModels.Doctor.Pages {
 		public DateTime SelectedDateEnd {
 			get => _selectedDateEnd;
 			set {
-				Console.WriteLine(DbContext.Workhours.Where(w => w.DoctorId == doctor.Id).OrderBy(w => w.BlockEnd).Count());
+				//Console.WriteLine(DbContext.Workhours.Where(w => w.DoctorId == doctor.Id).OrderBy(w => w.BlockEnd).Count());
 
-				if (DbContext.Workhours.Where(w => w.DoctorId == doctor.Id).Count() > 0)
+				if (DbContext.Workhours.Where(w => w.UserId == doctor.UserId).Count() > 0)
 				{
-                    if (value.Date <= DbContext.Workhours.Where(w => w.DoctorId == doctor.Id).OrderBy(w => w.BlockEnd).Last().End && value.Date >= SelectedDateStart.Date)
+                    if (value.Date <= DbContext.Workhours.Where(w => w.UserId == doctor.UserId).OrderBy(w => w.BlockEnd).Last().End && value.Date >= SelectedDateStart.Date)
 					{
 						_selectedDateEnd = value;
 						OnPropertyChanged(nameof(SelectedDateEnd));
@@ -126,9 +126,9 @@ namespace bazy1.ViewModels.Doctor.Pages {
 		public DateTime SelectedDateStart {
 			get => _selectedDateStart;
 			set {
-				if (DbContext.Workhours.Where(w => w.DoctorId == doctor.Id).Count() > 0)
+				if (DbContext.Workhours.Where(w => w.UserId == doctor.UserId).Count() > 0)
 				{
-					if (value.Date >= DbContext.Workhours.Where(w => w.DoctorId == doctor.Id).OrderBy(w => w.BlockStart).First().Start && value.Date <= SelectedDateEnd.Date)
+					if (value.Date >= DbContext.Workhours.Where(w => w.UserId == doctor.UserId).OrderBy(w => w.BlockStart).First().Start && value.Date <= SelectedDateEnd.Date)
 					{
 						_selectedDateStart = value;
 						OnPropertyChanged(nameof(SelectedDateStart));

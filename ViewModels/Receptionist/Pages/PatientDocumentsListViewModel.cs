@@ -41,7 +41,9 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 						return tempPrescription.DateOfPrescription.Value.ToLongDateString().ToLower().Contains(FilterText.ToLower().Trim())
 						|| tempPrescription.Patient.Name.ToLower().Contains(FilterText.ToLower().Trim()) ||
 						tempPrescription.Patient.Surname.ToLower().Contains(FilterText.ToLower().Trim())
-						|| tempPrescription.Medicines.Any(m => m.Name.ToLower().Contains(FilterText.ToLower().Trim()));
+						|| tempPrescription.Medicines.Any(m => m.Name.ToLower().Contains(FilterText.ToLower().Trim())) ||
+						(tempPrescription.Patient.Name + " " + tempPrescription.Patient.Surname).ToLower().Contains(FilterText.ToLower().Trim());
+
 					};
 				ReferralsView.Filter += (object referral) =>
 				{

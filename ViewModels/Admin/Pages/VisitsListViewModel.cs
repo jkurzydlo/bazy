@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace bazy1.ViewModels.Receptionist.Pages {
-	internal class PatientAppointmentsViewModel : ViewModelBase {
+namespace bazy1.ViewModels.Admin.Pages {
+	internal class VisitsListViewModel : ViewModelBase {
 		private ObservableCollection<Patient> _patients = new();
 		private Patient _selectedPatient;
 		private ObservableCollection<Appointment> _appointments = new();
@@ -41,13 +41,13 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 		public DateTime SelectedDate {
 			get => _selectedDate;
 			set {
-				if(_selectedDate >= DateTime.Now.Date) _selectedDate = value;
+				if (_selectedDate >= DateTime.Now.Date) _selectedDate = value;
 				else _selectedDate = DateTime.Now.Date;
 				OnPropertyChanged(nameof(SelectedDate));
 
 				var doc_id = new MySqlParameter("doc_id", DbContext.Doctors.Where(d => d.Id == SelectedAppointment.Doctor.Id).First().UserId);
-                Console.WriteLine("duid: "+ DbContext.Doctors.Where(d => d.Id == SelectedAppointment.Doctor.Id).First().Id);
-                var test = DbContext.Workhours.FromSqlRaw($"select * from przychodnia9.workhours where user_id = @doc_id", doc_id).ToList();
+				Console.WriteLine("duid: " + DbContext.Doctors.Where(d => d.Id == SelectedAppointment.Doctor.Id).First().Id);
+				var test = DbContext.Workhours.FromSqlRaw($"select * from przychodnia9.workhours where user_id = @doc_id", doc_id).ToList();
 				test = test.Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear).ToList();
 				AppointmentsSchedule = new(test);
 			}
@@ -74,13 +74,13 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 				var test = DbContext.Workhours.Where(w => w.Id == SelectedAppointment.DoctorId);
 				test = test.Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear);
 				AppointmentsSchedule = new(test);
-                foreach (var item in test)
-                {
-                    Console.WriteLine(item.Start+" "+item.Open);
-                }
+				foreach (var item in test)
+				{
+					Console.WriteLine(item.Start + " " + item.Open);
+				}
 				DbContext.SaveChanges();
 
-            }
+			}
 		}
 
 		public Patient SelectedPatient {
@@ -112,11 +112,11 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 
 		public ICommand RemoveAppointmentCommand { get; set; }
 		public ICommand UpdateAppointmentCommand { get; set; }
-		public ICommand ShowAppointmentsSchedule { get;set; }
+		public ICommand ShowAppointmentsSchedule { get; set; }
 		public ICommand SaveChangesCommand { get; set; }
 
-		public PatientAppointmentsViewModel(ReceptionistViewModel viewModel, Patient patient) {
-			
+		public VisitsListViewModel(AdminViewModel viewModel, Patient patient) {
+
 			SaveChangesCommand = new BasicCommand((object obj) =>
 			{
 				if (SelectedNewDate != null)
@@ -124,12 +124,12 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 					DbContext.Database.ExecuteSqlRaw($"update workhours set open = true where user_id={SelectedAppointment.DoctorUserId} && start='{SelectedAppointment.Date.Value.ToString("yyyy-MM-dd HH:mm:ss")}'");
 					DbContext.Database.ExecuteSqlRaw($"update appointment set date='{SelectedNewDate.Start.Value.ToString("yyyy-MM-dd HH:mm:ss")}' where id={SelectedAppointment.Id}");
 					DbContext.Database.ExecuteSqlRaw($"update workhours set open = false where user_id={SelectedAppointment.DoctorUserId} && start='{SelectedNewDate.Start.Value.ToString("yyyy-MM-dd HH:mm:ss")}'");
-				
-				foreach (var item in AppointmentsSchedule)
-                {
-					DbContext.Entry(item).Reload();
-                }
-                viewModel.CurrentViewModel = new PatientAppointmentsViewModel(viewModel,patient);
+
+					foreach (var item in AppointmentsSchedule)
+					{
+						DbContext.Entry(item).Reload();
+					}
+					viewModel.CurrentViewModel = new VisitsListViewModel(viewModel, patient);
 				}
 			});
 			PatientList = new(patientRepository.GetAll());
@@ -144,17 +144,17 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 				if (SelectedAppointment != null)
 				{
 					Console.WriteLine(SelectedAppointment.Date.Value.ToString("yyyy-MM-dd HH:mm:ss"));
-					var ok = DbContext.Database.ExecuteSqlRaw($"update workhours set open = true where user_id={SelectedAppointment.DoctorUserId} && start='{SelectedAppointment.Date.Value.ToString("yyyy-MM-dd HH:mm:ss") }'");
+					var ok = DbContext.Database.ExecuteSqlRaw($"update workhours set open = true where user_id={SelectedAppointment.DoctorUserId} && start='{SelectedAppointment.Date.Value.ToString("yyyy-MM-dd HH:mm:ss")}'");
 					appointmentRepository.RemoveAppointmentById(SelectedAppointment.Id);
 
 					foreach (var item in AppointmentsSchedule)
 					{
 						DbContext.Entry(item).Reload();
 					}
-					viewModel.CurrentViewModel = new PatientAppointmentsViewModel(viewModel, patient);
+					viewModel.CurrentViewModel = new VisitsListViewModel(viewModel, patient);
 
 				}
 			});
-        }
+		}
 	}
 }

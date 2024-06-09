@@ -31,7 +31,7 @@ namespace bazy1.Repositories
 							Workhour tempWorkhour = new ()
 							{
 								Id = reader.GetInt32("id"),
-								DoctorId = reader.GetInt32("doctor_id"),
+								UserId = reader.GetInt32("user_id"),
 								BlockStart = reader.GetDateTime("blockStart"),
 								BlockEnd = reader.GetDateTime("blockEnd"),
 								Open = reader.GetBoolean("open"),
