@@ -112,8 +112,8 @@ namespace bazy1.ViewModels.Receptionist {
 				var sz = DbContext.Prescriptions.Where(
 				pr => pr.DoctorUserId == CurrentUser.Id);
 
-				var ab = DbContext.Prescriptions.Include("Patient").
-					Where(pr => pr.DoctorUserId == CurrentUser.Id).ToList();
+				var ab = DbContext.Prescriptions.Include(p => p.Patient.Addresses).Include(p => p.Medicines).
+				Where(pr => pr.DoctorUserId == CurrentUser.Id).ToList();
 
 				//var pat = DbContext.Patients.Where(pat => pat.Prescriptions.Contains())
 				//Console.WriteLine("roz: "+ab.First().Patient.Id);

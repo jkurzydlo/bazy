@@ -130,7 +130,7 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 			ShowPatientDocumentsList = new BasicCommand(obj =>
 			{
                 Console.WriteLine(SelectedPatient.Prescriptions.Count());
-                viewModel.CurrentViewModel = new PatientDocumentsListViewModel(DbContext.Prescriptions.Where(pr => pr.PatientId == SelectedPatient.Id).ToList(), DbContext.Referrals.Where(pr => pr.PatientId == SelectedPatient.Id).ToList());
+                viewModel.CurrentViewModel = new PatientDocumentsListViewModel(DbContext.Prescriptions.Where(pr => pr.PatientId == SelectedPatient.Id).Include(p=>p.Doctor).Include(p=>p.Patient.Addresses).Include(p=>p.Patient.Diseases).Include(p=>p.Medicines).ToList(), DbContext.Referrals.Where(pr => pr.PatientId == SelectedPatient.Id).ToList());
 			});
 
 			AddPatientCommand = new BasicCommand(obj => viewModel.CurrentViewModel = new AddPatientViewModel(viewModel));

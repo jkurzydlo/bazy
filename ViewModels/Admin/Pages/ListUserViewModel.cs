@@ -200,12 +200,18 @@ namespace bazy1.ViewModels.Admin.Pages {
 
 		public ListUserViewModel(AdminViewModel adminViewModel) {
 
-            _users = new ObservableCollection<User>(DbContext.Users);
+            Users = new ObservableCollection<User>(DbContext.Users);
+            foreach (var item in Users)
+            {
+                Console.WriteLine("jest: "+item.Id+item.Deleted);
+            }
 
-            UsersView= CollectionViewSource.GetDefaultView(_users);
+            UsersView = CollectionViewSource.GetDefaultView(Users);
             _adminViewModel = adminViewModel;
+			foreach (var p in Users) DbContext.Update(p);
+			UsersView.Refresh();
 
-            ShowModifyPanel = new BasicCommand((object obj) => EditFormVisible = Visibility.Visible);
+			ShowModifyPanel = new BasicCommand((object obj) => EditFormVisible = Visibility.Visible);
             
 
             SendAccountVerificationEmail = new BasicCommand((object obj) =>
@@ -261,27 +267,35 @@ namespace bazy1.ViewModels.Admin.Pages {
             {
                 var selected = DbContext.Users.Where(user => SelectedUser.Id == user.Id).First();
 
-                Console.WriteLine(selected.Id);
+                    DbContext.Database.ExecuteSql($"update user set deleted = 1 where id = {SelectedUser.Id}");
+                selected.Deleted = true;
 
-                DbContext.Database.ExecuteSql($"update user set deleted = 1 where id = {SelectedUser.Id}");
+                foreach (var p in Users)
+                {
+                    DbContext.Update(p);
+                }
 
-              //  DbContext.Database.ExecuteSql($"update appointment set doctor_id =NULL, doctor_user_id =NULL where doctor_user_id={SelectedUser.Id}");
-                //    DbContext.Database.ExecuteSqlRaw($"delete from doctor_specialization where doctor_id = (select id from doctor where user_id = {SelectedUser.Id}); ");
-					//DbContext.Database.ExecuteSqlRaw($"delete from doctor where user_id = {SelectedUser.Id}; ");
+				
+				//  DbContext.Database.ExecuteSql($"update appointment set doctor_id =NULL, doctor_user_id =NULL where doctor_user_id={SelectedUser.Id}");
+				//    DbContext.Database.ExecuteSqlRaw($"delete from doctor_specialization where doctor_id = (select id from doctor where user_id = {SelectedUser.Id}); ");
+				//DbContext.Database.ExecuteSqlRaw($"delete from doctor where user_id = {SelectedUser.Id}; ");
 				//DbContext.Database.ExecuteSqlRaw($"delete from administrator where user_id = {SelectedUser.Id}; ");
 				//DbContext.Database.ExecuteSqlRaw($"delete from receptionist where user_id = {SelectedUser.Id}; ");
 
 
 				//DbContext.Database.ExecuteSqlRaw($"delete from user where id = {SelectedUser.Id}; ");
 
-                 //   DbContext.SaveChanges();
-                    _adminViewModel.CurrentViewModel = new ListUserViewModel(adminViewModel);
-                
+				//DbContext.SaveChanges();
 
-                // Refresh 
+				_adminViewModel.CurrentViewModel = new ListUserViewModel(adminViewModel);
 
-            }
-            );
+
+
+
+				// Refresh 
+
+			}
+			);
         }
     }
 }

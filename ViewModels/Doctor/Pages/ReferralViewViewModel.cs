@@ -1,4 +1,5 @@
 ﻿using bazy1.Models;
+using bazy1.Utils;
 using CsvHelper;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -55,7 +56,12 @@ namespace bazy1.ViewModels.Doctor.Pages {
 				_selectedReferral = value;
 				if (SelectedReferral != null)
 				{
-					PdfPath = SelectedReferral.Pdf;
+					if (File.Exists(SelectedReferral.Pdf)) PdfPath = SelectedReferral.Pdf;
+					else
+					{
+						var tempPres = ReferralGenerator.generate(SelectedReferral);
+						PdfPath = tempPres;
+					}
 				}
 				//_pdfPath = _selectedPrescription != null ? SelectedPrescription.Pdf : "";
 				Console.WriteLine("wymm:" + PdfPath);

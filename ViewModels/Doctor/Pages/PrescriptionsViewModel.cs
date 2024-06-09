@@ -3,6 +3,7 @@ using CsvHelper;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Globalization;
 using System.IO;
@@ -19,6 +20,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 		private Models.Doctor doctor;
 		private static string _pdfPath;
 		private ICollectionView _prescriptionsView;
+		private ObservableCollection<Prescription> _prescriptions;
 
 
 		public string PdfPath {
@@ -56,7 +58,13 @@ namespace bazy1.ViewModels.Doctor.Pages {
 
 				if (SelectedPrescription != null)
 				{
-					PdfPath = SelectedPrescription.Pdf;
+					if (File.Exists(SelectedPrescription.Pdf)) PdfPath = SelectedPrescription.Pdf;
+					else
+					{
+                        var tempPres = new PrescriptionGenerator().generate(SelectedPrescription, doctor);
+						PdfPath = tempPres;
+                    }
+
 				}
 
 				//_pdfPath = _selectedPrescription != null ? SelectedPrescription.Pdf : "";
@@ -77,8 +85,10 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			{
 				if (item.Patient.Name != null) Console.WriteLine(item.Patient.Name);
 			}
+			_prescriptions = new(prescriptions.ToList());
 			// Console.WriteLine(prescriptions[0].Patient.Name);
 			PrescriptionsView = CollectionViewSource.GetDefaultView(prescriptions);
+
         }
 	}
 }

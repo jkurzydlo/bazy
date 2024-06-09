@@ -21,6 +21,8 @@ namespace bazy1.ViewModels.Doctor.Pages {
 		private Patient patient;
 
 		public ICommand ShowAddMedicationCommand { get; set; }
+		public ICommand AddCommentsCommand { get; set;}
+
 
 		private List<Medicine> _medicines;
 		private string _medicineDetails;
@@ -31,6 +33,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 		public MedicalHistoryViewModel(Patient patient, Disease disease, DoctorViewModel viewModel) {
 			this.patient = patient;
 
+
 			ShowAddMedicationCommand = new BasicCommand(obj => {
 				viewModel.CurrentViewModel = new AddMedicationViewModel(patient,disease, viewModel);
 			});
@@ -39,7 +42,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			//"select dm.id from disease_medicine join patient p join diesease d where d. "
 			//DbContext.Database.ExecuteSql($"insert into diesease_medicine values({disease.Id},LAST_INSERT_ID())");
 			//DbContext.Database.ExecuteSql($"insert into patient_diesease values({disease.Id},{patient.Id})");
-			DbContext.SaveChanges();
+			//DbContext.SaveChanges();
 			var ans = DbContext.Database.SqlQuery<string>($"select med.name from  ((patient p join patient_diesease pd on p.id=pd.patient_id) join diesease_medicine dm on pd.disease_id = dm.diesease_id) join medicine med on med.id = dm.medicine_id where p.id={patient.Id}");
 			ans.ToList().ForEach(System.Console.WriteLine);
 			
@@ -69,7 +72,8 @@ namespace bazy1.ViewModels.Doctor.Pages {
 			set {
 				diesasesList = value;
 				OnPropertyChanged(nameof(DiseasesList));
-			}
+                Console.WriteLine("zmienionox");
+            }
 		}
 
 		public Disease SelectedDisease {
@@ -81,12 +85,15 @@ namespace bazy1.ViewModels.Doctor.Pages {
 				OnPropertyChanged(nameof(SelectedDisease));
 				foreach(var disease in DiseasesList)
 				{
-					//disease.Medicines.Add()
-				}
+					DbContext.Diseases.Where(d => d.Id == SelectedDisease.Id).First().Comments = SelectedDisease.Comments;
+                    Console.WriteLine("zmieniono");
+					
+                }
                 foreach (var item in patient.Diseases)
                 {
                     Console.WriteLine("imle: "+item.Medicines.Count);
                 }
+				DbContext.SaveChanges();
             }
 		}
 

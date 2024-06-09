@@ -81,7 +81,7 @@ namespace bazy1.ViewModels.Doctor {
 		private void ExecuteShowReferralViewCommand(object obj) {
 		if(!_currentUser.FirstLogin || !_firstLogin)
 			{
-				CurrentViewModel = new ReferralViewViewModel(DbContext.Referrals.Include("Doctor").Include("Patient").Where(r => r.DoctorUserId == _currentUser.Id).ToList(), DbContext.Doctors.Where(doc => doc.UserId == _currentUser.Id).First());
+				CurrentViewModel = new ReferralViewViewModel(DbContext.Referrals.Include("Doctor").Include(r => r.Patient.Addresses).Where(r => r.DoctorUserId == _currentUser.Id).ToList(), DbContext.Doctors.Where(doc => doc.UserId == _currentUser.Id).First());
 			}
 		}
 
@@ -109,7 +109,7 @@ namespace bazy1.ViewModels.Doctor {
 					var sz = DbContext.Prescriptions.Where(
 					pr => pr.DoctorUserId == CurrentUser.Id);
 
-				var ab = DbContext.Prescriptions.Include("Patient").
+				var ab = DbContext.Prescriptions.Include(p => p.Patient.Addresses).Include(p => p.Medicines).Include(p=>p.Patient.Diseases).
 					Where(pr => pr.DoctorUserId == CurrentUser.Id).ToList();
 
 				//var pat = DbContext.Patients.Where(pat => pat.Prescriptions.Contains())

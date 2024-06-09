@@ -1,7 +1,9 @@
 ﻿using bazy1.Models;
+using bazy1.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -64,12 +66,18 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 
 					if (SelectedPrescription != null)
 					{
-						PdfPath = SelectedPrescription.Pdf;
+					if (File.Exists(SelectedPrescription.Pdf)) PdfPath = SelectedPrescription.Pdf;
+					else
+					{
+						var tempPres = new PrescriptionGenerator().generate(SelectedPrescription, SelectedPrescription.Doctor);
+						PdfPath = tempPres;
 					}
+				}
 
 					//_pdfPath = _selectedPrescription != null ? SelectedPrescription.Pdf : "";
 					Console.WriteLine("wymm:" + PdfPath);
 					OnPropertyChanged(nameof(SelectedPrescription));
+					SelectedReferral = null;
 					//var filename = generator.generate(DbContext.Prescriptions.Include("Medicines").Include("Patient").Include("Patient.Addresses").Where(pr => pr.Id == SelectedPrescription.Id).First(), doctor);
 					//Console.WriteLine("pdf: " + SelectedPrescription.Pdf);
 
@@ -83,10 +91,15 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 
 				if (SelectedReferral != null)
 				{
-					PdfPath = SelectedReferral.Pdf;
+					if (File.Exists(SelectedReferral.Pdf)) PdfPath = SelectedReferral.Pdf;
+					else
+					{
+						var tempPres =ReferralGenerator.generate(SelectedReferral);
+						PdfPath = tempPres;
+					}
 				}
 				OnPropertyChanged(nameof(SelectedReferral));
-
+				SelectedPrescription = null;
 
 			}
 		}

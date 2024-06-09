@@ -1,4 +1,5 @@
 ﻿using bazy1.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -40,12 +41,23 @@ namespace bazy1.ViewModels.Admin.Pages
 
         public Disease SelectedDisease
         {
-            get => _selectedDisease;
+            get {
+				return _selectedDisease;
+            }
             set
             {
-                _selectedDisease = value;
-                OnPropertyChanged(nameof(SelectedDisease));
-            }
+
+                if (value != null)
+                {
+                    _selectedDisease = value;
+                    OnPropertyChanged(nameof(SelectedDisease));
+
+                    DbContext.Diseases.Where(d => d.Id == SelectedDisease.Id).First().Comments = SelectedDisease.Comments;
+
+                    Console.WriteLine(SelectedDisease.Comments);
+                    DbContext.SaveChanges();
+                }
+			}
         }
 
         public string FilterText
@@ -60,6 +72,10 @@ namespace bazy1.ViewModels.Admin.Pages
                     return tempDisease.Name.ToLower().Contains(FilterText.ToLower().Trim());
                 };
                 OnPropertyChanged(nameof(FilterText));
+                foreach (var item in DiseasesList)
+                {
+                    Console.WriteLine(item.Comments);
+                }
             }
         }
 

@@ -19,5 +19,9 @@ namespace bazy1.Views.Admin.Pages
         {
 
         }
-    }
+
+		private void UserControl_Loaded(object sender, System.Windows.RoutedEventArgs e) {
+
+		}
+	}
 }

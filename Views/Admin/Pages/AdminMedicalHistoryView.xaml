@@ -19,11 +19,11 @@
             <TextBox Padding="4" VerticalAlignment="Center" ToolTip="Wyszukaj" Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}" Width="120" Height="30"></TextBox>
         </StackPanel>
 
-        <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" ColumnWidth="*" Style="{StaticResource DataGrid}" SelectionMode="Single" HeadersVisibility="Column" IsReadOnly="True" ItemsSource="{Binding DiseasesView, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedDisease, Mode=TwoWay}" Margin="0,52,0,72" Grid.RowSpan="2">
+        <DataGrid CanUserAddRows="False" AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" ColumnWidth="*" Style="{StaticResource DataGrid}" SelectionMode="Single" HeadersVisibility="Column" ItemsSource="{Binding DiseasesView, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedDisease, Mode=TwoWay}" Margin="0,52,0,72" Grid.RowSpan="2">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Jednostka chorobowa" Binding="{Binding Name}" />
-                <DataGridTextColumn Header="Data rozpoznania" Binding="{Binding DateFrom, StringFormat='{}{0:dd/MM/yyyy}'}"/>
-                <DataGridTextColumn Header="Dodatkowe informacje" Binding="{Binding Comments}"  />
+                <DataGridTextColumn IsReadOnly="True" Header="Jednostka chorobowa" Binding="{Binding Name}" />
+                <DataGridTextColumn IsReadOnly="True" Header="Data rozpoznania" Binding="{Binding DateFrom, StringFormat='{}{0:dd/MM/yyyy}'}"/>
+                <DataGridTextColumn IsReadOnly="False" Header="Dodatkowe informacje" Binding="{Binding Comments, Mode=TwoWay, UpdateSourceTrigger=LostFocus}"  />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
