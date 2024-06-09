@@ -22,7 +22,7 @@
 
                 <Button IsEnabled="{Binding RPMButtonActive}" Command="{Binding DownloadRPM}" Margin="10,0,10,0" Content="Pobierz"/>
 
-                <ProgressBar Visibility="{Binding RPMVisible}" Value="{Binding RPLFraction}" Width="80" Height="10"/>
+                <ProgressBar Visibility="{Binding RPMVisible}" Value="{Binding RPMFraction}" Width="80" Height="10"/>
 
             </StackPanel>
         </StackPanel>

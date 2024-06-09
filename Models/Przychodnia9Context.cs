@@ -43,6 +43,8 @@ public partial class Przychodnia9Context : DbContext
 
     public virtual DbSet<Referral> Referrals { get; set; }
 
+    public virtual DbSet<ReminderSetting> ReminderSettings { get; set; }
+
     public virtual DbSet<Specialization> Specializations { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
@@ -565,6 +567,18 @@ public partial class Przychodnia9Context : DbContext
             entity.HasOne(d => d.Doctor).WithMany(p => p.Referrals)
                 .HasForeignKey(d => new { d.DoctorId, d.DoctorUserId })
                 .HasConstraintName("referral_ibfk_2");
+        });
+
+        modelBuilder.Entity<ReminderSetting>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("reminder_settings");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.ReminderTimeBeforeAppointment)
+                .HasDefaultValueSql("'24'")
+                .HasColumnName("reminder_time_before_appointment");
         });
 
         modelBuilder.Entity<Specialization>(entity =>

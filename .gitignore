@@ -18,6 +18,8 @@ mono_crash.*
 
 # Build results
 [Dd]ebug/
+![Dd]ebug/net8.0-windows/LibreBarcode39Text-Regular.ttf
+![Dd]ebug/net8.0-windows/LibreBarcode128-Regular.ttf
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/

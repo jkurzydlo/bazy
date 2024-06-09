@@ -203,12 +203,17 @@ namespace bazy1.ViewModels.Doctor.Pages
 
 					}
 				}
-			
-			XNamespace xNamespace = "http://rejestry.ezdrowie.gov.pl/rpl/eksport-danych-v4.0.0";
-			var medicines = XDocument.Load("rpl.xml").Root.Descendants(xNamespace + "produktLeczniczy");
-			foreach (var med in medicines)
+			try
 			{
-				FetchedMedicines.Add(new MedicinePart{ Name = med.Attribute("nazwaProduktu").Value});
+				XNamespace xNamespace = "http://rejestry.ezdrowie.gov.pl/rpl/eksport-danych-v4.0.0";
+				var medicines = XDocument.Load("rpl.xml").Root.Descendants(xNamespace + "produktLeczniczy");
+				foreach (var med in medicines)
+				{
+					FetchedMedicines.Add(new MedicinePart { Name = med.Attribute("nazwaProduktu").Value });
+				}
+			}catch(Exception e)
+			{
+				System.Windows.MessageBox.Show("Błąd pobierania listy leków");
 			}
 		}
 		public AddMedicationViewModel(Patient patient, Disease disease, DoctorViewModel parentViewModel) {

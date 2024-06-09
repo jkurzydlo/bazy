@@ -1,5 +1,6 @@
 ﻿using bazy1.Models;
 using bazy1.Utils;
+using bazy1.Views.Admin.Pages;
 using Google.Protobuf.Compiler;
 using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.EntityFrameworkCore;
@@ -213,6 +214,7 @@ namespace bazy1.ViewModels.Admin.Pages
 
                     // Wyświetlenie loginu i hasła w MessageBoxie
                     System.Windows.MessageBox.Show($"Operacja powiodła się", "Nowy użytkownik utworzony", MessageBoxButton.OK, MessageBoxImage.Information);
+                    parentModel.CurrentViewModel = new ListUserViewModel(parentModel);
 
                     /*
                     QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;

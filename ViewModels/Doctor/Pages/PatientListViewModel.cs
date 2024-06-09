@@ -20,6 +20,7 @@ using bazy1.Utils;
 using bazy1.ViewModels.Receptionist.Pages;
 using bazy1.Views.Admin.Pages;
 using System.Windows;
+using System.IO;
 
 namespace bazy1.ViewModels.Doctor.Pages {
 	public class PatientListViewModel : ViewModelBase {
@@ -129,11 +130,21 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 				viewModel.CurrentViewModel = new AddAppointmentViewModel(this, SelectedPatient);
 			});
 			ShowAddMedicationCommand = new BasicCommand(obj => {
+				if (File.Exists("rpl.xml"))
 				viewModel.CurrentViewModel = new AddMedicationViewModel(SelectedPatient, null, viewModel);
+				else System.Windows.MessageBox.Show("Nie odnaleziono pliku zasobów", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+
 			});
 			//PrescriptionGenerator p = new();
 			//p.generate();
-			ShowAddReferralCommand = new BasicCommand(obj => { viewModel.CurrentViewModel = new AddReferralViewModel(doctor, SelectedPatient,viewModel); });
+			ShowAddReferralCommand = new BasicCommand(obj => {
+				if (File.Exists("rpm.zip"))
+				{
+					viewModel.CurrentViewModel = new AddReferralViewModel(doctor, SelectedPatient, viewModel);
+				}
+				else System.Windows.MessageBox.Show("Nie odnaleziono pliku zasobów", "Błąd", MessageBoxButton.OK, MessageBoxImage.Error);
+
+			});
 			AddPatientCommand = new BasicCommand(obj => viewModel.CurrentViewModel = new AddPatientViewModel(doctor, viewModel));
 			PatientDeleteCommand = new BasicCommand(obj =>
 			{

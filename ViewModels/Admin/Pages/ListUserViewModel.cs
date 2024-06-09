@@ -209,11 +209,13 @@ namespace bazy1.ViewModels.Admin.Pages {
             
 
             SendAccountVerificationEmail = new BasicCommand((object obj) =>
-            {
-                EmailSender emailSender = new EmailSender();
-                emailSender.send(SelectedUser);
+            {   
                 SelectedUser.Token = Guid.NewGuid().ToString();
                 SelectedUser.Tokendate = DateTime.Now;
+
+                EmailSender emailSender = new EmailSender();
+                emailSender.send(SelectedUser);
+
                 DbContext.SaveChanges();
             });
 
@@ -224,27 +226,34 @@ namespace bazy1.ViewModels.Admin.Pages {
                 {
                     var userToUpdate = DbContext.Users.FirstOrDefault(u => u.Id == SelectedUser.Id);
                     MailAddress mail;
-                    if((string.IsNullOrEmpty(Email) || string.IsNullOrWhiteSpace(Email)) || (MailAddress.TryCreate(Email, out mail)))
-                    if (userToUpdate != null && !string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(Surname))
+                    if ((string.IsNullOrEmpty(Email) || string.IsNullOrWhiteSpace(Email)) || (MailAddress.TryCreate(Email, out mail)))
                     {
-                        userToUpdate.Name = Name;
-                        userToUpdate.Surname = Surname;
-                        userToUpdate.Login = Login;
-                        userToUpdate.Email = Email;
-                        try
+                        if (userToUpdate != null && !string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(Surname))
                         {
-                            // Zapisujemy zmiany do bazy danych
-                            DbContext.SaveChanges();
-                            System.Windows.MessageBox.Show("Zmiany zostały zapisane pomyślnie.");
+                            userToUpdate.Name = Name;
+                            userToUpdate.Surname = Surname;
+                            userToUpdate.Login = Login;
+                            userToUpdate.Email = Email;
+                            try
+                            {
+                                // Zapisujemy zmiany do bazy danych
+                                DbContext.SaveChanges();
+                                System.Windows.MessageBox.Show("Zmiany zostały zapisane pomyślnie.");
+                            }
+                            catch (Exception ex)
+                            {
+                                System.Windows.MessageBox.Show($"Wystąpił błąd podczas zapisywania zmian");
+                            }
+                            // Refresh 
+                            _adminViewModel.CurrentViewModel = new ListUserViewModel(adminViewModel);
                         }
-                        catch (Exception ex)
-                        {
-                            System.Windows.MessageBox.Show($"Wystąpił błąd podczas zapisywania zmian: {ex.Message}");
-                        }
-                        // Refresh 
-                        _adminViewModel.CurrentViewModel = new ListUserViewModel(adminViewModel);
                     }
-                }
+                    else
+                    {
+                        System.Windows.MessageBox.Show($"Wystąpił błąd podczas zapisywania zmian");
+						_adminViewModel.CurrentViewModel = new ListUserViewModel(adminViewModel);
+					}
+				}
             });
 
 

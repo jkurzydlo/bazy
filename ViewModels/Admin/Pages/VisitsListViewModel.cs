@@ -41,7 +41,7 @@ namespace bazy1.ViewModels.Admin.Pages {
 		public DateTime SelectedDate {
 			get => _selectedDate;
 			set {
-				if (_selectedDate >= DateTime.Now.Date) _selectedDate = value;
+				if (value >= DateTime.Now.Date) _selectedDate = value;
 				else _selectedDate = DateTime.Now.Date;
 				OnPropertyChanged(nameof(SelectedDate));
 
@@ -50,7 +50,8 @@ namespace bazy1.ViewModels.Admin.Pages {
 				var test = DbContext.Workhours.FromSqlRaw($"select * from przychodnia9.workhours where user_id = @doc_id", doc_id).ToList();
 				test = test.Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear).ToList();
 				AppointmentsSchedule = new(test);
-			}
+                Console.WriteLine("il: "+AppointmentsSchedule.Count());
+            }
 		}
 
 		public Visibility AppointmentScheduleVisible {

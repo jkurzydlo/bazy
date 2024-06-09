@@ -80,18 +80,28 @@ namespace bazy1.ViewModels.Admin.Pages {
 
 		public ICommand AddAppointmentCommand{ get; set; }
 		
-		public AddWorkhoursViewModel() {
+		public AddWorkhoursViewModel(Patient patient) {
+			SelectedPatient = patient;
 			AddAppointmentCommand = new BasicCommand((object obj) =>
 			{
-				if (!DbContext.Database.SqlQuery<bool>($"select open from appointment where date={SelectedDate}").First())
+				if (SelectedWorkhour != null && Workhours.Count != 0 && SelectedPatient != null && SelectedUser != null && (bool)Workhours.Where(w => w.Id == SelectedWorkhour.Id).First().Open)
 				{
-					DbContext.Database.ExecuteSqlRaw($"update workhours set open = false where doctor_id=(select id from doctor where doctor_user_id={SelectedUser.Id}) && id={SelectedWorkhour.Id}");
-					DbContext.Doctors.Where(d=>d.UserId ==SelectedUser.Id).First().Appointments.Add(new Appointment { Date = SelectedDate, Patient = SelectedPatient, Goal = AppointmentGoal });
+					if (!DbContext.Doctors.Where(d => !d.User.Deleted).Include("Patients").Where(d => d.UserId == SelectedUser.Id).First().Patients.Contains(SelectedPatient))
+						DbContext.Database.ExecuteSql($"insert into doctor_has_Patient values( (select id from doctor where user_id = {SelectedUser.Id}),{SelectedUser.Id},{SelectedPatient.Id})");
+					DbContext.Database.ExecuteSqlRaw($"update workhours set open = false where user_id={SelectedUser.Id} && id={SelectedWorkhour.Id}");
+					DbContext.Doctors.Where(d => d.UserId == SelectedUser.Id).First().Appointments.Add(new Appointment { Date = SelectedWorkhour.Start, Patient = SelectedPatient, Goal = AppointmentGoal });
+					//SelectedSelectedPatient.Appointments.Where(a => a.Date == SelectedWorkhour.Start).First().Notifications.Add(new Notification() { });
+					DbContext.Workhours.Where(w => w.UserId == SelectedUser.Id && w.Id == SelectedWorkhour.Id).First().Open = false;
 					DbContext.SaveChanges();
-					Workhours = new(DbContext.Workhours.Where(wh => wh.UserId == SelectedUser.Id).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear));
-
+					SelectedDate = SelectedDate;
 				}
+				else System.Windows.MessageBox.Show($"Wystąpił błąd podczas dodawania wizyty", "Błąd", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+
+
 			});
+
+
+
 			Users = DbContext.Users.Where(u=> !u.Deleted).ToList();
 			Patients = DbContext.Patients.Where(p=>!p.Deleted).ToList();
 			Workhours = new(DbContext.Workhours.Where(wh => wh.UserId == SelectedUser.Id).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear));

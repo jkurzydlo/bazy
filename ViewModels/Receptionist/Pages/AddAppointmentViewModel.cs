@@ -19,7 +19,7 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 		private ObservableCollection<Workhour> _workhours;
 		public List<Models.Doctor> Doctors { get; set; }
 		public List<Models.Patient> Patients { get; set; }
-		private Models.Doctor _selectedDoctor = DbContext.Doctors.First();
+		private Models.Doctor _selectedDoctor = DbContext.Doctors.Where(doc => !doc.User.Deleted).First();
 		private Models.Patient _selectedPatient = DbContext.Patients.First();
 		public Dictionary<Workhour, System.Windows.Media.Brush> RowColor { get; set; }
 		public System.Windows.Media.Brush RowColors { get; set; } = new SolidColorBrush(Colors.Green);
@@ -83,8 +83,15 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 					_selectedDoctor = value;
 					OnPropertyChanged(nameof(SelectedDoctor));
 					Workhours = new(DbContext.Workhours.Where(wh => wh.UserId == SelectedDoctor.UserId).Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear));
+
+					foreach (var item in DbContext.Workhours.Where(wh => wh.UserId == SelectedDoctor.UserId).ToList())
+					{
+						if ((bool)item.Open) { SelectedDate = item.BlockStart.Value.Date; break; }
+
+					}
+
 				}
-				}
+			}
 		}
 
 		public Models.Patient SelectedPatient {
@@ -102,7 +109,7 @@ namespace bazy1.ViewModels.Receptionist.Pages {
             Console.WriteLine("ldsgsd");
             AddAppointmentCommand = new BasicCommand((object obj) =>
 			{
-			if (Workhours.Count != 0 && SelectedPatient != null && SelectedDoctor != null)
+			if (SelectedWorkhour != null && Workhours.Count != 0 && SelectedPatient != null && SelectedDoctor != null && (bool)Workhours.Where(w=> w.Id == SelectedWorkhour.Id).First().Open)
 				{
 					if (!DbContext.Doctors.Where(d=>!d.User.Deleted).Include("Patients").Where(d => d.Id == SelectedDoctor.Id).First().Patients.Contains(patient))
 						DbContext.Database.ExecuteSql($"insert into doctor_has_patient values({SelectedDoctor.Id},{SelectedDoctor.UserId},{patient.Id})");
@@ -113,6 +120,8 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 					DbContext.SaveChanges();
 					SelectedDate = SelectedDate;
 				}
+				else System.Windows.MessageBox.Show($"Wystąpił błąd podczas dodawania wizyty", "Błąd", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+
 
 			});
 			Doctors = DbContext.Doctors.Where(d=>!d.User.Deleted).ToList();

@@ -82,7 +82,9 @@ namespace bazy1.ViewModels.Admin
         public ICommand ShowUserListViewCommand { get; }
         public ICommand ShowAddWorkhoursCommand { get; set; }
         public ICommand ShowPatientListViewCommand { get; }
-        public ICommand ShowAdminPatientListViewCommand { get; }
+        public ICommand ShowSchedulesListCommand { get; }
+
+		public ICommand ShowAdminPatientListViewCommand { get; }
         private void ExecuteShowAdminPatientListViewCommand(object obj)
         {
             if (!_currentUser.FirstLogin || !firstLogin)
@@ -139,7 +141,7 @@ namespace bazy1.ViewModels.Admin
             //DoctorViewModel = new DoctorViewModel();
             ShowAdminPatientListViewCommand = new BasicCommand(ExecuteShowAdminPatientListViewCommand);
 			ShowResourcesViewCommand = new BasicCommand((object obj) => { if (!CurrentUser.FirstLogin || !firstLogin) CurrentViewModel = new ResourcesDownloadViewModel(this); });
-
+			//ShowSchedulesListCommand = new BasicCommand((object obj) => { if (!CurrentUser.FirstLogin || !firstLogin) CurrentViewModel = new SchedulesViewModel(this); }
 		}
 
 

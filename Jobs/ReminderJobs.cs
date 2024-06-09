@@ -19,11 +19,12 @@ namespace bazy1.Jobs
             // Wywołaj metodę do wysyłania przypomnień
             await SendReminders();
         }
+        public ReminderJob() { }
 
         private async Task SendReminders()
         {
-            // Implementacja wysyłania przypomnień
-            // Poniżej znajduje się przykładowa implementacja
+
+            await Console.Out.WriteLineAsync("Wysyłanie...");
 
             int reminderTime = new AppointmentRepository().GetReminderTimeBeforeAppointment();
 
@@ -34,20 +35,22 @@ namespace bazy1.Jobs
                     connection.Open();
                     command.Connection = connection;
                     command.CommandText = @"
-                        SELECT a.id, p.phone, p.email, a.appointment_date 
+                        SELECT a.id, p.phoneNumber, p.email, a.date 
                         FROM appointments a
-                        JOIN patients p ON a.patient_id = p.id
-                        WHERE a.appointment_date > NOW() 
-                        AND a.appointment_date <= DATE_ADD(NOW(), INTERVAL @reminderTime HOUR)";
+                        JOIN patient p ON a.patient_id = p.id
+                        WHERE a.date > NOW() 
+                        AND a.date <= DATE_ADD(NOW(), INTERVAL @reminderTime HOUR)";
 
                     command.Parameters.AddWithValue("@reminderTime", reminderTime);
+                    await Console.Out.WriteLineAsync("rt: "+reminderTime.ToString());
                     using (var reader = command.ExecuteReader())
                     {
+                        await Console.Out.WriteLineAsync("czyt");
                         while (reader.Read())
                         {
                             int appointmentId = reader.GetInt32("id");
-                            string phone = reader["phone"] as string;
-                            string email = reader["email"] as string;
+                            string phone = reader["phoneNumber"] as string;
+							string email = reader["email"] as string;
                             DateTime appointmentDate = reader.GetDateTime("appointment_date");
 
                             string message = $"Przypomnienie o wizycie: {appointmentDate}";
@@ -62,6 +65,7 @@ namespace bazy1.Jobs
                                 // Wyślij email
                                 await SendEmail(email, "Przypomnienie o wizycie", message);
                             }
+                            await Console.Out.WriteLineAsync(message);
                         }
                     }
                 }
@@ -71,7 +75,7 @@ namespace bazy1.Jobs
         private Task SendSms(string phoneNumber, string message)
         {
             const string accountSid = "AC1e9328bff47258fd271efdc0ba9238ac";
-            const string authToken = "3573976159bd1a379d1ff36bfbc6e974";
+            const string authToken = "d1ab6658d40a407287ca18e180307e29";
             const string fromPhoneNumber = "+15672457041";
 
             TwilioClient.Init(accountSid, authToken);
@@ -98,7 +102,7 @@ namespace bazy1.Jobs
         private MySqlConnection GetConnection()
         {
             // Implementacja połączenia z bazą danych
-            string connectionString = "Server=localhost;Database=przychodnia9;Uid=root;Pwd=;";
+            string connectionString = "Server=localhost;Database=przychodnia9;Uid=root;Pwd=12345";
             return new MySqlConnection(connectionString);
         }
     }

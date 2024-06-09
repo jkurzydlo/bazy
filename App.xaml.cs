@@ -80,7 +80,7 @@ namespace bazy1
                 .WithIdentity("ReminderTrigger", "group1")
                 .StartNow()
                 .WithSimpleSchedule(x => x
-                    .WithIntervalInMinutes(60)
+                    .WithIntervalInMinutes(1)
                     .RepeatForever())
                 .Build();
 

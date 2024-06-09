@@ -29,6 +29,6 @@ public partial class Doctor
 
     public virtual ICollection<Specialization> Specializations { get; set; } = new List<Specialization>();
 	public override string ToString() {
-		return Name+" "+Surname;
+		return Name + " " + Surname;
 	}
 }
