@@ -11,8 +11,8 @@
              >
     <Grid Background="AliceBlue">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="93*"/>
+            <ColumnDefinition Width="67*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="25"/>
@@ -22,7 +22,7 @@
 
         <StackPanel Orientation="Horizontal" Grid.Row="0">
             <TextBlock FontFamily="Roboto" Grid.Row="0" Text="Lista użytkowników" FontSize="15" Margin="5" Grid.ColumnSpan="2"/>
-        <TextBox Width="80" Margin="0,2,0,2" Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0"/>
+            <TextBox Width="80" Margin="0,2,0,2" Text="{Binding FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0"/>
         </StackPanel>
 
         <DataGrid AutoGenerateColumns="False" VerticalScrollBarVisibility="Hidden" ColumnWidth="*" Grid.Row="1" Style="{StaticResource DataGrid}" SelectionMode="Single" HeadersVisibility="Column" IsReadOnly="True" ItemsSource="{Binding Users, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding SelectedUser, Mode=TwoWay}" Margin="5,5,5,180">
@@ -30,6 +30,8 @@
                 <DataGridTextColumn Header="Imię" Binding="{Binding Name}" />
                 <DataGridTextColumn Header="Nazwisko" Binding="{Binding Surname}"  />
                 <DataGridTextColumn Header="Login" Binding="{Binding Login}"  />
+                <DataGridTextColumn Header="Login" Binding="{Binding Login}"  />
+
                 <DataGridTextColumn Header="Ostatnie logowanie" Binding="{Binding LastLogin, StringFormat='{}{0:dd/MM/yyyy HH:mm}'}"/>
                 <DataGridTemplateColumn Header="Aktywny" CanUserResize="False" Width="*">
                     <DataGridTemplateColumn.CellTemplate>
@@ -50,6 +52,30 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
+                <DataGridTemplateColumn Header="Typ" CanUserResize="False" Width="*">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <TextBlock>
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Type }" Value="recepcjonista">
+                                                <Setter Property="Text" Value="Recepcjonista" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Type }" Value="admin">
+                                                <Setter Property="Text" Value="Administrator" />
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Type }" Value="lekarz">
+                                                <Setter Property="Text" Value="Lekarz" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
             </DataGrid.Columns>
             <DataGrid.ContextMenu>
                 <ContextMenu>
@@ -60,7 +86,7 @@
             </DataGrid.ContextMenu>
         </DataGrid>
 
-        <UniformGrid x:Name="modifyPanel" Visibility="{Binding EditFormVisible}" Columns="2" Rows="3" Grid.Column="1" Grid.Row="1" Width="260" Margin="70,0,70,290">
+        <UniformGrid x:Name="modifyPanel" Visibility="{Binding EditFormVisible}" Columns="2" Rows="3" Grid.Column="1" Grid.Row="1" Margin="70,0,60,290">
             <TextBlock Text="Imię" FontFamily="Roboto" VerticalAlignment="Center" HorizontalAlignment="Stretch"/>
             <TextBox Text="{Binding Name, Mode=TwoWay}" FontFamily="Roboto" Width="120" Height="20" VerticalAlignment="Center" HorizontalAlignment="Left"
                  Foreground="Black"
@@ -80,6 +106,6 @@
                  BorderThickness="1,1,1,1" />
         </UniformGrid>
 
-        <Button x:Name="btnSave" Visibility="{Binding EditFormVisible}" Content="Zapisz" Command="{Binding ModifyUserCommand}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,120,0,0" Grid.Row="1" Width="76"/>
+        <Button x:Name="btnSave" Visibility="{Binding EditFormVisible}" Content="Zapisz" Command="{Binding ModifyUserCommand}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,120,0,0" Grid.Row="1" Width="76" Height="20"/>
     </Grid>
 </UserControl>

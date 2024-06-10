@@ -28,6 +28,9 @@ namespace bazy1.Repositories
 				{
 					connection.Open();
 					command.Connection = connection;
+
+					command.CommandText = "select count(*) from User where type='admin'";
+					var adminCount = (long)command.ExecuteScalar();
                     Console.WriteLine("wykon");
                     string login = "admin", password = "admin"; //Pierwsze dane generowane i dostarczane przy dostarczaniu programu klientowi
 					
@@ -40,17 +43,20 @@ namespace bazy1.Repositories
 					command.Parameters.Add(new MySqlParameter("@firstLogin", MySqlDbType.Byte) { Value = 1 });
 					command.Parameters.Add(new MySqlParameter("@hash", MySqlDbType.VarChar) { Value = BCrypt.Net.BCrypt.HashPassword(password) }) ;
 					//command.Parameters.Add(new MySqlParameter("@password", MySqlDbType.VarChar) { Value = "admin" });
-					command.ExecuteScalar();
+					if(adminCount == 0)command.ExecuteScalar();
 
-					var specs = new List<string> { "Chirurg", "Dermatolog", "Kardiolog", "Laryngolog", "Neurolog", "Okulista", "Ortopeda", "Pediatra", "Psychiatra", "Psycholog", "Stomatolog", "Urolog" };
+					var specs = new List<string> { "Anestezjologia","Chirurgia","Dermatologia","Endokrynologia","Gastroenterologia","Ginekologia","Hematologia","Kardiologia","Laryngologia","Nefrologia","Neurologia","Okulistyka","Onkologia","Ortopedia","Pediatria","Psychiatria","Pulmonologia","Reumatologia","Urologia", "Choroby wewnętrzne" };
 
                     command.Connection = connection;
+
+					command.CommandText = "select count(*) from specialization";
+					var specCount = (long)command.ExecuteScalar();
 
 					for (int i = 0;i < specs.Count;i++)
                     {
                        command.CommandText = $"insert ignore into specialization(name) values(@{i})";
 						command.Parameters.Add(new MySqlParameter($"@{i}", MySqlDbType.VarChar) { Value = specs[i] });
-						command.ExecuteScalar();
+						if(specCount == 0)command.ExecuteScalar();
                     }
 
 				}
