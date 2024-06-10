@@ -21,7 +21,7 @@ namespace bazy1.Repositories
 				using (MySqlConnection conn = GetConnection())
 				{
 					conn.Open();
-					string query = "SELECT DISTINCT a.id,a.date,a.goal, a.patient_ID,a.doctor_id  FROM appointment a join patient p where a.patient_id=@id && !p.deleted";
+					string query = "SELECT DISTINCT a.id,a.date,a.goal, a.patient_ID,a.doctor_id, a.doctor_user_id  FROM appointment a join patient p where a.patient_id=@id && !p.deleted";
                     MySqlCommand cmd = new();
                     cmd.Connection = conn;
                     cmd.CommandText = query;
@@ -37,7 +37,8 @@ namespace bazy1.Repositories
 								Goal = reader["Goal"].ToString(),
 								PatientId = Convert.ToInt32(reader["Patient_id"]),
 								DoctorId = reader.GetInt32("doctor_id"),
-								Doctor = doctorRepository.GetById(reader.GetInt32("doctor_id"))
+								Doctor = doctorRepository.GetById(reader.GetInt32("doctor_id")),
+                                DoctorUserId = reader.GetInt32("doctor_user_id")
 
 							};
 							appointments.Add(appointment);

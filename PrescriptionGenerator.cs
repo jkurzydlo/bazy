@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using bazy1.Models;
+using bazy1.Repositories;
 using Microsoft.EntityFrameworkCore;
 using QuestPDF.Drawing;
 using QuestPDF.Fluent;
@@ -10,6 +11,8 @@ using QuestPDF.Infrastructure;
 
 namespace bazy1 {
 	public class PrescriptionGenerator {
+		private SettingsRepository repository = new();
+
 		public string generate(Prescription prescription, Doctor doctor) {
             Console.WriteLine("genruje sie;");
 			//ViewModels.ViewModelBase.DbContext.Doctors.Where(doc => doc.Patients.Contains(prescription.Patient)).Where(doc => )
@@ -39,8 +42,8 @@ namespace bazy1 {
 						});
 
 						table.Cell().Row(1).ColumnSpan(2).Border(1F).Text("Recepta").AlignLeft();
-						table.Cell().Row(1).ColumnSpan(2).Text("\nSpecjalistyczna przychodnia lekarska\n25-155 Warszawa, ul. Kwiatowa 22," +
-							"tel.:(42)655-47-64	\nfdj").AlignCenter();
+						table.Cell().Row(1).ColumnSpan(2).Text("\n"+repository.GetSettings().Name+"\n" +repository.GetSettings().Address+ "," +
+							"tel.:"+repository.GetSettings().Phone+"\n").AlignCenter();
 						table.Cell().Row(1).ColumnSpan(2).Border(1F).Text("\n\n\n\nŚwiadczeniodawca").AlignLeft();
 
 

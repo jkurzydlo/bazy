@@ -74,12 +74,9 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 					}
 				}
 
-					//_pdfPath = _selectedPrescription != null ? SelectedPrescription.Pdf : "";
-					Console.WriteLine("wymm:" + PdfPath);
 					OnPropertyChanged(nameof(SelectedPrescription));
-					SelectedReferral = null;
-					//var filename = generator.generate(DbContext.Prescriptions.Include("Medicines").Include("Patient").Include("Patient.Addresses").Where(pr => pr.Id == SelectedPrescription.Id).First(), doctor);
-					//Console.WriteLine("pdf: " + SelectedPrescription.Pdf);
+					//SelectedReferral = null;
+
 
 				}
 			}
@@ -99,7 +96,7 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 					}
 				}
 				OnPropertyChanged(nameof(SelectedReferral));
-				SelectedPrescription = null;
+				//SelectedPrescription = null;
 
 			}
 		}

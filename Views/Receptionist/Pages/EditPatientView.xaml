@@ -4,21 +4,51 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
+             xmlns:local="clr-namespace:bazy1.Views.Receptionist.Pages"
              d:DesignHeight="450" d:DesignWidth="800" Loaded="UserControl_Loaded">
-    <Grid>
-        <StackPanel>
-            <TextBlock Text="Edytuj Pacjenta" FontSize="20" Margin="10"/>
-			<Label Content="Imię" />
-            <TextBox Text="{Binding SelectedPatient.Name}" Width="200" Margin="10"/>
-			<Label Content="Nazwisko" />
-            <TextBox Text="{Binding SelectedPatient.Surname}" Width="200" Margin="10"/>
-			<Label Content="PESEL" />
-            <TextBox Text="{Binding SelectedPatient.Pesel}" Width="200" Margin="10"/>
-			<Label Content="Telefon" />
-            <TextBox Text="{Binding SelectedPatient.PhoneNumber}" Width="200" Margin="10"/>
-			<Label Content="Email" />
-            <TextBox Text="{Binding SelectedPatient.Email}" Width="200" Margin="10"/>
-            <Button Content="Zapisz" Command="{Binding SavePatientCommand}" Width="100" Margin="10"/>
-        </StackPanel>
+    <Grid Background="AliceBlue">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock Text="Edytuj Pacjenta" FontSize="20" Margin="10"/>
+                <Label Content="Imię" />
+                <TextBox Text="{Binding SelectedPatient.Name}" Width="200" Margin="10"/>
+                <Label Content="Nazwisko" />
+                <TextBox Text="{Binding SelectedPatient.Surname}" Width="200" Margin="10"/>
+                <Label Content="PESEL" />
+                <TextBox Text="{Binding SelectedPatient.Pesel}" Width="200" Margin="10"/>
+                <Label Content="Telefon" />
+                <TextBox Text="{Binding SelectedPatient.PhoneNumber}" Width="200" Margin="10"/>
+                <Label Content="Email" />
+                <TextBox Text="{Binding SelectedPatient.Email}" Width="200" Margin="10"/>
+                <Button Content="Zapisz" Command="{Binding SavePatientCommand}" Width="100" Height="30"/>
+            </StackPanel>
+        </ScrollViewer>
+
+        <ScrollViewer Grid.Column="1" VerticalScrollBarVisibility="Auto" Margin="20,0,0,0">
+            <StackPanel>
+                <TextBlock Text="Adresy" FontSize="16" Margin="10"/>
+                <ListBox ItemsSource="{Binding Addresses}" SelectedItem="{Binding SelectedAddress}" DisplayMemberPath="City" Height="200" />
+                <Button Content="Dodaj nowy adres" Command="{Binding AddNewAddressCommand}" Width="150" Margin="10"/>
+
+                <Label Content="Ulica" />
+                <TextBox Text="{Binding SelectedAddress.Street}" Width="200" Margin="10"/>
+                <Label Content="Miasto" />
+                <TextBox Text="{Binding SelectedAddress.City}" Width="200" Margin="10"/>
+                <Label Content="Numer budynku" />
+                <TextBox Text="{Binding SelectedAddress.BuildingNumber}" Width="200" Margin="10"/>
+                <Label Content="Kod pocztowy" />
+                <TextBox Text="{Binding SelectedAddress.PostalCode}" Width="200" Margin="10"/>
+                <Label Content="Typ adresu" />
+                <ComboBox ItemsSource="{Binding DataContext.AddressType, RelativeSource={RelativeSource AncestorType=local:EditPatientView}}" SelectedValue="{Binding SelectedAddress.Type}" Width="200" Margin="10"/>
+                <Button Content="Usuń adres" Command="{Binding RemoveAddressCommand}" Width="150" Margin="10"/>
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center" Margin="20"/>
     </Grid>
 </UserControl>

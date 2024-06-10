@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,6 +15,40 @@ namespace bazy1.ViewModels.Admin.Pages {
 		private double _rplfraction;
 		private bool _RPLButtonActive = true;
 		private Visibility _RPLVisible = Visibility.Hidden;
+		private string _name = "";
+		private string _address = "";
+		private string _phone = "";
+
+
+
+		public string Name {
+			get => _name;
+			set {
+				_name = value;
+				OnPropertyChanged(nameof(Name));
+			}
+		}
+
+		public string Phone {
+			get => _phone;
+			set {
+				_phone = value;
+				OnPropertyChanged(nameof(Phone));
+			}
+		}
+
+		public string Address {
+			get => _address;
+			set {
+				_address = value;
+				OnPropertyChanged(nameof(Address));
+			}
+		}
+		public ICommand SaveName { get; set; }
+		public ICommand SaveAddress { get; set; }
+		public ICommand SavePhone { get; set; }
+
+
 
 		private string rplFound = "Nie znaleziono pliku";
 		public string RPLFound {
@@ -150,11 +185,61 @@ namespace bazy1.ViewModels.Admin.Pages {
 		}
 
 		public ResourcesDownloadViewModel(AdminViewModel viewModel) {
-			DownloadRPL = new BasicCommand(downloadXML);
+			if (DbContext.Settings.Count() > 0)
+			{
+				Name = DbContext.Settings.First().Name;
+				Phone = DbContext.Settings.First().Phone;
+				Address = DbContext.Settings.First().Address;
+			}
+			else
+			{
+				Name = "";
+				Phone = "";
+				Address = "";
+			}
+
+				DownloadRPL = new BasicCommand(downloadXML);
 			DownloadRPM = new BasicCommand(downloadCSV);
 
 			if(File.Exists("rpl.xml")) RPLFound = "Znaleziono plik zasobów";
 			if (File.Exists("rpm.zip")) RPMFound = "Znaleziono plik zasobów";
+			SaveName = new BasicCommand((object obj) => {
+				if (Name != "" && Phone != "" && Address != "")
+				{
+					if (DbContext.Settings.Count() > 0)
+					{
+						DbContext.Settings.First().Name = Name;
+						DbContext.Settings.First().Address = Address;
+						DbContext.Settings.First().Phone = Phone;
+					}
+					else DbContext.Settings.Add(new Models.Setting() { Name = Name, Address = Address, Phone = Phone });
+					DbContext.SaveChanges();
+					System.Windows.MessageBox.Show("Zapisano", "Powodzenie", MessageBoxButton.OK, MessageBoxImage.Information);
+
+				}
+				else
+				{
+					System.Windows.MessageBox.Show("Wszystkie pola muszą być wypełnione","Błąd",MessageBoxButton.OK, MessageBoxImage.Error);
+				}
+			});
+
+			SaveAddress = new BasicCommand((object obj) =>
+			{
+				if (DbContext.Settings.Count() > 0 || DbContext.Settings.First().Address == "")
+					DbContext.Settings.First().Address = Address;
+				else DbContext.Settings.Add(new Models.Setting() { Address = Address });
+
+				DbContext.SaveChanges();
+			});
+
+			SavePhone = new BasicCommand((object obj) =>
+			{
+				if (DbContext.Settings.Count() > 0 || DbContext.Settings.First().Phone == "")
+					DbContext.Settings.First().Phone = Phone;
+				else DbContext.Settings.Add(new Models.Setting() { Phone = Phone});
+
+				DbContext.SaveChanges();
+			});
 
 		}
 	}

@@ -57,7 +57,7 @@ namespace bazy1.ViewModels.Doctor.Pages {
 					info = $"Data urodzenia: {tempPatient.BirthDate.Value.ToShortDateString()}\n";
 					if (tempPatient.PhoneNumber != null) info += "Telefon: " + tempPatient.PhoneNumber + "\n";
 					if (tempPatient.Email != null) info += "Email: " + tempPatient.Email + "\n";
-					info += "Adresy:" + adressess;
+					info += "Adresy:\n" + adressess;
 					info += "Przyjmowane leki:\n";
 					string tempDoses = "";
 					var names = DbContext.Database.SqlQueryRaw<string>("select distinct med.name from patient_diesease pd join prescription pr on pr.patient_id=pd.patient_id" +
@@ -121,7 +121,7 @@ $" join medicine med on med.id = pm.medicine_id where pd.patient_id={SelectedPat
 
 		public PatientListViewModel(User user, DoctorViewModel viewModel) {
 
-			EditPatientCommand = new BasicCommand((object obj) => { viewModel.CurrentViewModel = new EditPatientViewModel(SelectedPatient); });
+			//EditPatientCommand = new BasicCommand((object obj) => { viewModel.CurrentViewModel = new EditPatientViewModel(SelectedPatient); });
 
 
 

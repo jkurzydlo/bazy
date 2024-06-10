@@ -1,5 +1,7 @@
 ﻿using bazy1.Models;
 using bazy1.Repositories;
+using bazy1.ViewModels.Receptionist.Pages;
+using bazy1.ViewModels.Receptionist;
 using Microsoft.EntityFrameworkCore;
 using MySql.Data.MySqlClient;
 using System;
@@ -41,7 +43,7 @@ namespace bazy1.ViewModels.Admin.Pages {
 		public DateTime SelectedDate {
 			get => _selectedDate;
 			set {
-				if (value >= DateTime.Now.Date) _selectedDate = value;
+				if (_selectedDate >= DateTime.Now.Date) _selectedDate = value;
 				else _selectedDate = DateTime.Now.Date;
 				OnPropertyChanged(nameof(SelectedDate));
 
@@ -50,8 +52,7 @@ namespace bazy1.ViewModels.Admin.Pages {
 				var test = DbContext.Workhours.FromSqlRaw($"select * from przychodnia9.workhours where user_id = @doc_id", doc_id).ToList();
 				test = test.Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear).ToList();
 				AppointmentsSchedule = new(test);
-                Console.WriteLine("il: "+AppointmentsSchedule.Count());
-            }
+			}
 		}
 
 		public Visibility AppointmentScheduleVisible {
@@ -70,9 +71,9 @@ namespace bazy1.ViewModels.Admin.Pages {
 			set {
 				_selectedAppointment = value;
 				OnPropertyChanged(nameof(SelectedAppointment));
-
+				Console.WriteLine("duid: " + SelectedAppointment.DoctorUserId);
 				var doc_id = new MySqlParameter("doc_id", SelectedAppointment.Doctor.Id);
-				var test = DbContext.Workhours.Where(w => w.Id == SelectedAppointment.DoctorId);
+				var test = DbContext.Workhours.Where(w => w.UserId == SelectedAppointment.DoctorUserId);
 				test = test.Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear);
 				AppointmentsSchedule = new(test);
 				foreach (var item in test)

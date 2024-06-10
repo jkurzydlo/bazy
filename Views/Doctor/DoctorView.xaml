@@ -7,8 +7,9 @@
         xmlns:pagesViewModels="clr-namespace:bazy1.ViewModels.Doctor.Pages"
         xmlns:pagesViews="clr-namespace:bazy1.Views.Doctor.Pages"
         mc:Ignorable="d"
-        Title="MainView" Height="450" Width="800"
+        Title="Medikat" Height="450" Width="800"
         WindowStartupLocation="CenterScreen"
+
         >
     <Window.DataContext>
         <!-- Ustawia DoctorViewModel jako kontekst danych dla tego widoku-->
@@ -72,13 +73,13 @@
             <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Vertical" Background="LightBlue">
             <Button x:Name="listPatientButton" Width="auto" Height="40" Content="Zarządzanie pacjentami" Command="{Binding ShowPatientListViewCommand}"/>
             <Button x:Name="scheduleButton" Width="auto" Height="40" Content="Terminarz" Command="{Binding ShowScheduleViewCommand}"/>
             <Button x:Name="precriptionButton" Width="auto" Height="40" Content="Wystawione recepty" Command="{Binding ShowPrescriptionViewCommand}"/>
             <Button x:Name="referralsButton" Width="auto" Height="40" Content="Wystawione skierowania" Command="{Binding ShowReferralViewCommand}"/>
         </StackPanel>
 
-        <ContentControl Content="{Binding CurrentViewModel}" Grid.Column="2"/>
+        <ContentControl Background="AliceBlue" Content="{Binding CurrentViewModel}" Grid.Column="2"/>
     </Grid>
 </Window>

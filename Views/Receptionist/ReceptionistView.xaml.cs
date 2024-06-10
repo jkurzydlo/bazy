@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,13 @@ namespace bazy1.Views.Receptionist
         public ReceptionistView()
         {
             InitializeComponent();
-        }
+			Closing += (s, e) =>
+			{
+				foreach (var item in Directory.EnumerateFiles(Directory.GetCurrentDirectory()).ToList().Where(f => f.Contains("pdf")))
+				{
+					File.Delete(item);
+				}
+			};
+		}
     }
 }

@@ -45,6 +45,8 @@ public partial class Przychodnia9Context : DbContext
 
     public virtual DbSet<ReminderSetting> ReminderSettings { get; set; }
 
+    public virtual DbSet<Setting> Settings { get; set; }
+
     public virtual DbSet<Specialization> Specializations { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
@@ -579,6 +581,25 @@ public partial class Przychodnia9Context : DbContext
             entity.Property(e => e.ReminderTimeBeforeAppointment)
                 .HasDefaultValueSql("'24'")
                 .HasColumnName("reminder_time_before_appointment");
+        });
+
+        modelBuilder.Entity<Setting>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("settings");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.Address)
+                .HasMaxLength(100)
+                .HasColumnName("address");
+            entity.Property(e => e.Name)
+                .HasMaxLength(100)
+                .HasDefaultValueSql("''")
+                .HasColumnName("name");
+            entity.Property(e => e.Phone)
+                .HasMaxLength(45)
+                .HasColumnName("phone");
         });
 
         modelBuilder.Entity<Specialization>(entity =>

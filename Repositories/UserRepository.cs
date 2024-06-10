@@ -28,8 +28,8 @@ namespace bazy1.Repositories
 				{
 					connection.Open();
 					command.Connection = connection;
-
-					string login = "admin", password = "admin"; //Pierwsze dane generowane i dostarczane przy dostarczaniu programu klientowi
+                    Console.WriteLine("wykon");
+                    string login = "admin", password = "admin"; //Pierwsze dane generowane i dostarczane przy dostarczaniu programu klientowi
 					
 					//Dodane Ignore, żeby dodało konkretnego admina tylko raz 
 					command.CommandText = "insert ignore into user(type,login,name,surname,hash,firstLogin) values(@type,@login,@name,@surname, @hash, @firstLogin)";

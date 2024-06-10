@@ -18,7 +18,7 @@
     
     <Grid Background="AliceBlue">
         <StackPanel Margin="10" Orientation="Horizontal">
-            <TextBlock Text="Wystawiasz receptę dla: "/>
+            <TextBlock Text="Wystawiasz skierowanie dla: "/>
             <TextBlock Text="{Binding Patient}"/>
         </StackPanel>
 

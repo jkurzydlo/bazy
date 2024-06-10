@@ -67,6 +67,7 @@ namespace bazy1.Repositories
 								Name = reader.GetString("Name"),
 								Surname = reader.GetString("Surname"),
 								PhoneNumber = (reader.IsDBNull(3) ? "" : reader.GetString("phoneNumber")),
+								UserId = reader.GetInt32("user_id")
 							};
 							doctor = tempDoctor;
 						}

@@ -55,7 +55,7 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 					info = $"Data urodzenia: {tempPatient.BirthDate.Value.ToShortDateString()}\n";
 					if (tempPatient.PhoneNumber != null) info += "Telefon: " + tempPatient.PhoneNumber + "\n";
 					if (tempPatient.Email != null) info += "Email: " + tempPatient.Email + "\n";
-					info += "Adresy:" + adressess;
+					info += "Adresy:\n" + adressess;
 					info += "Przyjmowane leki:\n";
 					string tempDoses = "";
 					var names = DbContext.Database.SqlQueryRaw<string>($"select m.name from (prescription p join prescription_medicine ps on p.id=ps.prescription_id) join medicine m on m.id=ps.medicine_id join patient pat on pat.id =p.patient_id where pat.id ={SelectedPatient.Id};").ToList();
@@ -115,7 +115,7 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 
 			EditPatientCommand = new BasicCommand((object obj) =>
 			{
-				viewModel.CurrentViewModel = new EditPatientViewModel(SelectedPatient);
+				viewModel.CurrentViewModel = new EditPatientViewModel(this,SelectedPatient);
 			});
 
 			ShowAppointmentsListCommand = new BasicCommand((object obj) =>

@@ -86,7 +86,7 @@ namespace bazy1.ViewModels.Admin.Pages
         public DateTime SelectedDate {
             get => _selectedDate;
             set {
-                if (DbContext.Workhours.Where(w=>w.UserId == SelectedUser.Id).Count() >0&& SelectedUser != null && value.Date.Date <= DbContext.Workhours.Where(w => w.UserId == SelectedUser.Id).OrderBy(w => w.BlockEnd).Last().End.Value.Date &&
+                if (SelectedUser != null &&DbContext.Workhours.Where(w=>w.UserId == SelectedUser.Id).Count() >0 && value.Date.Date <= DbContext.Workhours.Where(w => w.UserId == SelectedUser.Id).OrderBy(w => w.BlockEnd).Last().End.Value.Date &&
                     value.Date.Date >= DbContext.Workhours.Where(w => w.UserId == SelectedUser.Id).OrderBy(w => w.BlockStart).First().Start.Value.Date)
                 {
                     _selectedDate = value;

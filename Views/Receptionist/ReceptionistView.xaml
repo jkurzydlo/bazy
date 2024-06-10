@@ -8,7 +8,7 @@
         xmlns:pagesViewModels="clr-namespace:bazy1.ViewModels.Receptionist.Pages"
         xmlns:pagesViews="clr-namespace:bazy1.Views.Receptionist.Pages"
         mc:Ignorable="d"
-        Title="ReceptionistView" Height="600" Width="900">
+        Title="Medikat" Height="600" Width="900">
     <Window.DataContext>
         <!-- Ustawia ReceptionistViewModel jako kontekst danych dla tego widoku-->
         <viewModels:ReceptionistViewModel/>
@@ -61,7 +61,7 @@
             <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Vertical" Background="LightBlue">
 
             <Button Width="150" Height="40" Content="Lista pacjentów" Command="{Binding ShowPatientListViewCommand}"/>
             <Button Width="150" Height="40" Content="Harmonogramy" Command="{Binding ShowDocScheduleViewCommand}"></Button>
@@ -69,7 +69,7 @@
         </StackPanel>
 
 
-        <ContentControl Content="{Binding CurrentViewModel}" Grid.Column="2"/>
+        <ContentControl Background="AliceBlue" Content="{Binding CurrentViewModel}" Grid.Column="2"/>
 
     </Grid>
 </Window>

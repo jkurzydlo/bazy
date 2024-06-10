@@ -41,5 +41,9 @@ namespace bazy1.ViewModels
 		{
 			_executeAction(parameter);
 		}
+
+		public void RaiseCanExecuteChanged() {
+			CommandManager.InvalidateRequerySuggested();
+		}
 	}
 }

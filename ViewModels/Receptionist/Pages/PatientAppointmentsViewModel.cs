@@ -47,9 +47,14 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 
 				var doc_id = new MySqlParameter("doc_id", DbContext.Doctors.Where(d => d.Id == SelectedAppointment.Doctor.Id).First().UserId);
                 Console.WriteLine("duid: "+ DbContext.Doctors.Where(d => d.Id == SelectedAppointment.Doctor.Id).First().Id);
-                var test = DbContext.Workhours.FromSqlRaw($"select * from przychodnia9.workhours where user_id = @doc_id", doc_id).ToList();
+
+				var test = DbContext.Workhours.FromSqlRaw($"select * from przychodnia9.workhours where user_id = @doc_id", doc_id).ToList();
 				test = test.Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear).ToList();
 				AppointmentsSchedule = new(test);
+				foreach (var item in AppointmentsSchedule)
+				{
+					DbContext.Entry(item).Reload();
+				}
 			}
 		}
 
@@ -69,9 +74,9 @@ namespace bazy1.ViewModels.Receptionist.Pages {
 			set {
 				_selectedAppointment = value;
 				OnPropertyChanged(nameof(SelectedAppointment));
-
-				var doc_id = new MySqlParameter("doc_id", SelectedAppointment.Doctor.Id);
-				var test = DbContext.Workhours.Where(w => w.Id == SelectedAppointment.DoctorId);
+                Console.WriteLine("duid: "+ SelectedAppointment.DoctorUserId);
+                var doc_id = new MySqlParameter("doc_id", SelectedAppointment.Doctor.Id);
+				var test = DbContext.Workhours.Where(w => w.UserId == SelectedAppointment.DoctorUserId);
 				test = test.Where(w => w.Start.Value.DayOfYear == SelectedDate.DayOfYear);
 				AppointmentsSchedule = new(test);
                 foreach (var item in test)

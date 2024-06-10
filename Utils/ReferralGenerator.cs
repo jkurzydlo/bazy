@@ -1,4 +1,5 @@
 ﻿using bazy1.Models;
+using bazy1.Repositories;
 using bazy1.ViewModels;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Crypto.Modes.Gcm;
@@ -15,6 +16,8 @@ using System.Threading.Tasks;
 
 namespace bazy1.Utils {
 	public class ReferralGenerator {
+		private static SettingsRepository settingsRepository = new();
+
 		public static string generate(Referral referral) {
 			Console.WriteLine("genruje sie;");
 
@@ -50,7 +53,7 @@ namespace bazy1.Utils {
 					table.Cell().Row(6).Column(1).AlignLeft().Text("Pacjent").Bold();
 					table.Cell().Row(6).Column(2).AlignLeft().Text(referral.Patient.Name + " " + referral.Patient.Surname + "\nPESEL " + referral.Patient.Pesel + "\nur. " + referral.Patient.BirthDate.Value.ToShortDateString() + "r.\n");
 					table.Cell().Row(7).Column(1).Text("Wystawca ").Bold();
-					table.Cell().Row(7).Column(2).AlignLeft().Text("Specjalistyczna przychodnia lekarska\n25 - 155 Warszawa, ul.Kwiatowa 22");
+					table.Cell().Row(7).Column(2).AlignLeft().Text(settingsRepository.GetSettings().Name+"\n"+settingsRepository.GetSettings().Address);
 					table.Cell().Row(8).ColumnSpan(2).LineHorizontal(1F);
 					table.Cell().Row(9).Column(1).AlignLeft().Text("Rozpoznanie").Bold();
 					table.Cell().Row(10).Column(1).Text(referral.Disease).AlignLeft();

@@ -13,7 +13,7 @@
             xmlns:md="https://github.com/fantasticfiasco/mvvm-dialogs"
 
         md:DialogServiceViews.IsRegistered="True"
-        Title="AdminView" Height="450" Width="1200">
+        Title="Medikat" Height="450" Width="1200">
     <Window.DataContext>
         <!-- Ustawia MainViewModel jako viewmodel dla tego widoku-->
         <viewModels:AdminViewModel/>
@@ -89,7 +89,7 @@
             <ColumnDefinition Width="150"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Vertical" Background="LightBlue">
             <Button x:Name="addUserButton" Width="150" Height="40" Content="Dodaj użytkownika" Command="{Binding ShowAddUserViewCommand}"/>
             <Button x:Name="listUserButton" Width="150" Height="40" Content="Lista użytkowników" Command="{Binding ShowUserListViewCommand}">
             </Button>
@@ -99,7 +99,7 @@
             <Button x:Name="Listaharmonogramow" Width="150" Height="40" Content="Lista harmonogramów" Command="{Binding ShowAdminSchedulesViewCommand}"/>
 
             <Button x:Name="patientList" Width="150" Height="40" Content="Lista pacjentów" Command="{Binding ShowAdminPatientListViewCommand}"/>
-            <Button x:Name="Zasoby" Width="150" Height="40" Content="Pliki zasobów" Command="{Binding ShowResourcesViewCommand}"/>
+            <Button x:Name="Zasoby" Width="150" Height="40" Content="Konfiguracja" Command="{Binding ShowResourcesViewCommand}"/>
 
 
         </StackPanel>
